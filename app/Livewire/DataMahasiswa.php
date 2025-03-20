@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class DataMahasiswa extends Component
 {
+    public $nim, $nm_mahasiswa, $kd_prodi, $fakultas;
+    public $mahasiswa_id;
+    public $formdatamhs='hidden';
+
     public function render()
     {
         $datmhs=DB::table('dat_mahasiswa')
@@ -17,10 +21,6 @@ class DataMahasiswa extends Component
         ->paginate(10);
         return view('livewire.data-mahasiswa',['datamahasiswa'=>$datmhs])->extends('layouts.back');
     }
-
-
-    public $nim, $nm_mahasiswa, $kd_prodi, $fakultas;
-    public $mahasiswa_id;
 
     protected $rules = [
         'nim' => 'required|max:20',
@@ -51,13 +51,38 @@ class DataMahasiswa extends Component
                 'kd_prodi' => $this->kd_prodi,
             ]);
             session()->flash('message', 'Data berhasil ditambahkan!');
+            
         }
 
         $this->reset();
+        $this->dispatch('flashMessage');
     }
 
+    public function delete($nim)
+    {
+        
+        $datmhs = DB::table('dat_mahasiswa')->where('nim', $nim)->delete();
+
+
+            // dd($datmhs);
+            
+            session()->flash('message', 'Data berhasil dihapus!');
+       
+
+        $this->dispatch('flashMessage');
+    }
+
+    public function tambahdata(){
+        $this->reset();
+        $this->formdatamhs='';
+    }
+    public function cfmhs(){
+        $this->reset();
+        $this->formdatamhs='hidden';
+    }
 
     public function edit($nim){
+        $this->formdatamhs='';
         $data=datMahasiswa::where('nim',$nim)->first();
 
         $this->nim=$data->nim;
