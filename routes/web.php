@@ -15,6 +15,7 @@ Route::view('profile', 'profile')
 
   
 
-    Route::get('/data-mahasiswa', DataMahasiswa::class)->name('datamahasiswa');
+    Route::get('/data-mahasiswa', DataMahasiswa::class)->middleware(['auth'])->name('datamahasiswa');
+    Route::get('/data-prodi', DataProdi::class)->middleware(['auth'])->name('dataprodi');
 
 require __DIR__.'/auth.php';

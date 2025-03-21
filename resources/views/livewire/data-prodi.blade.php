@@ -9,42 +9,38 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-semibold">Data Mahasiswa</h2>
+                    <h2 class="text-lg font-semibold">Data Program Studi</h2>
                     <button wire:click="tambahdata"
                        class="hover:bg-blue-500 text-white px-4 py-2 rounded bg-[#00bcd4]">
-                        + Tambah Mahasiswa
+                        + Tambah Program Studi
                     </button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full border border-gray-300">
                         <thead class="bg-[#66008b] text-white">
                             <tr>
-                                <th class="border px-4 py-2 text-center">NIM</th>
-                                <th class="border px-4 py-2 text-center">Nama Mahasiswa</th>
-                                <th class="border px-4 py-2 text-center">Kelas</th>
-                                <th class="border px-4 py-2 text-center">Semester</th>
+                                <th class="border px-4 py-2 text-center">Kd Prodi</th>
                                 <th class="border px-4 py-2 text-center">Program Studi</th>
                                 <th class="border px-4 py-2 text-center">Fakultas</th>
-                                <th class="border px-4 py-2 text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($datamahasiswa as $datmhs)
+                            @forelse($prodi Studi as $datprodi)
                                 <tr class="hover:bg-gray-100 border">
-                                    <td class="px-4 py-2">{{ $datmhs->nim }}</td>
-                                    <td class="px-4 py-2">{{ $datmhs->nm_mahasiswa }}</td>
-                                    <td class="px-4 py-2">{{ $datmhs->kelas }}</td>
-                                    <td class="px-4 py-2">{{ $datmhs->semester }}</td>
-                                    <td class="px-4 py-2">{{ $datmhs->nm_prodi }}</td>
-                                    <td class="px-4 py-2">{{ $datmhs->nm_fakultas }}</td>
+                                    <td class="px-4 py-2">{{ $datprodi->nim }}</td>
+                                    <td class="px-4 py-2">{{ $datprodi->nm_Program Studi }}</td>
+                                    <td class="px-4 py-2">{{ $datprodi->kelas }}</td>
+                                    <td class="px-4 py-2">{{ $datprodi->semester }}</td>
+                                    <td class="px-4 py-2">{{ $datprodi->nm_prodi }}</td>
+                                    <td class="px-4 py-2">{{ $datprodi->nm_fakultas }}</td>
                                     <td class="px-4 py-2 text-center justify-center flex gap-5">
-                                        <a  wire:click="edit({{ $datmhs->nim }})"
+                                        <a  wire:click="edit({{ $datprodi->nim }})"
                                            class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">
                                            <i class="bi bi-pencil-square"></i> Perbarui
                                         </a>
                                         <form class="inline">
                                             <button type="button"
-                                                    wire:click="delete({{ $datmhs->nim }})"
+                                                    wire:click="delete({{ $datprodi->nim }})"
                                                     onclick="return confirm('Yakin ingin menghapus?')"
                                                     class="bg-[#f44336] text-white px-3 py-1 rounded hover:bg-red-600">
                                                 <i class="bi bi-trash-fill"></i> Hapus
@@ -58,7 +54,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="border px-4 py-2 text-center text-gray-500">
-                                        Belum ada data mahasiswa
+                                        Belum ada data Program Studi
                                     </td>
                                 </tr>
                             @endforelse
@@ -83,10 +79,10 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium">Nama Mahasiswa</label>
-                    <input type="text" wire:model="nm_mahasiswa"
+                    <label class="block text-gray-700 font-medium">Nama Program Studi</label>
+                    <input type="text" wire:model="nm_Program Studi"
                         class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('nm_mahasiswa') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    @error('nm_Program Studi') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium">Kelas</label>
@@ -125,7 +121,7 @@
 
                     <button type="submit" 
                             class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-[#00bcd4]">
-                        {{ $mahasiswa_id ? 'Update' : 'Simpan' }}
+                        {{ $Program Studi_id ? 'Update' : 'Simpan' }}
                     </button>
                 </div>
             </form>
