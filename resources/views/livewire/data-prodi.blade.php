@@ -22,34 +22,29 @@
                                 <th class="border px-4 py-2 text-center">Kd Prodi</th>
                                 <th class="border px-4 py-2 text-center">Program Studi</th>
                                 <th class="border px-4 py-2 text-center">Fakultas</th>
+                                <th class="border px-4 py-2 text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($prodi Studi as $datprodi)
+                            @forelse($prodi as $datprodi)
                                 <tr class="hover:bg-gray-100 border">
-                                    <td class="px-4 py-2">{{ $datprodi->nim }}</td>
-                                    <td class="px-4 py-2">{{ $datprodi->nm_Program Studi }}</td>
-                                    <td class="px-4 py-2">{{ $datprodi->kelas }}</td>
-                                    <td class="px-4 py-2">{{ $datprodi->semester }}</td>
+                                    <td class="px-4 py-2">{{ $datprodi->kd_prodi }}</td>
                                     <td class="px-4 py-2">{{ $datprodi->nm_prodi }}</td>
                                     <td class="px-4 py-2">{{ $datprodi->nm_fakultas }}</td>
                                     <td class="px-4 py-2 text-center justify-center flex gap-5">
-                                        <a  wire:click="edit({{ $datprodi->nim }})"
-                                           class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">
-                                           <i class="bi bi-pencil-square"></i> Perbarui
-                                        </a>
-                                        <form class="inline">
-                                            <button type="button"
-                                                    wire:click="delete({{ $datprodi->nim }})"
-                                                    onclick="return confirm('Yakin ingin menghapus?')"
-                                                    class="bg-[#f44336] text-white px-3 py-1 rounded hover:bg-red-600">
-                                                <i class="bi bi-trash-fill"></i> Hapus
-                                            </button>
-                                        </form>
-
-
-
-                                    </td>
+                                        <a  wire:click="edit({{ $datprodi->kd_prodi }})"
+                                        class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">
+                                        <i class="bi bi-pencil-square"></i> Perbarui
+                                    </a>
+                                    <form class="inline">
+                                        <button type="button"
+                                        wire:click="delete({{ $datprodi->kd_prodi }})"
+                                        onclick="return confirm('Yakin ingin menghapus?')"
+                                        class="bg-[#f44336] text-white px-3 py-1 rounded hover:bg-red-600">
+                                        <i class="bi bi-trash-fill"></i> Hapus
+                                        </button>
+                                    </form>                           
+                                </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -64,53 +59,44 @@
             </div>
         </div>
     </div>
-    <div class="form-group {{$formdatamhs}} fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
-        <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md min-w-[90%]">
-        <div class="text-end">
-            <span wire:click="cfmhs" class="px-2 py-1 bg-slate-50 rounded-full cursor-pointer hover:bg-slate-200 font-bold">X</span>
-        </div>    
+    <div class="form-group {{$formdataprodi}} fixed inset-0 flex items-center justify-center bg-black bg-opacity-20">
+        <div class="max-w-4xl mx-auto mt-10 shadow-md min-w-[90%]">
+        <div class="bg-[#66008b] p-4 rounded-t-md">
 
-            <form wire:submit.prevent="save">
+            <div class="text-end">
+                <span wire:click="cfprodi" class="px-2 py-1 bg-slate-50 rounded-full cursor-pointer hover:bg-slate-200 font-bold">X</span>
+            </div>    
+            <h2 class="text-xl text-center text-white font-bold">FORMULIR DATA PROGRAM STUDI</h2>
+        </div>
+
+        <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md'>
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium">NIM</label>
-                    <input type="text" wire:model="nim"
+                    <label class="block text-white font-medium">Kode Prodi* </label>
+                    <input type="text" wire:model="kdprodi"
                         class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('nim') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    @error('kdprodi') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium">Nama Program Studi</label>
-                    <input type="text" wire:model="nm_Program Studi"
+                    <label class="block text-white font-medium">Nama Program Studi* </label>
+                    <input type="text" wire:model="nmprodi"
                         class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('nm_Program Studi') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        @error('nmprodi') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium">Kelas</label>
-                    <input type="text" wire:model="kelas"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('kelas') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-medium">Semester</label>
-                    <input type="number" wire:model="semester"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('semester') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-                <div class="mb-4">
-                <select wire:model="kd_prodi" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    <option value="">Pilih Program Studi</option>
-                    @foreach($prodi as $p)
-                        <option value="{{ $p->kd_prodi }}" {{ $kd_prodi == $p->kd_prodi ? 'selected' : '' }}>
-                            {{ $p->nm_prodi }}
+                <label class="block text-white font-medium" required>Fakultas* </label>
+                <select wire:model="kdfakultas" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
+                <option selected>Pilih Fakultas</option>
+                    @foreach($fakultas as $p)
+                        <option value="{{ $p->kd_fakultas }}" {{ $kdfakultas == $p->kd_fakultas ? 'selected' : '' }}>
+                            {{ $p->nm_fakultas }}
                         </option>
                     @endforeach
                 </select>
-
+                @error('kdfakultas') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
 
-                
-                    
-
+             
                 
 
                 <div class="flex justify-between">
@@ -121,7 +107,7 @@
 
                     <button type="submit" 
                             class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-[#00bcd4]">
-                        {{ $Program Studi_id ? 'Update' : 'Simpan' }}
+                        {{ $kdprodi ? 'Update' : 'Simpan' }}
                     </button>
                 </div>
             </form>

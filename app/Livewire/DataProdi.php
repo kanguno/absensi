@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+use Illuminate\Support\Facades\DB;
 
 use Livewire\Component;
 
@@ -8,9 +9,9 @@ class DataProdi extends Component
 {
    
 
-    public $nim, $nm_mahasiswa, $kelas,$semester,$kd_prodi, $fakultas;
-    public $mahasiswa_id,$prodi;
-    public $formdatamhs='hidden';
+    public $kdprodi, $nmprodi, $kdfakultas;
+    public $fakultas,$prodi;
+    public $formdataprodi='hidden';
 
     public function render()
 {
@@ -21,7 +22,7 @@ class DataProdi extends Component
     $this->fakultas=DB::table('dat_fakultas')->get();
     
     return view('livewire.data-prodi', [
-        'fakultas' => $fakultas,
+        'fakultas' => $this->fakultas,
         'prodi' => $this->prodi
     ])->extends('layouts.back');
 }
@@ -37,11 +38,16 @@ class DataProdi extends Component
         'kdprodi' => 'required|max:2',
         'nmprodi' => 'required|string|max:255',
         'kdfakultas' => 'required|string|max:2',
+    ],
+    $message = [
+        'kdprodi.required' => 'Kode Prodi wajib diisi.',
+        'nmprodi.required' => 'Nama Prodi wajib diisi.',
+        'kdfakultas.required' => 'Pilih salah satu fakultas'
     ];
 
     public function save()
     {
-        $this->validate();
+        $this->validate($this->rules, $this->message);
 
         $prodi = DB::table('dat_prodi')->where('kd_prodi', $this->kdprodi)->first();
 
@@ -57,7 +63,7 @@ class DataProdi extends Component
             session()->flash('message', 'Data berhasil diperbarui!');
         } else {
             // Insert data baru
-            DB::table('dat_mahasiswa')->insert([
+            DB::table('dat_prodi')->insert([
                 'kd_prodi' => $this->kdprodi,
                 'nm_prodi' => $this->nmprodi,
                 'kd_fakultas' => $this->kdfakultas
@@ -86,18 +92,22 @@ class DataProdi extends Component
 
     public function tambahdata(){
         $this->reset();
-        $this->formdatamhs='';
+        $this->resetValidation();
+        $this->formdataprodi='';
     }
-    public function cfmhs(){
+    public function cfprodi(){
         $this->reset();
-        $this->formdatamhs='hidden';
+        $this->resetValidation();
+        $this->formdataprodi='hidden';
     }
     public function resetform(){
         $this->reset();
-        $this->formdatamhs='';
+        $this->resetValidation();
+        $this->formdataprodi='';
     }
     public function edit($kdprodi){
-        $this->formdatamhs='';
+        $this->formdataprodi='';
+        $this->resetValidation();
         $data=DB::table('dat_prodi')->where('kd_prodi', $kdprodi)->first();
 
         $this->kdprodi=$data->kd_prodi;

@@ -10,7 +10,7 @@ class DataMahasiswa extends Component
 {
     public $nim, $nm_mahasiswa, $kelas,$semester,$kd_prodi, $fakultas;
     public $mahasiswa_id,$prodi;
-    public $formdatamhs='hidden';
+    public $formdatamhs='hidden',$opsisave;
 
     public function render()
 {
@@ -44,15 +44,26 @@ class DataMahasiswa extends Component
     
     protected $rules = [
         'nim' => 'required|max:20',
-        'nm_mahasiswa' => 'required|string|max:255',
+        'nm_mahasiswa' => 'required|string|max:100',
         'kelas' => 'required|string|max:10',
-        'semester' => 'required',
-        'kd_prodi' => 'required|string|max:255',
+        'semester' => 'required|number',
+        'kd_prodi' => 'required',
+    ],
+    $message = [
+        'nim.required' => 'NIM wajib diisi.',
+        'nm_mahasiswa.required' => 'Nama Mahasiswa wajib diisi.',
+        'semester.required' => 'Semester wajib diisi.',
+        'kelas.required' => 'kelas wajib diisi.',
+        'kd_prodi.required' => 'Pilih salah satu program studi.',
+        'nim.max' => 'NIM Maksimal 20 karakter',
+        'nm_mahasiswa.max' => 'Nama Mahasiswa Maksimal 100 karakter',
+        'kelas.max' => 'Kelas Maksimal 10 karakter',
+        'semester.number' => 'Semester harus diisi angka'
     ];
 
     public function save()
     {
-        $this->validate();
+        $this->validate($this->rules,$this->message);
 
         $datmhs = DB::table('dat_mahasiswa')->where('nim', $this->nim)->first();
 
@@ -100,18 +111,24 @@ class DataMahasiswa extends Component
 
     public function tambahdata(){
         $this->reset();
+        $this->resetValidation();
         $this->formdatamhs='';
+        $this->opsisave='Tambahkan';
     }
     public function cfmhs(){
         $this->reset();
+        $this->resetValidation();
         $this->formdatamhs='hidden';
     }
     public function resetform(){
         $this->reset();
+        $this->resetValidation();
         $this->formdatamhs='';
     }
     public function edit($nim){
         $this->formdatamhs='';
+        $this->resetValidation();
+        $this->opsisave='Perbarui';
         $data=datMahasiswa::where('nim',$nim)->first();
 
         $this->nim=$data->nim;

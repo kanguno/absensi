@@ -68,40 +68,45 @@
             </div>
         </div>
     </div>
-    <div class="form-group {{$formdatamhs}} fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
-        <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md min-w-[90%]">
-        <div class="text-end">
-            <span wire:click="cfmhs" class="px-2 py-1 bg-slate-50 rounded-full cursor-pointer hover:bg-slate-200 font-bold">X</span>
-        </div>    
+    <div class="form-group {{$formdatamhs}} fixed inset-0 flex items-center justify-center bg-black bg-opacity-20">
+        <div class="max-w-4xl mx-auto mt-10 shadow-md min-w-[90%]">
+        <div class="bg-[#66008b] p-4 rounded-t-md">
 
-            <form wire:submit.prevent="save">
+            <div class="text-end">
+                <span wire:click="cfmhs" class="px-2 py-1 bg-slate-50 rounded-full cursor-pointer hover:bg-slate-200 font-bold">X</span>
+            </div>    
+            <h2 class="text-xl text-center text-white font-bold">FORMULIR DATA MAHASISWA</h2>
+        </div>
+            <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md'>
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium">NIM</label>
+                    <label class="block text-white font-medium">NIM* </label>
                     <input type="text" wire:model="nim"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('nim') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        class="w-full px-4 py-2 border-none rounded-lg focus:ring focus:ring-blue-300 placeholder-red-500 {{ $nim ? 'bg-gray-200' : '' }}"
+                        {{ $opsisave==='Perbarui' ? 'disabled' : '' }}
+                        >
+                    @error('nim') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium">Nama Mahasiswa</label>
+                    <label class="block text-white font-medium">Nama Mahasiswa* </label>
                     <input type="text" wire:model="nm_mahasiswa"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('nm_mahasiswa') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        class="w-full px-4 py-2 border-none rounded-lg focus:ring focus:ring-blue-300 placeholder-red-500">
+                    @error('nm_mahasiswa') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium">Kelas</label>
+                    <label class="block text-white font-medium">Kelas* </label>
                     <input type="text" wire:model="kelas"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('kelas') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        class="w-full px-4 py-2 border-none rounded-lg focus:ring focus:ring-blue-300 placeholder-red-500">
+                    @error('kelas') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium">Semester</label>
+                    <label class="block text-white font-medium">Semester* </label>
                     <input type="number" wire:model="semester"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('semester') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        class="w-full px-4 py-2 border-none rounded-lg focus:ring focus:ring-blue-300 placeholder-red-500">
+                    @error('semester') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="mb-4">
-                <select wire:model="kd_prodi" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                <select wire:model="kd_prodi" class="w-full px-4 py-2 border-none rounded-lg focus:ring focus:ring-blue-300 placeholder-red-500">
                     <option value="">Pilih Program Studi</option>
                     @foreach($prodi as $p)
                         <option value="{{ $p->kd_prodi }}" {{ $kd_prodi == $p->kd_prodi ? 'selected' : '' }}>
@@ -109,7 +114,7 @@
                         </option>
                     @endforeach
                 </select>
-
+                @error('kd_prodi') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 
@@ -119,13 +124,13 @@
 
                 <div class="flex justify-between">
                     <button type="button" wire:click="resetform()"
-                            class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-                        Reset
+                            class="bg-[#66008b] text-white border-2 border-[#66008b] px-3 py-1 rounded hover:bg-white hover:text-[#66008b] hover:border-white">
+                        Kosongkan Formulir
                     </button>
 
                     <button type="submit" 
-                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-[#00bcd4]">
-                        {{ $mahasiswa_id ? 'Update' : 'Simpan' }}
+                            class="bg-orange-500 text-white border-2 border-orange-500 px-3 py-1 rounded hover:border-orange-500  hover:bg-[#66008b]">
+                        {{ $opsisave }}
                     </button>
                 </div>
             </form>

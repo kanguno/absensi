@@ -39,6 +39,22 @@ new class extends Component
                         {{ __('Data Mahasiswa') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('datadosen')" :active="request()->routeIs('datadosen')" wire:navigate>
+                        {{ __('Data Dosen') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('dataprodi')" :active="request()->routeIs('dataprodi')" wire:navigate>
+                        {{ __('Data Program Studi') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('datafakultas')" :active="request()->routeIs('datafakultas')" wire:navigate>
+                        {{ __('Data Fakultas') }}
+                    </x-nav-link>
+                </div>
+
             </div>
 
             <!-- Settings Dropdown -->
