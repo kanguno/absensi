@@ -77,7 +77,7 @@
             </div>    
             <h2 class="text-xl text-center text-white font-bold">FORMULIR DATA MAHASISWA</h2>
         </div>
-            <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md'>
+            <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md max-h-[80vh] overflow-y-auto'>
                 <div class="mb-4">
                     <label class="block text-white font-medium">NIM* </label>
                     <input type="text" wire:model="nim"

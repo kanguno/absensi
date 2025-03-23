@@ -11,7 +11,7 @@ class DataFakultas extends Component
 
     public $nmfakultas, $kdfakultas;
     public $fakultas;
-    public $formdatafakultas='hidden';
+    public $formdatafakultas='hidden',$opsisave;
 
     public function render()
 {
@@ -82,6 +82,7 @@ class DataFakultas extends Component
         $this->reset();
         $this->resetValidation();
         $this->formdatafakultas='';
+        $this->opsisave='Tambahkan';
     }
     public function cffakultas(){
         $this->reset();
@@ -96,6 +97,7 @@ class DataFakultas extends Component
     public function edit($kdfakultas){
         $this->formdatafakultas='';
         $this->resetValidation();
+        $this->opsisave='Perbarui';
         $data=DB::table('dat_fakultas')->where('kd_fakultas', $kdfakultas)->first();
 
         $this->kdfakultas=$data->kd_fakultas;

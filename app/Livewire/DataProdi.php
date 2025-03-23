@@ -11,7 +11,7 @@ class DataProdi extends Component
 
     public $kdprodi, $nmprodi, $kdfakultas;
     public $fakultas,$prodi;
-    public $formdataprodi='hidden';
+    public $formdataprodi='hidden',$opsisave;
 
     public function render()
 {
@@ -94,6 +94,7 @@ class DataProdi extends Component
         $this->reset();
         $this->resetValidation();
         $this->formdataprodi='';
+        $this->opsisave='Tambahkan';
     }
     public function cfprodi(){
         $this->reset();
@@ -108,6 +109,7 @@ class DataProdi extends Component
     public function edit($kdprodi){
         $this->formdataprodi='';
         $this->resetValidation();
+        $this->opsisave='Perbarui';
         $data=DB::table('dat_prodi')->where('kd_prodi', $kdprodi)->first();
 
         $this->kdprodi=$data->kd_prodi;

@@ -69,7 +69,7 @@
             <h2 class="text-xl text-center text-white font-bold">FORMULIR DATA PROGRAM STUDI</h2>
         </div>
 
-        <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md'>
+        <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md max-h-[80vh] overflow-y-auto'>
                 <div class="mb-4">
                     <label class="block text-white font-medium">Kode Prodi* </label>
                     <input type="text" wire:model="kdprodi"
@@ -106,8 +106,8 @@
                     </button>
 
                     <button type="submit" 
-                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-[#00bcd4]">
-                        {{ $kdprodi ? 'Update' : 'Simpan' }}
+                            class="bg-orange-500 text-white border-2 border-orange-500 px-3 py-1 rounded hover:border-orange-500  hover:bg-[#66008b]">
+                        {{ $opsisave }}
                     </button>
                 </div>
             </form>

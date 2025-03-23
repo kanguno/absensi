@@ -83,7 +83,7 @@ class DataDosen extends Component
         $this->formdatadosen='';
         $this->opsisave='Tambahkan';
     }
-    public function cfmhs(){
+    public function cfdosen(){
         $this->reset();
         $this->resetValidation();
         $this->formdatadosen='hidden';

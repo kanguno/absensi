@@ -67,7 +67,7 @@
             <h2 class="text-xl text-center text-white font-bold">FORMULIR DATA FAKULTAS</h2>
         </div>
 
-        <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md'>
+        <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md max-h-[80vh] overflow-y-auto'>
                 <div class="mb-4">
                     <label class="block text-white font-medium">Kode Fakultas* </label>
                     <input type="text" wire:model="kdfakultas"
@@ -88,8 +88,8 @@
                     </button>
 
                     <button type="submit" 
-                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-[#00bcd4]">
-                        {{ $kdfakultas ? 'Update' : 'Simpan' }}
+                            class="bg-orange-500 text-white border-2 border-orange-500 px-3 py-1 rounded hover:border-orange-500  hover:bg-[#66008b]">
+                        {{ $opsisave }}
                     </button>
                 </div>
             </form>
