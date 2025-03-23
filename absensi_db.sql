@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2025 at 07:53 AM
+-- Generation Time: Mar 24, 2025 at 12:47 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -72,6 +72,14 @@ CREATE TABLE `dat_dosen` (
   `email` varchar(160) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `dat_dosen`
+--
+
+INSERT INTO `dat_dosen` (`id_dosen`, `nm_dosen`, `no_telp`, `email`) VALUES
+('3523141115552222', 'Andy Mulianti, M.Kom', '082225555226', 'andi@gmail.com'),
+('3523232352', 'Dosen', '0822252225', 'dosen@gmail.com');
+
 -- --------------------------------------------------------
 
 --
@@ -127,6 +135,16 @@ CREATE TABLE `dat_matkul` (
   `jml_sks` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `dat_matkul`
+--
+
+INSERT INTO `dat_matkul` (`kd_matkul`, `nm_matkul`, `jml_sks`) VALUES
+('11', 'Pemrograman', 3),
+('12', 'Managemen Proyek', 3),
+('13', 'Basis Data', 4),
+('14', 'Jaringan Komputer', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -141,6 +159,13 @@ CREATE TABLE `dat_perkuliahan` (
   `jam` time DEFAULT NULL,
   `expired` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dat_perkuliahan`
+--
+
+INSERT INTO `dat_perkuliahan` (`id_perkuliahan`, `kd_matkul`, `id_dosen`, `tanggal`, `jam`, `expired`) VALUES
+(1, '11', '3523232352', '2025-03-24', '10:45:00', '2025-03-24 11:45:00');
 
 -- --------------------------------------------------------
 
@@ -161,7 +186,8 @@ CREATE TABLE `dat_prodi` (
 INSERT INTO `dat_prodi` (`kd_prodi`, `nm_prodi`, `kd_fakultas`) VALUES
 ('01', '(D3) Kebidanan', '1'),
 ('02', '(S1) Keperawatan & Profesi NERS', '1'),
-('11', 'Teknik Informatika', '2');
+('11', 'Teknik Informatika', '2'),
+('12', 'Desain Komunikasi', '2');
 
 -- --------------------------------------------------------
 
@@ -277,7 +303,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('wgCuJSpsdJ8SCjRIAm5Zzhrv4byeFBUkslMo1tNc', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiWlczQjRGYzZoQ0dabmExczVVWkFGT3E5aFM1Z29FbWdSS01YTThJcyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9kYXRhLW1haGFzaXN3YSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6MzoidXJsIjthOjA6e31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1742538788);
+('pP7U3aOmObCHiPJ31F14u3dIcnx1RQqucoU43hgv', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiUk4zRlg0QnpMTWw4cGNkTFBadVpzYmhWOXVzeVNsUGs0dTMxMkNTSyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MTp7aTowO3M6NzoibWVzc2FnZSI7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9kYXRhLWRvc2VuIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mjt9', 1742773559);
 
 -- --------------------------------------------------------
 
@@ -302,7 +328,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `nm_user`, `email`, `email_verified_at`, `password`, `kd_otoritas`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@gmail.com', NULL, '$2y$12$YEHqlzzlQ0J3Cxdp.TPe6ug3qHAwIFsUjCQc/2HesSiG9aIW37Hri', '2', NULL, '2025-03-19 23:26:52', '2025-03-19 23:26:52');
+(1, 'admin', 'admin@gmail.com', NULL, '$2y$12$YEHqlzzlQ0J3Cxdp.TPe6ug3qHAwIFsUjCQc/2HesSiG9aIW37Hri', '2', NULL, '2025-03-19 23:26:52', '2025-03-19 23:26:52'),
+(2, 'dosen', 'dosen@gmail.com', NULL, '$2y$12$j1G9WHXdznnLCfkIMKJHveWgQpA2jyF22WTEZ1vXw5dPGQrqANcEy', '2', NULL, '2025-03-23 14:54:43', '2025-03-23 14:54:43');
 
 --
 -- Indexes for dumped tables
@@ -436,7 +463,7 @@ ALTER TABLE `dat_absensi`
 -- AUTO_INCREMENT for table `dat_perkuliahan`
 --
 ALTER TABLE `dat_perkuliahan`
-  MODIFY `id_perkuliahan` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_perkuliahan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -460,7 +487,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
