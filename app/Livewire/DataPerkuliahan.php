@@ -88,7 +88,6 @@ class DataPerkuliahan extends Component
                     'batas_absen' => $this->expired
             ]);
             session()->flash('message', 'Data berhasil ditambahkan!');
-            
         }
 
         $this->reset();
@@ -132,18 +131,23 @@ class DataPerkuliahan extends Component
         $data=DB::table('dat_perkuliahan')->where('id_perkuliahan', $idperkuliahan)->first();
 
         $this->idperkuliahan=$data->id_perkuliahan;
+        $this->idsebaranmatkul=$data->id_sebaran_matkul;
         $this->kelas=$data->kelas;
-        $this->kdmatkul=$data->kd_matkul;
-        $this->iddosen=$data->id_dosen;
         $this->tanggal=$data->tanggal;
         $this->jam=$data->jam;
-        $this->expired=$data->expired;
+        $this->expired=$data->batas_absen;
         
     }
 
-    private function generateAbsen($idperkuliahan)
+    public function absensi($idperkuliahan)
     {
-        $mahasiswa = DB::table('dat_mahasiswa')
+        $dataabsensi=DB::table('dat_absensi')->where('id_perkuliahan','=',$idperkuliahan)->first();
+
+        if($dataabsensi){
+            $this->redirectRoute('ceklistabsensi', $idperkuliahan);
+        }
+        else{
+            $mahasiswa = DB::table('dat_mahasiswa')
             ->join('dat_perkuliahan', 'dat_mahasiswa.kelas', '=', 'dat_perkuliahan.kelas')
             ->where('dat_perkuliahan.id_perkuliahan', $idperkuliahan)
             ->select('dat_mahasiswa.nim', 'dat_mahasiswa.nm_mahasiswa')
@@ -157,6 +161,9 @@ class DataPerkuliahan extends Component
                 'keterangan' => null,
             ]);
         }
+        $this->redirectRoute('ceklistabsensi', $idperkuliahan);
+        }
+        
     }
 
 }

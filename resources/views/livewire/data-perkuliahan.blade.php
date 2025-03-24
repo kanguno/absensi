@@ -40,10 +40,14 @@
                                     <td class="px-4 py-2">{{ $datperkuliahan->jam }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->batas_absen }}</td>
                                     <td class="px-4 py-2 text-center justify-center flex gap-5">
+                                        <a  wire:click="absensi({{ $datperkuliahan->id_perkuliahan }})"
+                                        class="bg-[#1db851] text-white px-3 py-1 rounded hover:bg-green-600 cursor-pointer">
+                                            <i class="bi bi-card-checklist"></i> Absensi
+                                         </a>
                                         <a  wire:click="edit({{ $datperkuliahan->id_perkuliahan }})"
                                         class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">
-                                        <i class="bi bi-pencil-square"></i> Perbarui
-                                    </a>
+                                            <i class="bi bi-pencil-square"></i> Perbarui
+                                        </a>
                                     <form class="inline">
                                         <button type="button"
                                         wire:click="delete({{ $datperkuliahan->id_perkuliahan }})"

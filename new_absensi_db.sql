@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2025 at 09:00 AM
+-- Generation Time: Mar 25, 2025 at 12:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -58,6 +58,24 @@ CREATE TABLE `dat_absensi` (
   `status_kehadiran` char(1) NOT NULL,
   `keterangan` varchar(160) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dat_absensi`
+--
+
+INSERT INTO `dat_absensi` (`id_absensi`, `nim`, `id_perkuliahan`, `status_kehadiran`, `keterangan`) VALUES
+(1, '24612001', 3, 'T', NULL),
+(2, '24612002', 3, 'T', NULL),
+(3, '24612003', 3, 'T', NULL),
+(4, '24612004', 3, 'T', NULL),
+(5, '24612005', 3, 'T', NULL),
+(6, '24612006', 3, 'T', NULL),
+(7, '24612007', 3, 'T', NULL),
+(8, '24612008', 3, 'T', NULL),
+(9, '24612009', 3, 'T', NULL),
+(10, '24612010', 3, 'T', NULL),
+(11, '24612011', 3, 'T', NULL),
+(12, '24612012', 3, 'T', NULL);
 
 -- --------------------------------------------------------
 
@@ -336,6 +354,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('3fNZ7KV5yfahoprQjvfhXwj4U86C6u3cOQnWfTKo', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiUGlDMk9CWWlxRGdMRnZvNXJ3SlVJM1NHUTVOVEk2elk3bmE1MkNtNyI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM4OiJodHRwOi8vbG9jYWxob3N0OjgwMDAvY2VrbGlzdC1hYnNlbnNpMyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1742858219),
 ('yDano71SU8gCgViDKMTvaNbpES5L0MIrA79HnmNc', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiQlNqWHYwclNFbmEwUFQ0WEpPZTV1bExRVEVseDRVZ1pkZ3JiTnk0NSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzg6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9kYXRhLXBlcmt1bGlhaGFuIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1742803146);
 
 -- --------------------------------------------------------
@@ -497,7 +516,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `dat_absensi`
 --
 ALTER TABLE `dat_absensi`
-  MODIFY `id_absensi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `dat_perkuliahan`
