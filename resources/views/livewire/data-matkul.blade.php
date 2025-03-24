@@ -22,6 +22,8 @@
                                 <th class="border px-4 py-2 text-center">Kode Mata Kuliah</th>
                                 <th class="border px-4 py-2 text-center">Nama Mata Kuliah</th>
                                 <th class="border px-4 py-2 text-center">Jumlah SKS</th>
+                                <th class="border px-4 py-2 text-center">Jumlah Teori</th>
+                                <th class="border px-4 py-2 text-center">Jumlah Praktek</th>
                                 <th class="border px-4 py-2 text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -31,8 +33,10 @@
                                     <td class="px-4 py-2">{{ $datmatkul->kd_matkul }}</td>
                                     <td class="px-4 py-2">{{ $datmatkul->nm_matkul }}</td>
                                     <td class="px-4 py-2">{{ $datmatkul->jml_sks }}</td>
+                                    <td class="px-4 py-2">{{ $datmatkul->teori }}</td>
+                                    <td class="px-4 py-2">{{ $datmatkul->praktek }}</td>
                                     <td class="px-4 py-2 text-center justify-center flex gap-5">
-                                        <a  wire:click="edit({{ $datmatkul->kd_matkul }})"
+                                        <a  wire:click="edit('{{ $datmatkul->kd_matkul }}')"
                                         class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">
                                         <i class="bi bi-pencil-square"></i> Perbarui
                                     </a>
@@ -88,6 +92,18 @@
                     <input type="text" wire:model="sks"
                         class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
                         @error('sks') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div class="mb-4">
+                    <label class="block text-white font-medium">Jumlah Teori</label>
+                    <input type="text" wire:model="teori"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                        @error('teori') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+                </div>
+                <div class="mb-4">
+                    <label class="block text-white font-medium">Jumlah Praktek</label>
+                    <input type="text" wire:model="praktek"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                        @error('praktek') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="flex justify-between">
                     <button type="button" wire:click="resetform()"

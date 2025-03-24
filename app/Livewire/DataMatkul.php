@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class DataMatkul extends Component
 {
-    public $kdmatkul, $nmmatkul, $sks;
+    public $kdmatkul, $nmmatkul, $sks,$teori,$praktek;
     public $datmakul,$user;
     public $formdatamatkul='hidden',$opsisave;
 
@@ -21,15 +21,17 @@ class DataMatkul extends Component
 }
 
     protected $rules = [
-        'kdmatkul' => 'required|max:2',
+        'kdmatkul' => 'required|max:10',
         'nmmatkul' => 'required|string|max:160',
         'sks' => 'required',
+
     ],
     $message = [
         'kdmatkul.required' => 'Kd Mata Kuliah wajib diisi.',
         'nmmatkul.required' => 'Nama Mata Kuliah wajib diisi.',
         'sks.required' => 'Jumlah SKS wajib diisi.',
-        'kdmatkul.max' => 'Kode Mata Kuliah Maksimal 2 karakter',
+        
+        'kdmatkul.max' => 'Kode Mata Kuliah Maksimal 10 karakter',
         'nmmatkul.max' => 'Nama Mata Kuliah Maksimal 160 karakter',
     ];
 
@@ -46,6 +48,8 @@ class DataMatkul extends Component
                 ->update([
                     'nm_matkul' => $this->nmmatkul,
                     'jml_sks' => $this->sks,
+                    'teori' => $this->teori,
+                    'praktek' => $this->praktek,
                 ]);
             session()->flash('message', 'Data berhasil diperbarui!');
         } else {
@@ -54,6 +58,8 @@ class DataMatkul extends Component
                 'kd_matkul' => $this->kdmatkul,
                 'nm_matkul' => $this->nmmatkul,
                 'jml_sks' => $this->sks,
+                'teori' => $this->teori,
+                'praktek' => $this->praktek,
             ]);
             session()->flash('message', 'Data berhasil ditambahkan!');
             
@@ -96,10 +102,13 @@ class DataMatkul extends Component
         $this->resetValidation();
         $this->opsisave='Perbarui';
         $data=DB::table('dat_matkul')->where('kd_matkul',$kdmatkul)->first();
+        
 
-        $this->kdmakul=$data->kd_maktul;
+        $this->kdmatkul=$data->kd_matkul;
         $this->nmmatkul=$data->nm_matkul;
         $this->sks=$data->jml_sks;
+        $this->teori=$data->teori;
+        $this->praktek=$data->praktek;
         
     }
 }
