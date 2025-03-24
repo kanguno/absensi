@@ -9,45 +9,50 @@ class DataPerkuliahan extends Component
 {
    
 
-    public $idperkuliahan, $kdmatkul, $iddosen,$tanggal,$jam,$expired;
-    public $perkuliahan,$matkul,$dosen;
+    public $idperkuliahan, $idsebaranmatkul,$kelas,$tanggal,$jam,$expired;
+    public $perkuliahan,$sebaranmatkul,$matkul,$prodi,$dosen;
     public $formdataperkuliahan='hidden',$opsisave;
 
     public function render()
 {
     $this->perkuliahan = DB::table('dat_perkuliahan')
-        ->join('dat_matkul', 'dat_perkuliahan.kd_matkul', '=', 'dat_matkul.kd_matkul')
-        ->join('dat_dosen', 'dat_perkuliahan.id_dosen', '=', 'dat_dosen.id_dosen')
-        ->select('dat_perkuliahan.*', 'dat_matkul.nm_matkul','dat_matkul.jml_sks','dat_dosen.nm_dosen')
+        ->join('dat_sebaran_matkul', 'dat_perkuliahan.id_sebaran_matkul', '=', 'dat_sebaran_matkul.id_sebaran_matkul')
+        ->join('dat_prodi', 'dat_sebaran_matkul.kd_prodi', '=', 'dat_prodi.kd_prodi')
+        ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
+        ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
+        ->select('dat_perkuliahan.*', 'dat_prodi.nm_prodi','dat_matkul.nm_matkul','dat_dosen.nm_dosen')
         ->get();
-        $this->dosen=DB::table('dat_dosen')->get();
-        $this->matkul=DB::table('dat_matkul')->get();
-        
-    return view('livewire.data-perkuliahan', [
+        $this->sebaranmatkul=DB::table('dat_sebaran_matkul')
+        ->join('dat_prodi', 'dat_sebaran_matkul.kd_prodi', '=', 'dat_prodi.kd_prodi')
+        ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
+        ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
+        ->select('dat_sebaran_matkul.*', 'dat_prodi.nm_prodi','dat_matkul.nm_matkul','dat_dosen.nm_dosen')
+        ->get();
+
+        return view('livewire.data-perkuliahan', [
         'perkuliahan' => $this->perkuliahan,
-        'matkul' => $this->matkul,
-        'dosen' => $this->dosen
+        'sebaranmatkul' => $this->sebaranmatkul,
     ])->extends('layouts.back');
 }
 
     public function mount()
     {
-        $this->dosen=DB::table('dat_dosen')->get();
-        $this->matkul=DB::table('dat_matkul')->get();
+        $this->sebaranmatkul=DB::table('dat_sebaran_matkul')->get();
         
     }
     
     protected $rules = [
         'idperkuliahan' => 'required|max:2|unique:dat_perkuliahan',
-        'kdmatkul' => 'required|string|max:255',
-        'iddosen' => 'required|string|max:16',
+        'idsebaranmatkul' => 'required',
+        'kelas' => 'required|max:10',
         'tanggal' => 'required|date',
         'jam' => 'required',
         'expired' => 'required',
     ],
     $message = [
         'idperkuliahan.required' => 'Kode Prodi wajib diisi.',
-        'kdmatkul.required' => 'Nama Prodi wajib diisi.',
+        'kelas.required' => 'Kelas wajib diisi.',
+        'idsebaranmatkul.required' => 'Pilih Data Distribusi Mata Kuliah.',
         'iddosen.required' => 'Pilih salah satu fakultas',
         'tanggal.required' => 'Tanggal Wajib diisi',
         'jam.required' => 'Jam Wajib diisi',
@@ -65,22 +70,22 @@ class DataPerkuliahan extends Component
             DB::table('dat_perkuliahan')
                 ->where('id_perkuliahan', $this->idperkuliahan)
                 ->update([
-                    'kd_matkul' => $this->kdmatkul,
-                    'id_dosen' => $this->iddosen,
+                    'id_sebaran_matkul' => $this->idsebaranmatkul,
+                    'kelas' => $this->kelas,
                     'tanggal' => $this->tanggal,
                     'jam' => $this->jam,
-                    'expired' => $this->expired
+                    'batas_absen' => $this->expired
                     
                 ]);
             session()->flash('message', 'Data berhasil diperbarui!');
         } else {
             // Insert data baru
             DB::table('dat_perkuliahan')->insert([
-                'kd_matkul' => $this->kdmatkul,
-                'id_dosen' => $this->iddosen,
-                'tanggal' => $this->tanggal,
-                'jam' => $this->jam,
-                'expired' => $this->expired
+                    'id_sebaran_matkul' => $this->idsebaranmatkul,
+                    'kelas' => $this->kelas,
+                    'tanggal' => $this->tanggal,
+                    'jam' => $this->jam,
+                    'batas_absen' => $this->expired
             ]);
             session()->flash('message', 'Data berhasil ditambahkan!');
             
@@ -127,6 +132,7 @@ class DataPerkuliahan extends Component
         $data=DB::table('dat_perkuliahan')->where('id_perkuliahan', $idperkuliahan)->first();
 
         $this->idperkuliahan=$data->id_perkuliahan;
+        $this->kelas=$data->kelas;
         $this->kdmatkul=$data->kd_matkul;
         $this->iddosen=$data->id_dosen;
         $this->tanggal=$data->tanggal;
@@ -134,4 +140,23 @@ class DataPerkuliahan extends Component
         $this->expired=$data->expired;
         
     }
+
+    private function generateAbsen($idperkuliahan)
+    {
+        $mahasiswa = DB::table('dat_mahasiswa')
+            ->join('dat_perkuliahan', 'dat_mahasiswa.kelas', '=', 'dat_perkuliahan.kelas')
+            ->where('dat_perkuliahan.id_perkuliahan', $idperkuliahan)
+            ->select('dat_mahasiswa.nim', 'dat_mahasiswa.nm_mahasiswa')
+            ->get();
+        
+        foreach ($mahasiswa as $mhs) {
+            DB::table('dat_absensi')->insert([
+                'id_perkuliahan' => $idperkuliahan,
+                'nim' => $mhs->nim,
+                'status_kehadiran' => 'T',
+                'keterangan' => null,
+            ]);
+        }
+    }
+
 }

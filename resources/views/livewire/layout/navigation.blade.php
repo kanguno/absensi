@@ -64,6 +64,11 @@ new class extends Component
                         {{ __('Data Perkuliahan') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('datasebaranmatkul')" :active="request()->routeIs('datasebaranmatkul')" wire:navigate>
+                        {{ __('Data Distribusi Mata Kuliah') }}
+                    </x-nav-link>
+                </div>
 
             </div>
 

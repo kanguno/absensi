@@ -20,6 +20,7 @@
                         <thead class="bg-[#66008b] text-white">
                             <tr>
                                 <th class="border px-4 py-2 text-center">Id Perkuliahan</th>
+                                <th class="border px-4 py-2 text-center">Kelas</th>
                                 <th class="border px-4 py-2 text-center">Mata Kuliah</th>
                                 <th class="border px-4 py-2 text-center">Nama Dosen</th>
                                 <th class="border px-4 py-2 text-center">Tanggal</th>
@@ -32,11 +33,12 @@
                             @forelse($perkuliahan as $datperkuliahan)
                                 <tr class="hover:bg-gray-100 border">
                                     <td class="px-4 py-2">{{ $datperkuliahan->id_perkuliahan }}</td>
+                                    <td class="px-4 py-2">{{ $datperkuliahan->kelas }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->nm_matkul }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->nm_dosen }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->tanggal }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->jam }}</td>
-                                    <td class="px-4 py-2">{{ $datperkuliahan->expired }}</td>
+                                    <td class="px-4 py-2">{{ $datperkuliahan->batas_absen }}</td>
                                     <td class="px-4 py-2 text-center justify-center flex gap-5">
                                         <a  wire:click="edit({{ $datperkuliahan->id_perkuliahan }})"
                                         class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">
@@ -77,31 +79,26 @@
 
         <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md max-h-[80vh] overflow-y-auto'>
             <div class="mb-4">
-                <label class="block text-white font-medium" required>Matkul* </label>
-                <select wire:model="kdmatkul" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
-                <option selected>Pilih Mata Kuliah</option>
-                    @foreach($matkul as $m)
-                        <option value="{{ $m->kd_matkul }}" {{ $kdmatkul == $m->kd_matkul ? 'selected' : '' }}>
-                            {{ $m->nm_matkul }}
+                <label class="block text-white font-medium" required>Data Distribusi Mata Kuliah* </label>
+                <select wire:model="idsebaranmatkul" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
+                <option selected>Pilih Distribusi Matkul</option>
+                    @foreach($sebaranmatkul as $m)
+                        <option value="{{ $m->id_sebaran_matkul }}">
+                        {{$m->id_sebaran_matkul}}||{{$m->nm_prodi}}||{{ $m->nm_matkul }}||{{$m->nm_dosen}}||Semester {{$m->semester}}
                         </option>
                     @endforeach
                 </select>
-                @error('kdmatkul') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+                @error('idsebaranmatkul') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
             </div>
+            
             <div class="mb-4">
-                <label class="block text-white font-medium" required>Nama Dosen Pengampu* </label>
-                <select wire:model="iddosen" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
-                <option selected>Pilih Dosen Pengampu</option>
-                    @foreach($dosen as $d)
-                        <option value="{{ $d->id_dosen }}" {{ $iddosen == $d->id_dosen ? 'selected' : '' }}>
-                            {{ $d->nm_dosen }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('iddosen') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
-            </div>
-    
-        
+                    <label class="block text-white font-medium">Kelas* </label>
+                    <input type="text" wire:model="kelas"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+                        placeholder="Contoh Penulisan : 2024-A">
+                    @error('kelasl') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+                </div>
+
             <div class="mb-4">
                     <label class="block text-white font-medium">tanggal* </label>
                     <input type="date" wire:model="tanggal"

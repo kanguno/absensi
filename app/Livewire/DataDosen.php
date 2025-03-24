@@ -21,11 +21,12 @@ class DataDosen extends Component
 }
 
     protected $rules = [
-        'iddosen' => 'required|max:16',
+        'iddosen' => 'required|max:16|unique:dat_dosen,id_dosen',
         'nmdosen' => 'required|string|max:100',
         'email' => 'required',
     ],
     $message = [
+        'iddosen.unique' => 'ID dosen sudah ada di database.',
         'iddosen.required' => 'ID dosen wajib diisi.',
         'nmdosen.required' => 'Nama Dosen wajib diisi.',
         'nmdosen.required' => 'Email wajib diisi.',

@@ -23,10 +23,11 @@ class DataFakultas extends Component
 }
     
     protected $rules = [
-        'kdfakultas' => 'required|max:2',
+        'kdfakultas' => 'required|max:2|unique:dat_fakultas,kd_fakultas',
         'nmfakultas' => 'required|string|max:255'
     ],
     $message = [
+        'kdfakultas.unique' => 'Kode Fakultas sudah ada di database.',
         'kdfakultas.required' => 'Kode Fakultas wajib diisi.',
         'nmfakultas.required' => 'Nama Fakultas wajib diisi.',
         'kdfakultas.max:2' => 'Kode Fakultas maksimal 2 karakter.',

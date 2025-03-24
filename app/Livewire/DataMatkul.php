@@ -21,12 +21,13 @@ class DataMatkul extends Component
 }
 
     protected $rules = [
-        'kdmatkul' => 'required|max:10',
+        'kdmatkul' => 'required|max:10|unique:dat_matkul,kd_matkul',
         'nmmatkul' => 'required|string|max:160',
         'sks' => 'required',
 
     ],
     $message = [
+        'kdmatkul.unique' => 'Kd Mata Kuliah sudah ada di database.',
         'kdmatkul.required' => 'Kd Mata Kuliah wajib diisi.',
         'nmmatkul.required' => 'Nama Mata Kuliah wajib diisi.',
         'sks.required' => 'Jumlah SKS wajib diisi.',

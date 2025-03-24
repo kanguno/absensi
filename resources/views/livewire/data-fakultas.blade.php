@@ -71,7 +71,9 @@
                 <div class="mb-4">
                     <label class="block text-white font-medium">Kode Fakultas* </label>
                     <input type="text" wire:model="kdfakultas"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                        class="w-full px-4 py-2 border-none rounded-lg focus:ring focus:ring-blue-300 placeholder-red-500 {{ $kdfakultas ? 'bg-gray-200' : '' }}"
+                        {{ $opsisave==='Perbarui' ? 'disabled' : '' }}
+                        >
                     @error('kdfakultas') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
 

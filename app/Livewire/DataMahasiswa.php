@@ -43,13 +43,14 @@ class DataMahasiswa extends Component
     }
     
     protected $rules = [
-        'nim' => 'required|max:20',
+        'nim' => 'required|max:20|unique:dat_mahasiswa,nim',
         'nm_mahasiswa' => 'required|string|max:100',
         'kelas' => 'required|string|max:10',
-        'semester' => 'required|number',
+        'semester' => 'required|numeric',
         'kd_prodi' => 'required',
     ],
     $message = [
+        'nim.unique' => 'NIM sudah ada didatabase.',
         'nim.required' => 'NIM wajib diisi.',
         'nm_mahasiswa.required' => 'Nama Mahasiswa wajib diisi.',
         'semester.required' => 'Semester wajib diisi.',

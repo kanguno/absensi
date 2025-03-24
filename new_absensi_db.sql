@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2025 at 04:46 AM
+-- Generation Time: Mar 24, 2025 at 09:00 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -72,6 +72,15 @@ CREATE TABLE `dat_dosen` (
   `email` varchar(160) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `dat_dosen`
+--
+
+INSERT INTO `dat_dosen` (`id_dosen`, `nm_dosen`, `no_telp`, `email`) VALUES
+('33553232325', 'Rohman Hadi Al Haq.,M.Kom ', NULL, 'Rohman@gmail.com'),
+('35231411121114', 'Andi Mulyanti S.,S.Kom.,M.MT', NULL, 'andimulyanti@gmail.com'),
+('3523232323211111', 'Andik Setiawan S.Kom., M.Kom', NULL, 'andik@gmail.com');
+
 -- --------------------------------------------------------
 
 --
@@ -82,6 +91,14 @@ CREATE TABLE `dat_fakultas` (
   `kd_fakultas` char(2) NOT NULL,
   `nm_fakultas` varchar(160) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dat_fakultas`
+--
+
+INSERT INTO `dat_fakultas` (`kd_fakultas`, `nm_fakultas`) VALUES
+('01', 'Saintek'),
+('02', 'Ilmu Kesehatan');
 
 -- --------------------------------------------------------
 
@@ -97,6 +114,24 @@ CREATE TABLE `dat_mahasiswa` (
   `no_telp` varchar(15) DEFAULT NULL,
   `kd_prodi` char(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dat_mahasiswa`
+--
+
+INSERT INTO `dat_mahasiswa` (`nim`, `nm_mahasiswa`, `kelas`, `semester`, `no_telp`, `kd_prodi`) VALUES
+('24612001', 'Ahmad Dafin Eka Subastian', '2024-A', 2, NULL, '12'),
+('24612002', 'Priyo Sulistyo Budi (K)', '2024-A', 2, NULL, '12'),
+('24612003', 'Fyppo Alfa Wijaya', '2024-A', 2, NULL, '12'),
+('24612004', 'Futiha Nur Sa\'adah', '2024-A', 2, NULL, '12'),
+('24612005', 'Pindy Ayu Damayanti', '2024-A', 2, NULL, '12'),
+('24612006', 'Sofi Alfitriana ', '2024-A', 2, NULL, '12'),
+('24612007', 'M.Iqbal Nur Wafa', '2024-A', 2, NULL, '12'),
+('24612008', 'Novika Hawa Al-Hurin', '2024-A', 2, NULL, '12'),
+('24612009', 'Padmahayu Paramarta Pambayun', '2024-A', 2, NULL, '12'),
+('24612010', 'Ragil Kurniawan ', '2024-A', 2, NULL, '12'),
+('24612011', 'Yulia Devi Ernawati', '2024-A', 2, NULL, '12'),
+('24612012', 'Miftakhul Jannah', '2024-A', 2, NULL, '12');
 
 -- --------------------------------------------------------
 
@@ -117,7 +152,8 @@ CREATE TABLE `dat_matkul` (
 --
 
 INSERT INTO `dat_matkul` (`kd_matkul`, `nm_matkul`, `jml_sks`, `teori`, `praktek`) VALUES
-('RPL0112', 'Pancasila & PAK', 3, 3, 0);
+('RPL0112', 'Pancasila & PAK', 3, 3, 0),
+('RPL1822', 'Matematika Komputasi', 3, 3, 0);
 
 -- --------------------------------------------------------
 
@@ -128,10 +164,18 @@ INSERT INTO `dat_matkul` (`kd_matkul`, `nm_matkul`, `jml_sks`, `teori`, `praktek
 CREATE TABLE `dat_perkuliahan` (
   `id_perkuliahan` int(11) NOT NULL,
   `id_sebaran_matkul` int(11) NOT NULL,
+  `kelas` varchar(10) NOT NULL,
   `tanggal` date DEFAULT NULL,
   `jam` time DEFAULT NULL,
   `batas_absen` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dat_perkuliahan`
+--
+
+INSERT INTO `dat_perkuliahan` (`id_perkuliahan`, `id_sebaran_matkul`, `kelas`, `tanggal`, `jam`, `batas_absen`) VALUES
+(3, 1, '2024-A', '2025-03-25', '13:59:00', '2025-03-25 14:30:00');
 
 -- --------------------------------------------------------
 
@@ -145,6 +189,14 @@ CREATE TABLE `dat_prodi` (
   `kd_fakultas` char(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `dat_prodi`
+--
+
+INSERT INTO `dat_prodi` (`kd_prodi`, `nm_prodi`, `kd_fakultas`) VALUES
+('11', 'Rekayasa Perangkat Lunak', '01'),
+('12', 'Bisnis Digital', '01');
+
 -- --------------------------------------------------------
 
 --
@@ -156,9 +208,17 @@ CREATE TABLE `dat_sebaran_matkul` (
   `kd_prodi` char(2) NOT NULL,
   `kd_matkul` varchar(10) NOT NULL,
   `id_dosen` varchar(16) NOT NULL,
-  `Semester` int(11) DEFAULT NULL,
+  `semester` int(11) DEFAULT NULL,
   `thn_akademik` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `dat_sebaran_matkul`
+--
+
+INSERT INTO `dat_sebaran_matkul` (`id_sebaran_matkul`, `kd_prodi`, `kd_matkul`, `id_dosen`, `semester`, `thn_akademik`) VALUES
+(1, '11', 'RPL1822', '33553232325', 2, '2024/2025'),
+(2, '11', 'RPL1822', '3523232323211111', 2, '2024/2025');
 
 -- --------------------------------------------------------
 
@@ -276,7 +336,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('yDano71SU8gCgViDKMTvaNbpES5L0MIrA79HnmNc', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiQlNqWHYwclNFbmEwUFQ0WEpPZTV1bExRVEVseDRVZ1pkZ3JiTnk0NSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzg6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9kYXRhLXBlcmt1bGlhaGFuIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1742787940);
+('yDano71SU8gCgViDKMTvaNbpES5L0MIrA79HnmNc', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiQlNqWHYwclNFbmEwUFQ0WEpPZTV1bExRVEVseDRVZ1pkZ3JiTnk0NSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzg6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9kYXRhLXBlcmt1bGlhaGFuIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1742803146);
 
 -- --------------------------------------------------------
 
@@ -443,13 +503,13 @@ ALTER TABLE `dat_absensi`
 -- AUTO_INCREMENT for table `dat_perkuliahan`
 --
 ALTER TABLE `dat_perkuliahan`
-  MODIFY `id_perkuliahan` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_perkuliahan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `dat_sebaran_matkul`
 --
 ALTER TABLE `dat_sebaran_matkul`
-  MODIFY `id_sebaran_matkul` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_sebaran_matkul` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`

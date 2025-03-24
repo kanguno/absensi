@@ -35,11 +35,12 @@ class DataProdi extends Component
     }
     
     protected $rules = [
-        'kdprodi' => 'required|max:2',
+        'kdprodi' => 'required|max:2|unique:dat_prodi,kd_prodi',
         'nmprodi' => 'required|string|max:255',
         'kdfakultas' => 'required|string|max:2',
     ],
     $message = [
+        'kdprodi.unique' => 'Kode Prodi sudah ada di database.',
         'kdprodi.required' => 'Kode Prodi wajib diisi.',
         'nmprodi.required' => 'Nama Prodi wajib diisi.',
         'kdfakultas.required' => 'Pilih salah satu fakultas'

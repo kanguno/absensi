@@ -75,7 +75,9 @@
                 <div class="mb-4">
                     <label class="block text-white font-medium">ID Dosen* </label>
                     <input type="text" wire:model="iddosen"
-                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
+                        {{ $opsisave==='Perbarui' ? 'disabled' : '' }}
+                        >
                     @error('iddosen') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
 
