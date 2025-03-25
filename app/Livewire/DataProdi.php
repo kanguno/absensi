@@ -12,6 +12,7 @@ class DataProdi extends Component
     public $kdprodi, $nmprodi, $kdfakultas;
     public $fakultas,$prodi;
     public $formdataprodi='hidden',$opsisave;
+    public $editingId = null; // ID yang sedang diedit
 
     public function render()
 {
@@ -33,13 +34,23 @@ class DataProdi extends Component
         // Debugging untuk memastikan data ada
         
     }
-    
-    protected $rules = [
-        'kdprodi' => 'required|max:2|unique:dat_prodi,kd_prodi',
-        'nmprodi' => 'required|string|max:255',
-        'kdfakultas' => 'required|string|max:2',
-    ],
-    $message = [
+    public function rules()
+    {
+        return [
+            'kdprodi' => $this->editingId 
+                ? 'required|max:2|exists:dat_prodi,kd_prodi' // Hanya validasi exists jika sedang edit
+                : 'required|max:2|unique:dat_prodi,kd_prodi',
+            'nmprodi' => 'required|string|max:255',
+            'kdfakultas' => 'required|string|max:2',
+        ];
+    }
+
+    // protected $rules = [
+    //     'kdprodi' => 'required|max:2|unique:dat_prodi,kd_prodi',
+    //     'nmprodi' => 'required|string|max:255',
+    //     'kdfakultas' => 'required|string|max:2',
+    // ],
+    protected $message = [
         'kdprodi.unique' => 'Kode Prodi sudah ada di database.',
         'kdprodi.required' => 'Kode Prodi wajib diisi.',
         'nmprodi.required' => 'Nama Prodi wajib diisi.',
@@ -48,7 +59,7 @@ class DataProdi extends Component
 
     public function save()
     {
-        $this->validate($this->rules, $this->message);
+        $this->validate($this->rules(), $this->message);
 
         $prodi = DB::table('dat_prodi')->where('kd_prodi', $this->kdprodi)->first();
 
@@ -111,6 +122,7 @@ class DataProdi extends Component
         $this->formdataprodi='';
         $this->resetValidation();
         $this->opsisave='Perbarui';
+        $this->editingId=$kdprodi;
         $data=DB::table('dat_prodi')->where('kd_prodi', $kdprodi)->first();
 
         $this->kdprodi=$data->kd_prodi;

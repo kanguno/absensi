@@ -133,10 +133,9 @@
                                     </td>
 
                                     <td class="px-4">
-                                        <textarea wire:model.lazy="keterangan.{{ $databsensi->id_absensi }}" 
-                                            wire:change="updateKeterangan({{ $databsensi->id_absensi }})"
-                                            class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-400 transition-all">
-                                        </textarea>
+                                    <textarea wire:model.lazy="keterangan.{{ $databsensi->id_absensi }}" 
+                                        class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-400 transition-all">
+                                    </textarea>
                                     </td>
                                    
                                 </tr>

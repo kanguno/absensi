@@ -9,7 +9,7 @@ class DataMatkul extends Component
 {
     public $kdmatkul, $nmmatkul, $sks,$teori,$praktek;
     public $datmakul,$user;
-    public $formdatamatkul='hidden',$opsisave;
+    public $formdatamatkul='hidden',$opsisave,$editingId=null;
 
     public function render()
 {
@@ -20,13 +20,23 @@ class DataMatkul extends Component
     ])->extends('layouts.back');
 }
 
-    protected $rules = [
-        'kdmatkul' => 'required|max:10|unique:dat_matkul,kd_matkul',
+    public function rules () {
+        return[
+        
+        'kdmatkul' => $this->editingId
+        ? 'required|max:10|exists:dat_matkul,kd_matkul'
+        : 'required|max:10|unique:dat_matkul,kd_matkul',
         'nmmatkul' => 'required|string|max:160',
         'sks' => 'required',
+        ];
+    }
+    // protected $rules = [
+    //     'kdmatkul' => 'required|max:10|unique:dat_matkul,kd_matkul',
+    //     'nmmatkul' => 'required|string|max:160',
+    //     'sks' => 'required',
 
-    ],
-    $message = [
+    // ],
+    protected $message = [
         'kdmatkul.unique' => 'Kd Mata Kuliah sudah ada di database.',
         'kdmatkul.required' => 'Kd Mata Kuliah wajib diisi.',
         'nmmatkul.required' => 'Nama Mata Kuliah wajib diisi.',
@@ -38,7 +48,7 @@ class DataMatkul extends Component
 
     public function save()
     {
-        $this->validate($this->rules,$this->message);
+        $this->validate($this->rules(),$this->message);
 
         $datmatkul = DB::table('dat_matkul')->where('kd_matkul', $this->kdmatkul)->first();
 
@@ -102,6 +112,7 @@ class DataMatkul extends Component
         $this->formdatamatkul='';
         $this->resetValidation();
         $this->opsisave='Perbarui';
+        $this->editingId=$kdmatkul;
         $data=DB::table('dat_matkul')->where('kd_matkul',$kdmatkul)->first();
         
 

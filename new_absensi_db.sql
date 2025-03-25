@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2025 at 03:45 AM
+-- Generation Time: Mar 26, 2025 at 12:26 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -64,8 +64,8 @@ CREATE TABLE `dat_absensi` (
 --
 
 INSERT INTO `dat_absensi` (`id_absensi`, `nim`, `id_perkuliahan`, `status_kehadiran`, `keterangan`) VALUES
-(1, '24612001', 3, 'T', ''),
-(2, '24612002', 3, 'Y', ''),
+(1, '24612001', 3, 'T', 'Cuti Sakit'),
+(2, '24612002', 3, 'T', 'Kepentingan Keluarga'),
 (3, '24612003', 3, 'Y', NULL),
 (4, '24612004', 3, 'Y', NULL),
 (5, '24612005', 3, 'Y', NULL),
@@ -354,7 +354,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('s95aSU9T11ELPUc8vVIwW3nvllvCuixTPsWZRPYM', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiU2NNd0xiWTZ4VHo3c2JpeWRQbWRjMkxvTkFXZkJLQWNBZWxVMDdBWiI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjM4OiJodHRwOi8vbG9jYWxob3N0OjgwMDAvY2VrbGlzdC1hYnNlbnNpMyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1742870625);
+('UDUEbX5CiwZD2ImhOV2qklwWq8CiHyNBf0JTCBiy', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiTzlzZkp0czkwekZhQ2s3SjVpNzJBMnFIUUQ2YzJWTDc3TThNV1AwZCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzg6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9kYXRhLXBlcmt1bGlhaGFuIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1742945056);
 
 -- --------------------------------------------------------
 
