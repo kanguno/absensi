@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class DataMahasiswa extends Component
 {
-    public $nim, $nm_mahasiswa, $kelas,$semester,$kd_prodi, $fakultas;
+    public $nim, $nm_mahasiswa, $kelas,$semester,$kd_prodi, $fakultas,$editingId;
     public $mahasiswa_id,$prodi;
     public $formdatamhs='hidden',$opsisave;
 
@@ -41,15 +41,20 @@ class DataMahasiswa extends Component
         // Debugging untuk memastikan data ada
         
     }
-    
-    protected $rules = [
-        'nim' => 'required|max:20|unique:dat_mahasiswa,nim',
+    public function rules()
+{
+    return [
+        'nim' => $this->editingId
+        ? 'required|max:20|unique:dat_mahasiswa,nim,'.$this->editingId .',nim'
+        : 'required|max:20|unique:dat_mahasiswa,nim',
         'nm_mahasiswa' => 'required|string|max:100',
         'kelas' => 'required|string|max:10',
         'semester' => 'required|numeric',
         'kd_prodi' => 'required',
-    ],
-    $message = [
+    ];
+}
+
+    protected $message = [
         'nim.unique' => 'NIM sudah ada didatabase.',
         'nim.required' => 'NIM wajib diisi.',
         'nm_mahasiswa.required' => 'Nama Mahasiswa wajib diisi.',
@@ -64,7 +69,7 @@ class DataMahasiswa extends Component
 
     public function save()
     {
-        $this->validate($this->rules,$this->message);
+        $this->validate($this->rules(),$this->message);
 
         $datmhs = DB::table('dat_mahasiswa')->where('nim', $this->nim)->first();
 
@@ -132,11 +137,15 @@ class DataMahasiswa extends Component
         $this->opsisave='Perbarui';
         $data=datMahasiswa::where('nim',$nim)->first();
 
-        $this->nim=$data->nim;
-        $this->nm_mahasiswa=$data->nm_mahasiswa;
-        $this->kelas=$data->kelas;
-        $this->semester=$data->semester;
-        $this->kd_prodi=$data->kd_prodi;
+        if ($data) {
+            $this->nim = $data->nim; // Simpan ID untuk validasi update
+            $this->editingId = $data->nim; // Simpan ID untuk validasi update
+            $this->nm_mahasiswa=$data->nm_mahasiswa;
+            $this->kelas=$data->kelas;
+            $this->semester=$data->semester;
+            $this->kd_prodi=$data->kd_prodi;
+        }
+        
         
     }
 }

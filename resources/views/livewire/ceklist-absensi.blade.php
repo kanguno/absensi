@@ -1,7 +1,9 @@
 <div>
+
 @if (session()->has('message'))
-    <div id="notifikasi" class="bg-green-100 text-green-700 p-3 rounded mb-4 transition-opacity">
+    <div id="notifikasi" class="fixed bottom-4 right-4 z-50 bg-green-100 text-green-700 px-4 py-3 rounded-2xl shadow-lg max-w-xs">
         {{ session('message') }}
+        <div class="absolute -bottom-2 right-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent shadow-lg border-t-8 border-green-100"></div>
     </div>
 @endif
 <script>
@@ -45,8 +47,8 @@
                         TA {{$perkuliahan->thn_akademik}}
                 </h2>
                     
-                    <div class="flex justify-between">
-                        <table class="text-lg font-semibold">
+                    <div class="grid md:flex justify-between">
+                        <table class="mb-2 md:mb-0 text-lg font-semibold">
                             <tr>
                                 <td class="px-4">Mata Kuliah</td>
                                 <td class="px-4">:</td>

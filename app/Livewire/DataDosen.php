@@ -7,103 +7,104 @@ use Illuminate\Support\Facades\DB;
 
 class DataDosen extends Component
 {
-    public $iddosen, $nmdosen, $notelp,$email;
+    public $iddosen, $nmdosen, $notelp, $email;
     public $datdosen;
-    public $formdatadosen='hidden',$opsisave;
+    public $formdatadosen = 'hidden', $opsisave;
+    public $editingId = null; // ID yang sedang diedit
 
     public function render()
-{
-    $this->datdosen = DB::table('dat_dosen')->get();
+    {
+        $this->datdosen = DB::table('dat_dosen')->get();
 
-    return view('livewire.data-dosen', [
-        'dosen' => $this->datdosen
-    ])->extends('layouts.back');
-}
+        return view('livewire.data-dosen', [
+            'dosen' => $this->datdosen
+        ])->extends('layouts.back');
+    }
 
-    protected $rules = [
-        'iddosen' => 'required|max:16|unique:dat_dosen,id_dosen',
-        'nmdosen' => 'required|string|max:100',
-        'email' => 'required',
-    ],
-    $message = [
+    public function rules()
+    {
+        return [
+            'iddosen' => $this->editingId 
+                ? 'required|max:16|exists:dat_dosen,id_dosen' // Hanya validasi exists jika sedang edit
+                : 'required|max:16|unique:dat_dosen,id_dosen',
+            'nmdosen' => 'required|string|max:100',
+            'email' => 'required|email',
+        ];
+    }
+
+    protected $messages = [
         'iddosen.unique' => 'ID dosen sudah ada di database.',
         'iddosen.required' => 'ID dosen wajib diisi.',
+        'iddosen.exists' => 'ID dosen tidak ditemukan dalam database.', // Pesan baru
         'nmdosen.required' => 'Nama Dosen wajib diisi.',
-        'nmdosen.required' => 'Email wajib diisi.',
-        'iddosen.max' => 'ID Dosen Maksimal 16 karakter',
-        'nmdosen.max' => 'Nama Mahasiswa Maksimal 100 karakter',
+        'email.required' => 'Email wajib diisi.',
+        'iddosen.max' => 'ID Dosen maksimal 16 karakter.',
+        'nmdosen.max' => 'Nama Dosen maksimal 100 karakter.',
     ];
 
     public function save()
     {
-        $this->validate($this->rules,$this->message);
+        $this->validate();
 
-        $datdosen = DB::table('dat_dosen')->where('id_dosen', $this->iddosen)->first();
-
-        if ($datdosen) {
-            // Update data jika sudah ada
+        if ($this->editingId) {
+            // Update data jika sedang mengedit (tidak ubah id_dosen)
             DB::table('dat_dosen')
-                ->where('id_dosen', $this->iddosen)
+                ->where('id_dosen', $this->editingId)
                 ->update([
                     'nm_dosen' => $this->nmdosen,
                     'no_telp' => $this->notelp,
                     'email' => $this->email,
                 ]);
+
             session()->flash('message', 'Data berhasil diperbarui!');
         } else {
             // Insert data baru
             DB::table('dat_dosen')->insert([
                 'id_dosen' => $this->iddosen,
                 'nm_dosen' => $this->nmdosen,
-                    'no_telp' => $this->notelp,
-                    'email' => $this->email,
+                'no_telp' => $this->notelp,
+                'email' => $this->email,
             ]);
+
             session()->flash('message', 'Data berhasil ditambahkan!');
-            
         }
 
-        $this->reset();
+        $this->resetForm();
         $this->dispatch('flashMessage');
     }
 
     public function delete($iddosen)
     {
-        
-        $datdosen = DB::table('dat_dosen')->where('id_dosen', $iddosen)->delete();
-
-
-            session()->flash('message', 'Data berhasil dihapus!');
-       
-
+        DB::table('dat_dosen')->where('id_dosen', $iddosen)->delete();
+        session()->flash('message', 'Data berhasil dihapus!');
         $this->dispatch('flashMessage');
     }
 
-    public function tambahdata(){
-        $this->reset();
-        $this->resetValidation();
-        $this->formdatadosen='';
-        $this->opsisave='Tambahkan';
+    public function tambahdata()
+    {
+        $this->resetForm();
+        $this->opsisave = 'Tambahkan';
     }
-    public function cfdosen(){
-        $this->reset();
-        $this->resetValidation();
-        $this->formdatadosen='hidden';
-    }
-    public function resetform(){
-        $this->reset();
-        $this->resetValidation();
-        $this->formdatadosen='';
-    }
-    public function edit($iddosen){
-        $this->formdatadosen='';
-        $this->resetValidation();
-        $this->opsisave='Perbarui';
-        $data=DB::table('dat_dosen')->where('id_dosen',$iddosen)->first();
 
-        $this->iddosen=$data->id_dosen;
-        $this->nmdosen=$data->nm_dosen;
-        $this->notelp=$data->no_telp;
-        $this->email=$data->email;
-        
+    public function edit($iddosen)
+    {
+        $this->resetValidation();
+        $this->formdatadosen = '';
+        $this->opsisave = 'Perbarui';
+        $this->editingId = $iddosen; // Simpan ID yang sedang diedit
+
+        $data = DB::table('dat_dosen')->where('id_dosen', $iddosen)->first();
+
+        $this->iddosen = $data->id_dosen;
+        $this->nmdosen = $data->nm_dosen;
+        $this->notelp = $data->no_telp;
+        $this->email = $data->email;
+    }
+
+    public function resetForm()
+    {
+        $this->reset(['iddosen', 'nmdosen', 'notelp', 'email', 'editingId']);
+        $this->resetValidation();
+        $this->formdatadosen = 'hidden';
     }
 }

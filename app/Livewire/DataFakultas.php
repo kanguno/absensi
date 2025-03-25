@@ -9,7 +9,7 @@ class DataFakultas extends Component
 {
    
 
-    public $nmfakultas, $kdfakultas;
+    public $nmfakultas, $kdfakultas, $editingId = null;
     public $fakultas;
     public $formdatafakultas='hidden',$opsisave;
 
@@ -22,11 +22,17 @@ class DataFakultas extends Component
     ])->extends('layouts.back');
 }
     
-    protected $rules = [
-        'kdfakultas' => 'required|max:2|unique:dat_fakultas,kd_fakultas',
-        'nmfakultas' => 'required|string|max:255'
-    ],
-    $message = [
+public function rules()
+{
+    return [
+        'kdfakultas' => $this->editingId
+            ? 'required|max:2|unique:dat_fakultas,kd_fakultas,' . $this->editingId . ',kd_fakultas'
+            : 'required|max:2|unique:dat_fakultas,kd_fakultas',
+        'nmfakultas' => 'required|string|max:255',
+    ];
+}
+
+    protected $message = [
         'kdfakultas.unique' => 'Kode Fakultas sudah ada di database.',
         'kdfakultas.required' => 'Kode Fakultas wajib diisi.',
         'nmfakultas.required' => 'Nama Fakultas wajib diisi.',
@@ -36,7 +42,7 @@ class DataFakultas extends Component
 
     public function save()
     {
-        $this->validate($this->rules, $this->message);
+        $this->validate($this->rules(), $this->message);
 
         $Fakultas = DB::table('dat_fakultas')->where('kd_fakultas', $this->kdfakultas)->first();
 
@@ -46,7 +52,6 @@ class DataFakultas extends Component
                 ->where('kd_fakultas', $this->kdfakultas)
                 ->update([
                     'nm_fakultas' => $this->nmfakultas,
-                    'kd_fakultas' => $this->kdfakultas,
                     
                 ]);
             session()->flash('message', 'Data berhasil diperbarui!');
@@ -55,7 +60,6 @@ class DataFakultas extends Component
             DB::table('dat_fakultas')->insert([
                 'kd_fakultas' => $this->kdfakultas,
                 'nm_fakultas' => $this->nmfakultas,
-                'kd_fakultas' => $this->kdfakultas
             ]);
             session()->flash('message', 'Data berhasil ditambahkan!');
             
@@ -95,14 +99,18 @@ class DataFakultas extends Component
         $this->resetValidation();
         $this->formdatafakultas='';
     }
-    public function edit($kdfakultas){
-        $this->formdatafakultas='';
+    public function edit($kdfakultas)
+    {
+        $this->formdatafakultas = '';
         $this->resetValidation();
-        $this->opsisave='Perbarui';
-        $data=DB::table('dat_fakultas')->where('kd_fakultas', $kdfakultas)->first();
+        $this->opsisave = 'Perbarui';
 
-        $this->kdfakultas=$data->kd_fakultas;
-        $this->nmfakultas=$data->nm_fakultas;
-        
+        $data = DB::table('dat_fakultas')->where('kd_fakultas', $kdfakultas)->first();
+
+        if ($data) {
+            $this->editingId = $data->kd_fakultas; // Simpan ID untuk validasi update
+            $this->kdfakultas = $data->kd_fakultas;
+            $this->nmfakultas = $data->nm_fakultas;
+        }
     }
 }
