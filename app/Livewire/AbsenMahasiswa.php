@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class AbsenMahasiswa extends Component
 {
-    public $dataperkuliahan=[],$idperkuliahan;
+    public $dataperkuliahan=[],$idperkuliahan,$absensi=[],$idabsensi,$nim;
+    public $carimhs,$formabsen="hidden";
+    
     public function render()
     {
         return view('livewire.absen-mahasiswa',[
@@ -37,5 +39,34 @@ class AbsenMahasiswa extends Component
         )
         ->where('dat_perkuliahan.id_perkuliahan', '=', $idperkuliahan) // Tambahkan where untuk spesifik perkuliahan
         ->first();
+    }
+
+
+    public function caridataabsensi(){
+        
+        $this->formabsen="";
+        $this->carimhs="hidden";
+        $this->absensi = DB::table('dat_absensi')
+        ->join('dat_mahasiswa', 'dat_mahasiswa.nim', '=', 'dat_absensi.nim')
+        ->join('dat_prodi', 'dat_mahasiswa.kd_prodi', '=', 'dat_prodi.kd_prodi')
+        ->join('dat_fakultas', 'dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
+        ->where('dat_absensi.nim', '=', $this->nim)
+        ->select('dat_absensi.*', 'dat_mahasiswa.nm_mahasiswa','dat_mahasiswa.kelas','dat_mahasiswa.kelas','dat_prodi.nm_prodi','dat_fakultas.nm_fakultas')
+        ->first();        
+    }
+    public function absen($idabsensi){
+        $this->absensi=DB::table('dat_absensi')->where('id_absensi','=',$idabsensi)
+        ->update([
+            'status_kehadiran'=>'Y',
+            'keterangan'=>''
+        ]);
+        session()->flash('message', 'Anda berhasil Absen!');
+        return redirect()->route('absensimahasiswa', ['idperkuliahan' => $this->idperkuliahan]);
+    }
+    public function resetcaridata(){
+        $this->carimhs="";
+        $this->nim="";
+        $this->absensi=null;
+
     }
 }

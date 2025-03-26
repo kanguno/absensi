@@ -124,7 +124,7 @@
                 
 
                 <div class="flex justify-between">
-                    <button type="button" wire:click="resetform()"
+                    <button type="button" wire:click="formcarimhs"
                             class="bg-[#66008b] text-white border-2 border-[#66008b] px-3 py-1 rounded hover:bg-white hover:text-[#66008b] hover:border-white">
                         Kosongkan Formulir
                     </button>
