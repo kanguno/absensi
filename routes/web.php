@@ -8,11 +8,11 @@ use App\Livewire\DataDosen;
 use App\Livewire\DataMatkul;
 use App\Livewire\DataSebaranMatkul;
 use App\Livewire\DataPerkuliahan;
-use App\Livewire\DataAbsensi;
+use App\Livewire\AbsenMahasiswa;
 use App\Livewire\CeklistAbsensi;
 
 Route::view('/', 'welcome');
-Route::get('/data-absensi', DataAbsensi::class)->name('dataabsensi');
+Route::get('/data-absensi-{idperkuliahan}', AbsenMahasiswa::class)->name('absensimahasiswa');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -31,6 +31,6 @@ Route::view('profile', 'profile')
     Route::get('/data-matkul', DataMatkul::class)->middleware(['auth'])->name('datamatkul');
     Route::get('/data-sebaran-matkul', DataSebaranMatkul::class)->middleware(['auth'])->name('datasebaranmatkul');
     Route::get('/data-perkuliahan', DataPerkuliahan::class)->middleware(['auth'])->name('dataperkuliahan');
-    Route::get('/ceklist-absensi{idperkuliahan}', CeklistAbsensi::class)->middleware(['auth'])->name('ceklistabsensi');
+    Route::get('/ceklist-absensi-{idperkuliahan}', CeklistAbsensi::class)->middleware(['auth'])->name('ceklistabsensi');
 
 require __DIR__.'/auth.php';
