@@ -61,5 +61,16 @@
 
 
     });
+
+    function closeModal() {
+            const modal = document.getElementById('notifikasi');
+            if (modal) {
+            
+                    modal.style.display = 'none'; // Menyembunyikan modal setelah fade-out selesai
+                 
+            } else {
+                console.log('Modal tidak ditemukan');
+            }
+        }
 </script>
 </html>

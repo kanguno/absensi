@@ -5,6 +5,31 @@
         <div class="absolute -bottom-2 right-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent shadow-lg border-t-8 border-green-100"></div>
     </div>
 @endif
+<div>
+    @if (session()->has('messagemodal'))
+        <div id="notifikasi" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="bg-white p-2 rounded-lg shadow-lg max-w-xs">
+                
+                <div class="text-center p-4 text-red-700">
+                <i style="font-size: 4rem;" class="bi bi-bell-fill"></i>    
+                <p class="p-4 text-red-700 font-semibold">{{ session('messagemodal') }}</p>
+                    <button onclick="closeModal()" class="text-white px-3 py-2 hover:bg-slate-200 rounded-full cursor-pointer bg-slate-500 font-bold">Close</button>
+                </div>
+                
+            </div>
+        </div>
+
+        <script>
+            function closeModal() {
+                document.getElementById('notifikasiModal').style.display = 'none';
+            }
+
+            setTimeout(() => {
+                closeModal();
+            }, 5000); // Otomatis hilang setelah 3 detik
+        </script>
+    @endif
+</div>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -44,6 +69,10 @@
                                         <a  wire:click="absensi({{ $datperkuliahan->id_perkuliahan }})"
                                         class="bg-[#1db851] text-white px-3 py-1 rounded hover:bg-green-600 cursor-pointer">
                                             <i class="bi bi-card-checklist"></i> Absensi
+                                         </a>
+                                        <a  wire:click="cetakabsensi({{ $datperkuliahan->id_perkuliahan }})"
+                                        class="bg-[#45025b] text-white px-3 py-1 rounded hover:bg-purple-600 cursor-pointer">
+                                            <i class="bi bi-printer-fill"></i> Cetak Absensi
                                          </a>
                                         <a  wire:click="edit({{ $datperkuliahan->id_perkuliahan }})"
                                         class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">

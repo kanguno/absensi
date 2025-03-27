@@ -165,5 +165,19 @@ class DataPerkuliahan extends Component
         }
         
     }
+    public function cetakabsensi($idperkuliahan)
+    {
+        $dataabsensi=DB::table('dat_absensi')->where('id_perkuliahan','=',$idperkuliahan)->first();
+
+        
+        if($dataabsensi){
+            $this->redirectRoute('cetakabsensiharian', $idperkuliahan);
+        }
+        else{
+            session()->flash('messagemodal', 'Data Absensi Belum Dibuat!');
+            $this->dispatch('flashMessage');
+            
+        }
+    }
 
 }
