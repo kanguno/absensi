@@ -31,8 +31,8 @@
     @endif
 </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+ <div class="py-5">
+        <div class="w-full mx-auto lg:px-5">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold">Data Perkuliahan</h2>
@@ -72,7 +72,7 @@
                                          </a>
                                         <a  wire:click="cetakabsensi({{ $datperkuliahan->id_perkuliahan }})"
                                         class="bg-[#45025b] text-white px-3 py-1 rounded hover:bg-purple-600 cursor-pointer">
-                                            <i class="bi bi-printer-fill"></i> Cetak Absensi
+                                            <i class="bi bi-file-earmark-ruled"></i> Lihat Absensi
                                          </a>
                                         <a  wire:click="edit({{ $datperkuliahan->id_perkuliahan }})"
                                         class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">

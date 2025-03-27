@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use Livewire\Component;
 
@@ -57,4 +58,8 @@ class CetakAbsensiHarian extends Component
         
         $this->dispatch('print-page');
     }
+    public function kembali(){
+        $this->redirectRoute('dataperkuliahan');
+    }
+    
 }

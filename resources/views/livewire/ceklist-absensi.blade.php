@@ -31,8 +31,8 @@
     });
 </script>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+ <div class="py-5">
+        <div class="w-full mx-auto lg:px-5">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="mb-4">
                     <h2 class="text-center text-2xl uppercase font-bold">PRODI {{$perkuliahan->nm_prodi}} FAKULTAS {{$perkuliahan->nm_fakultas}}</h2>
