@@ -1,3 +1,22 @@
+<?php
+
+use App\Livewire\Actions\Logout;
+use Livewire\Volt\Component;
+
+new class extends Component
+{
+    /**
+     * Log the current user out of the application.
+     */
+    public function logout(Logout $logout): void
+    {
+        $logout();
+
+        $this->redirect('/', navigate: true);
+    }
+}; ?>
+
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -18,25 +37,68 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            <livewire:layout.sidenavigation />
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+    <body class="bg-gray-100">
+    <div x-data="{ open: true }">
+        <!-- Sidebar -->
+        <!-- Main Content -->
+            <div class="flex-1 flex flex-col">
+                <!-- Navbar -->
+                <header class="bg-white fixed z-50 w-full shadow p-4 flex justify-between items-center">
+                    <div class="flex space-x-2">
+                        <button @click="open = !open" class="text-black focus:outline-none">
+                            ☰
+                        </button>
+                        <h1 class="text-lg font-semibold">Dashboard</h1>
+                    </div>
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" class="focus:outline-none">
+                            {{ Auth::user()->name }} ⌄
+                        </button>
+                        <div x-show="open" class="absolute right-0 mt-2 bg-white border rounded shadow-md">
+                            <x-dropdown-link :href="route('profile')" wire:navigate>
+                                {{ __('Profile') }}
+                            </x-dropdown-link>
+                            <button wire:click="logout" class="block w-full text-left px-4 py-2">Logout</button>
+                        </div>
                     </div>
                 </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-            @yield('content')
-            </main>
-        </div>
-    </body>
+                <div class="flex">
+                    <div  class="bg-white transition-all duration-300 fixed z-10 h-full">
+                        <nav :class="open ? 'grid' : 'hidden'" class=" mt-[4rem] w-64">
+                             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                                {{ __('Dashboard') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('datamahasiswa')" :active="request()->routeIs('datamahasiswa')" wire:navigate>
+                                {{ __('Data Mahasiswa') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('datadosen')" :active="request()->routeIs('datadosen')" wire:navigate>
+                                {{ __('Data Dosen') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('dataprodi')" :active="request()->routeIs('dataprodi')" wire:navigate>
+                                {{ __('Data Program Studi') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('datafakultas')" :active="request()->routeIs('datafakultas')" wire:navigate>
+                                {{ __('Data Fakultas') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('datamatkul')" :active="request()->routeIs('datamatkul')" wire:navigate>
+                                {{ __('Data Mata Kuliah') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('dataperkuliahan')" :active="request()->routeIs('dataperkuliahan')" wire:navigate>
+                                {{ __('Data Perkuliahan') }}
+                            </x-responsive-nav-link>
+                            <x-responsive-nav-link :href="route('datasebaranmatkul')" :active="request()->routeIs('datasebaranmatkul')" wire:navigate>
+                                {{ __('Data Distribusi Mata Kuliah') }}
+                            </x-responsive-nav-link>
+                        </nav>
+                    </div>
+                    <main :class="open ? 'ml-64' : 'ml-0'" class="mt-10 w-full p-4">
+                        @yield('content')
+                    </main>
+                </div>
+            </div>
+    </div>
+    @livewireScripts
+</body>
    
    <script>
     document.addEventListener('livewire:init', () => {
