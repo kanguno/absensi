@@ -79,10 +79,16 @@ class DataDosen extends Component
         session()->flash('message', 'Data berhasil dihapus!');
         $this->dispatch('flashMessage');
     }
-
+  public function cfdosen(){
+        $this->reset();
+        $this->resetValidation();
+        $this->formdatadosen='hidden';
+    }
     public function tambahdata()
     {
+        
         $this->resetForm();
+        $this->formdatadosen='';
         $this->opsisave = 'Tambahkan';
     }
 
