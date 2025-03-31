@@ -72,7 +72,7 @@
                         </thead>
                         <tbody>
                             @forelse($absensi as $databsensi)
-                                <tr class="hover:bg-gray-100 border">
+                                <tr class="text-md hover:bg-gray-100 border">
                                     <td class="px-4">{{ $databsensi->nim }}</td>
                                     <td class="px-4">{{ $databsensi->nm_mahasiswa }}</td>
                                     <td class="px-4">{{ $absensi->status_kehadiran == 'Y' ? '✔' : '' }}</td>

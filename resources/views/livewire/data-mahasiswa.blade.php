@@ -7,7 +7,7 @@
 @endif
 
  <div class="py-5">
-        <div class="w-full mx-auto lg:px-5">
+        <div class="w-full h-screen mx-auto lg:px-5">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold">Data Mahasiswa</h2>
@@ -20,6 +20,7 @@
                     <table class="min-w-full border border-gray-300">
                         <thead class="bg-[#66008b] text-white">
                             <tr>
+                                <th class="border px-4 py-2 text-center">No.</th>
                                 <th class="border px-4 py-2 text-center">NIM</th>
                                 <th class="border px-4 py-2 text-center">Nama Mahasiswa</th>
                                 <th class="border px-4 py-2 text-center">Kelas</th>
@@ -31,29 +32,35 @@
                         </thead>
                         <tbody>
                             @forelse($datamahasiswa as $datmhs)
-                                <tr class="hover:bg-gray-100 border">
+                                <tr class="text-md hover:bg-gray-100 border">
+                                    <td class="px-4 py-2">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-2">{{ $datmhs->nim }}</td>
                                     <td class="px-4 py-2">{{ $datmhs->nm_mahasiswa }}</td>
                                     <td class="px-4 py-2">{{ $datmhs->kelas }}</td>
                                     <td class="px-4 py-2">{{ $datmhs->semester }}</td>
                                     <td class="px-4 py-2">{{ $datmhs->nm_prodi }}</td>
                                     <td class="px-4 py-2">{{ $datmhs->nm_fakultas }}</td>
-                                    <td class="px-4 py-2 text-center justify-center flex gap-5">
-                                        <a  wire:click="edit({{ $datmhs->nim }})"
-                                           class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">
-                                           <i class="bi bi-pencil-square"></i> Perbarui
-                                        </a>
-                                        <form class="inline">
-                                            <button type="button"
-                                                    wire:click="delete({{ $datmhs->nim }})"
-                                                    onclick="return confirm('Yakin ingin menghapus?')"
-                                                    class="bg-[#f44336] text-white px-3 py-1 rounded hover:bg-red-600">
-                                                <i class="bi bi-trash-fill"></i> Hapus
-                                            </button>
-                                        </form>
+                                    <td class="px-4 py-2 text-center text-sm justify-center flex gap-5">
+                                            <a x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
+                                            wire:click="edit({{ $datmhs->nim }})"
+                                            class="relative bg-[#ff9800] text-white px-2 py-1 items-center rounded hover:bg-yellow-600 cursor-pointer">
+                                                <i class="bi bi-pencil-square"></i>
+                                                <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
+                                                    Perbaruhi Data
+                                                </span> 
+                                            </a>
 
-
-
+                                            <form class="inline">
+                                                <button x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
+                                                        type="button" wire:click="delete({{ $datmhs->nim }})"
+                                                        onclick="return confirm('Yakin ingin menghapus?')"
+                                                        class="relative bg-[#f44336] text-white px-2 py-1 items-center rounded hover:bg-red-600">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                    <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
+                                                        Hapus Data
+                                                    </span>
+                                                </button>
+                                            </form>
                                     </td>
                                 </tr>
                             @empty
@@ -78,7 +85,7 @@
             </div>    
             <h2 class="text-xl text-center text-white font-bold">FORMULIR DATA MAHASISWA</h2>
         </div>
-            <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md max-h-[70vh] overflow-y-auto'>
+            <form wire:submit.prevent="save" class='p-6  bg-[#45025b] rounded-b-md max-h-[70vh] overflow-y-auto'>
                 <div class="mb-4">
                     <label class="block text-white font-medium">NIM* </label>
                     <input type="text" wire:model="nim"

@@ -32,7 +32,7 @@
 </script>
 
  <div class="py-5">
-        <div class="w-full mx-auto lg:px-5">
+        <div class="w-full h-screen mx-auto lg:px-5">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="mb-4">
                     <h2 class="text-center text-2xl uppercase font-bold">PRODI {{$perkuliahan->nm_prodi}} FAKULTAS {{$perkuliahan->nm_fakultas}}</h2>
@@ -104,7 +104,7 @@
                         </thead>
                         <tbody>
                             @forelse($absensi as $databsensi)
-                                <tr class="hover:bg-gray-100 border">
+                                <tr class="text-md hover:bg-gray-100 border">
                                     <td class="px-4">{{ $databsensi->nim }}</td>
                                     <td class="px-4">{{ $databsensi->nm_mahasiswa }}</td>
                                     <td class="px-4 py-2 text-center">

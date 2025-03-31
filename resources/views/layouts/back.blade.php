@@ -36,9 +36,13 @@ $component = new class extends Component
 
     <style>
         [x-cloak] { display: none; }
+        .scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
     </style>
 </head>
 <body class="bg-gray-100">
+
     <div x-data="{ sidebarOpen: true }">
         <div class="flex-1 flex flex-col">
             <header class="bg-white fixed z-50 w-full shadow p-4 flex justify-between items-center">
@@ -66,13 +70,13 @@ $component = new class extends Component
                 </div>
             </header>
             <div class="flex">
-               <div class="bg-white fixed z-10 h-full transition-transform duration-300"
+               <div class="bg-white fixed z-10 p-4 h-full transition-transform duration-300"
      :class="sidebarOpen ? 'w-64' : 'w-0'">
 
                     <nav :class="sidebarOpen ? 'grid' : 'hidden'" class="mt-[4rem] p-4">
                         <div x-data="{ openAkademik: true }">
                             <button @click="openAkademik = !openAkademik" class="focus:outline-none w-full">
-                                <h2 class="flex justify-between text-gray-700 font-semibold mt-4">
+                                <h2 class="flex justify-between text-left text-gray-700 font-semibold mt-4">
                                     <span>Data Akademik</span>
                                 <svg class="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"></path>
@@ -87,7 +91,7 @@ $component = new class extends Component
                         </div>
                         <div x-data="{ openCivitas: true }">
                             <button @click="openCivitas = !openCivitas" class="focus:outline-none w-full">
-                                <h2 class="flex justify-between text-gray-700 font-semibold mt-4">
+                                <h2 class="flex justify-between text-left text-gray-700 font-semibold mt-4">
                                   <span>
                                   Data Civitas Akademika
                                   </span>
@@ -103,7 +107,7 @@ $component = new class extends Component
                         </div>
                         <div x-data="{ openPerkuliahan: true }">
                             <button @click="openPerkuliahan = !openPerkuliahan" class="focus:outline-none w-full">
-                                <h2 class="flex justify-between text-gray-700 font-semibold mt-4">Manajemen Perkuliahan
+                                <h2 class="flex justify-between text-left text-gray-700 font-semibold mt-4">Manajemen Perkuliahan
                                   <svg class="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                       <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"></path>
                                   </svg>
@@ -118,11 +122,56 @@ $component = new class extends Component
                     </nav>
                 </div>
                 <main :class="sidebarOpen ? 'ml-64' : 'ml-0'" class="mt-10 w-full p-4">
+                
+
                     @yield('content')
                 </main>
+
             </div>
         </div>
     </div>
+    @if (session()->has('message'))
+    <script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('flashMessage', () => {
+            // console.log("flashMessage event received!");
+
+            setTimeout(() => {
+                const flashMessage = document.getElementById('notifikasi');
+                
+                if (flashMessage) {
+                    // console.log("Notifikasi ditemukan, mulai fade-out...");
+                    setTimeout(() => {
+                        flashMessage.style.transition = 'opacity 1s ease-out';
+                        flashMessage.style.opacity = 0;
+
+                        setTimeout(() => {
+                            flashMessage.style.display = 'none';
+                            console.log("Flash message hidden.");
+                        }, 1000);
+                    }, 3000);
+                } else {
+                    // console.log('flashMessage tidak ditemukan di DOM.');
+                }
+            }, 500);
+        });
+    });
+    </script>
+@endif
+
+@if (session()->has('messagemodal'))
+<script>
+            function closeModal() {
+                document.getElementById('notifikasiModal').style.display = 'none';
+            }
+
+            setTimeout(() => {
+                closeModal();
+            }, 5000); // Otomatis hilang setelah 3 detik
+        </script>
+@endif
+
+
     @livewireScripts
 </body>
 </html>

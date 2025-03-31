@@ -7,7 +7,7 @@
 @endif
 
     <div class="py-5">
-        <div class="w-full mx-auto lg:px-5">
+        <div class="w-full h-screen mx-auto lg:px-5">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold">Data Dosen</h2>
@@ -20,8 +20,9 @@
                     <table class="min-w-full border border-gray-300">
                         <thead class="bg-[#66008b] text-white">
                             <tr>
-                                <th class="border px-4 py-2 text-center">Kd Dosen</th>
-                                <th class="border px-4 py-2 text-center">Dosen</th>
+                                <th class="border px-4 py-2 text-center">No.</th>
+                                <th class="border px-4 py-2 text-center">ID Dosen</th>
+                                <th class="border px-4 py-2 text-center">Nama Dosen</th>
                                 <th class="border px-4 py-2 text-center">No Telpon</th>
                                 <th class="border px-4 py-2 text-center">Email</th>
                                 <th class="border px-4 py-2 text-center">Aksi</th>
@@ -29,25 +30,36 @@
                         </thead>
                         <tbody>
                             @forelse($dosen as $datdosen)
-                                <tr class="hover:bg-gray-100 border">
+                                <tr class="text-md hover:bg-gray-100 border">
+                                    <td class="px-4 py-2">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-2">{{ $datdosen->id_dosen }}</td>
                                     <td class="px-4 py-2">{{ $datdosen->nm_dosen }}</td>
                                     <td class="px-4 py-2">{{ $datdosen->no_telp }}</td>
                                     <td class="px-4 py-2">{{ $datdosen->email }}</td>
-                                    <td class="px-4 py-2 text-center justify-center flex gap-5">
-                                        <a  wire:click="edit({{ $datdosen->id_dosen }})"
-                                        class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">
-                                        <i class="bi bi-pencil-square"></i> Perbarui
-                                    </a>
-                                    <form class="inline">
-                                        <button type="button"
-                                        wire:click="delete({{ $datdosen->id_dosen }})"
-                                        onclick="return confirm('Yakin ingin menghapus?')"
-                                        class="bg-[#f44336] text-white px-3 py-1 rounded hover:bg-red-600">
-                                        <i class="bi bi-trash-fill"></i> Hapus
-                                        </button>
-                                    </form>                           
-                                </td>
+                                    
+                                    <td class="px-4 py-2 text-center text-sm justify-center flex gap-5">
+                                            <a x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
+                                            wire:click="edit({{ $datdosen->id_dosen }})"
+                                            class="relative bg-[#ff9800] text-white px-2 py-1 items-center rounded hover:bg-yellow-600 cursor-pointer">
+                                                <i class="bi bi-pencil-square"></i>
+                                                <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
+                                                    Perbaruhi Data
+                                                </span>
+                                            </a>
+
+                                            <form class="inline">
+                                                <button x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
+                                                        type="button" wire:click="delete({{ $datdosen->id_dosen }})"
+                                                        onclick="return confirm('Yakin ingin menghapus?')"
+                                                        class="relative bg-[#f44336] text-white px-2 py-1 items-center rounded hover:bg-red-600">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                    <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
+                                                        Hapus Data
+                                                    </span>
+                                                </button>
+                                            </form>
+                                    </td>
+                                    
                                 </tr>
                             @empty
                                 <tr>

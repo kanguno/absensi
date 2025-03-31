@@ -7,7 +7,7 @@
 @endif
 
  <div class="py-5">
-        <div class="w-full mx-auto lg:px-5">
+        <div class="w-full h-screen mx-auto lg:px-5">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold">Data Fakultas</h2>
@@ -20,6 +20,7 @@
                     <table class="min-w-full border border-gray-300">
                         <thead class="bg-[#66008b] text-white">
                             <tr>
+                                <th class="border px-4 py-2 text-center">No.</th>
                                 <th class="border px-4 py-2 text-center">Kd Fakultas</th>
                                 <th class="border px-4 py-2 text-center">Fakultas</th>
                                 <th class="border px-4 py-2 text-center">Aksi</th>
@@ -27,23 +28,32 @@
                         </thead>
                         <tbody>
                             @forelse($fakultas as $datfakultas)
-                                <tr class="hover:bg-gray-100 border">
+                                <tr class="text-md hover:bg-gray-100 border">
+                                    <td class="px-4 py-2">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-2">{{ $datfakultas->kd_fakultas }}</td>
                                     <td class="px-4 py-2">{{ $datfakultas->nm_fakultas }}</td>
-                                    <td class="px-4 py-2 text-center justify-center flex gap-5">
-                                        <a  wire:click="edit({{ $datfakultas->kd_fakultas }})"
-                                        class="bg-[#ff9800] text-white px-3 py-1 rounded hover:bg-yellow-600 cursor-pointer">
-                                        <i class="bi bi-pencil-square"></i> Perbarui
-                                    </a>
-                                    <form class="inline">
-                                        <button type="button"
-                                        wire:click="delete({{ $datfakultas->kd_fakultas }})"
-                                        onclick="return confirm('Yakin ingin menghapus?')"
-                                        class="bg-[#f44336] text-white px-3 py-1 rounded hover:bg-red-600">
-                                        <i class="bi bi-trash-fill"></i> Hapus
-                                        </button>
-                                    </form>                           
-                                </td>
+                                    <td class="px-4 py-2 text-center text-sm justify-center flex gap-5">
+                                            <a x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
+                                            wire:click="edit({{ $datfakultas->kd_fakultas }})"
+                                            class="relative bg-[#ff9800] text-white px-2 py-1 items-center rounded hover:bg-yellow-600 cursor-pointer">
+                                                <i class="bi bi-pencil-square"></i>
+                                                <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
+                                                    Perbaruhi Data
+                                                </span>
+                                            </a>
+
+                                            <form class="inline">
+                                                <button x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
+                                                        type="button" wire:click="delete({{ $datfakultas->kd_fakultas }})"
+                                                        onclick="return confirm('Yakin ingin menghapus?')"
+                                                        class="relative bg-[#f44336] text-white px-2 py-1 items-center rounded hover:bg-red-600">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                    <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
+                                                        Hapus Data
+                                                    </span>
+                                                </button>
+                                            </form>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -58,7 +68,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group {{$formdatafakultas}} fixed inset-0 flex items-center justify-center bg-black bg-opacity-20">
+    <div class="form-group {{$formdatafakultas}} fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-20">
         <div class="max-w-4xl mx-auto mt-10 shadow-md min-w-[90%]">
         <div class="bg-[#66008b] p-4 rounded-t-md">
 
@@ -68,7 +78,7 @@
             <h2 class="text-xl text-center text-white font-bold">FORMULIR DATA FAKULTAS</h2>
         </div>
 
-        <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md max-h-[80vh] overflow-y-auto'>
+        <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md max-h-[70vh] overflow-y-auto'>
                 <div class="mb-4">
                     <label class="block text-white font-medium">Kode Fakultas* </label>
                     <input type="text" wire:model="kdfakultas"
