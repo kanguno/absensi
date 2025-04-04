@@ -2,6 +2,10 @@
 
 namespace App\Livewire;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Carbon\Carbon;
 
 use Livewire\Component;
 
@@ -60,39 +64,51 @@ class DataPerkuliahan extends Component
     ];
 
     public function save()
-    {
-        // $this->validate($this->rules, $this->message);
-        
-        $perkuliahan = DB::table('dat_perkuliahan')->where('id_perkuliahan', $this->idperkuliahan)->first();
-        
-        if ($perkuliahan) {
-            // Update data jika sudah ada
-            DB::table('dat_perkuliahan')
-                ->where('id_perkuliahan', $this->idperkuliahan)
-                ->update([
-                    'id_sebaran_matkul' => $this->idsebaranmatkul,
-                    'kelas' => $this->kelas,
-                    'tanggal' => $this->tanggal,
-                    'jam' => $this->jam,
-                    'batas_absen' => $this->expired
-                    
-                ]);
-            session()->flash('message', 'Data berhasil diperbarui!');
-        } else {
-            // Insert data baru
-            DB::table('dat_perkuliahan')->insert([
-                    'id_sebaran_matkul' => $this->idsebaranmatkul,
-                    'kelas' => $this->kelas,
-                    'tanggal' => $this->tanggal,
-                    'jam' => $this->jam,
-                    'batas_absen' => $this->expired
+{
+    // Cek apakah data sudah ada berdasarkan id_perkuliahan
+    $perkuliahan = DB::table('dat_perkuliahan')->where('id_perkuliahan', $this->idperkuliahan)->first();
+    
+    if ($perkuliahan) {
+        // Update data jika sudah ada
+        DB::table('dat_perkuliahan')
+            ->where('id_perkuliahan', $this->idperkuliahan)
+            ->update([
+                'id_sebaran_matkul' => $this->idsebaranmatkul,
+                'kelas' => $this->kelas,
+                'tanggal' => $this->tanggal,
+                'jam' => $this->jam,
+                'batas_absen' => $this->expired
             ]);
-            session()->flash('message', 'Data berhasil ditambahkan!');
-        }
 
-        $this->reset();
-        $this->dispatch('flashMessage');
+        session()->flash('message', 'Data berhasil diperbarui!');
+    } else {
+        // Insert data baru & dapatkan ID terbaru
+        $idperkuliahan = DB::table('dat_perkuliahan')->insertGetId([
+            'id_sebaran_matkul' => $this->idsebaranmatkul,
+            'kelas' => $this->kelas,
+            'tanggal' => $this->tanggal,
+            'jam' => $this->jam,
+            'batas_absen' => $this->expired
+        ]);
+
+        // Buat QR Code untuk perkuliahan yang baru
+        do {
+            $hash = md5(Str::random(10)); // Hash lebih pendek
+            $exists = DB::table('qrabsen')->where('link_absen', $hash)->exists();
+        } while ($exists);
+
+        DB::table('qrabsen')->insert([
+            'id_perkuliahan' => $idperkuliahan,
+            'link_absen' => $hash,
+        ]);
+
+        session()->flash('message', 'Data berhasil ditambahkan!');
     }
+
+    $this->reset();
+    $this->dispatch('flashMessage');
+}
+
 
     public function delete($idperkuliahan)
     {
@@ -179,5 +195,78 @@ class DataPerkuliahan extends Component
             
         }
     }
+    
+    
+    public function Generate($idperkuliahan){
+      $qrabsen=DB::table('qrabsen')->where('id_perkuliahan','=',$idperkuliahan)->first();
+      
+
+      if(!$qrabsen){
+        do {
+        $hash = hash('sha256', $data . Str::random(5));
+        $exists = DB::table('qrabsen')->where('link_absen', $hash)->exists();
+    } while ($exists);
+        DB::table('qrabsen')->insert([
+          'id_perkuliahan'=>$idperkuliahan,
+          'link-absen'=>$hash,
+          ]);
+      }
+    
+      
+    $qrabsen=DB::table('qrabsen')->where('id_perkuliahan','=',$idperkuliahan)->first();
+    $qrCode = QrCode::size(300)->generate(url('/link-absen-' . $qrabsen->id_perkuliahan));
+
+      return response(QrCode::size(300)->generate(url('localhost:8000/link-absen-' . $qrlink)))
+        ->header('Content-Type', 'image/svg+xml');
+    }
+
+
+
+public function GenerateQr($idperkuliahan)
+{
+    // Cari QR yang sudah ada berdasarkan id_perkuliahan
+    $qrabsen = DB::table('qrabsen')->where('id_perkuliahan', '=', $idperkuliahan)->first();
+
+    // Path untuk menyimpan file sementara
+    $filePath = storage_path('app/public/qrcode-' . $idperkuliahan . '.png');
+
+    // Generate QR Code dan simpan ke file
+    \QrCode::format('png')->size(300)
+    ->margin(10)->backgroundColor(255,255,255)->generate(url('/link-absen-' . $qrabsen->link_absen), $filePath);
+
+    // Return file sebagai download
+    return response()->download($filePath, 'qrcode-' . $idperkuliahan . '.png')->deleteFileAfterSend(true);
+}
+
+    
+
+public function redirectToAbsensi($qrlink)
+{
+    $qrabsen = DB::table('qrabsen')
+        ->join('dat_perkuliahan', 'qrabsen.id_perkuliahan', '=', 'dat_perkuliahan.id_perkuliahan')
+        ->select('qrabsen.*', 'dat_perkuliahan.*')
+        ->where('qrabsen.link_absen', '=', $qrlink)
+        ->first();
+
+    // Cek apakah $qrabsen ditemukan
+    if (!$qrabsen) {
+        // Jika QR tidak ditemukan
+        return response('QR Code tidak ditemukan', 404);
+    }
+
+    // Mengonversi batas_absen ke zona waktu lokal (misalnya Asia/Jakarta)
+    $batasAbsen = Carbon::parse($qrabsen->batas_absen)->setTimezone('Asia/Jakarta');
+
+    // Periksa apakah waktu batas absen sudah lewat
+    if ($batasAbsen->greaterThan(now('Asia/Jakarta'))) {
+        return redirect()->route('absensimahasiswa', ['idperkuliahan' => $qrabsen->id_perkuliahan]);
+    } else {
+        return response("
+            <body>
+            <h1>Waktu Absen Telah Berakhir</h1>
+            </body>
+        ", 200)->header('Content-Type', 'text/html');
+    }
+}
 
 }

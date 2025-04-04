@@ -73,6 +73,14 @@
                                                     Lihat Absensi
                                                 </span>
                                             </a>
+                                                                <a x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
+                                            wire:click="GenerateQr({{ $datperkuliahan->id_perkuliahan }})"
+                                            class="relative bg-black text-white px-2 py-1 items-center rounded hover:bg-black-600 cursor-pointer">
+                                                <i class="bi bi-qr-code"></i>
+                                                <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
+                                                    Download QR Code
+                                                </span>
+                                            </a>
 
                                             <a x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
                                             wire:click="edit({{ $datperkuliahan->id_perkuliahan }})"

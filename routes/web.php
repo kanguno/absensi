@@ -15,6 +15,8 @@ use App\Livewire\CetakAbsensiHarian;
 Route::view('/', 'welcome');
 Route::get('/data-absensi-{idperkuliahan}', AbsenMahasiswa::class)->name('absensimahasiswa');
 
+Route::get('/link-absen-{qrlink}', [DataPerkuliahan::class, 'redirectToAbsensi']);
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -34,5 +36,6 @@ Route::view('profile', 'profile')
     Route::get('/data-perkuliahan', DataPerkuliahan::class)->middleware(['auth'])->name('dataperkuliahan');
     Route::get('/ceklist-absensi-{idperkuliahan}', CeklistAbsensi::class)->middleware(['auth'])->name('ceklistabsensi');
     Route::get('/cetak-absensi-harian-{idperkuliahan}', CetakAbsensiHarian::class)->middleware(['auth'])->name('cetakabsensiharian');
+    
 
 require __DIR__.'/auth.php';
