@@ -231,7 +231,7 @@ public function GenerateQr($idperkuliahan)
     $filePath = storage_path('app/public/qrcode-' . $idperkuliahan . '.png');
 
     // Generate QR Code dan simpan ke file
-    \QrCode::format('png')->size(300)
+    \QrCode::format('svg')->size(300)
     ->margin(10)->backgroundColor(255,255,255)->generate(url('/link-absen-' . $qrabsen->link_absen), $filePath);
 
     // Return file sebagai download

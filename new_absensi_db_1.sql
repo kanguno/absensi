@@ -1,4 +1,4 @@
-Enter password: 
+-- Enter password: 
 /*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.8.0-MariaDB, for Android (aarch64)
 --
@@ -544,7 +544,7 @@ CREATE TABLE `qrabsen` (
   PRIMARY KEY (`id`),
   KEY `id_perkuliahan` (`id_perkuliahan`),
   CONSTRAINT `qrabsen_ibfk_1` FOREIGN KEY (`id_perkuliahan`) REFERENCES `dat_perkuliahan` (`id_perkuliahan`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
