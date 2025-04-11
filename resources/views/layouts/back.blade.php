@@ -43,6 +43,7 @@ $component = new class extends Component
 </head>
 <body class="bg-gray-100">
 
+
     <div x-data="{ sidebarOpen: true }">
         <div class="flex-1 flex flex-col">
             <header class="bg-white fixed z-50 w-full shadow p-4 flex justify-between items-center">
@@ -159,17 +160,20 @@ $component = new class extends Component
     </script>
 @endif
 
-@if (session()->has('messagemodal'))
-<script>
-            function closeModal() {
-                document.getElementById('notifikasiModal').style.display = 'none';
-            }
 
-            setTimeout(() => {
-                closeModal();
-            }, 5000); // Otomatis hilang setelah 3 detik
-        </script>
-@endif
+<script>
+    function closeModal() {
+        const modal = document.getElementById('notifikasiModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    setTimeout(() => {
+        closeModal();
+    }, 5000); // Hilang setelah 5 detik
+</script>
+
 
 
     @livewireScripts

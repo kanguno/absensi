@@ -7,7 +7,7 @@
 @endif
 <div>
     @if (session()->has('messagemodal'))
-        <div id="notifikasi" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div id="notifikasiModal" class="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div class="bg-white p-2 rounded-lg shadow-lg max-w-xs">
                 
                 <div class="text-center p-4 text-red-700">
@@ -118,7 +118,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group {{$formdataperkuliahan}} fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-20">
+    <div class="form-group {{$formdataperkuliahan}} fixed z-40 inset-0 flex items-center justify-center bg-black bg-opacity-20">
         <div class="max-w-4xl mx-auto mt-10 shadow-md min-w-[90%]">
         <div class="bg-[#66008b] p-4 rounded-t-md">
 
@@ -127,8 +127,59 @@
             </div>    
             <h2 class="text-xl text-center text-white font-bold">FORMULIR DATA PERKULIAHAN</h2>
         </div>
-
+            
         <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md max-h-[70vh] overflow-y-auto'>
+            
+            <div class="mb-4">
+                <label class="block text-white font-medium" required>Program Studi* </label>
+                <select wire:model="prodi" wire:change="dataMatkul()" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
+                <option selected>Pilih Program Studi</option>
+                    @foreach($dataprodi as $p)
+                        <option value="{{ $p->kd_prodi }}">
+                        {{$p->kd_prodi}} || {{$p->nm_prodi}}
+                        </option>
+                    @endforeach
+                </select>
+                @error('kdprodi') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-white font-medium" required>Mata Kuliah* </label>
+                <select wire:model="kdmatkul" wire:change="dataSemester()" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
+                <option selected>Pilih Mata Kuliah</option>
+                    @foreach($datamatkul as $m)
+                        <option value="{{ $m->kd_matkul }}">
+                        {{$m->kd_matkul}}||{{$m->nm_matkul}}
+                        </option>
+                    @endforeach
+                </select>
+                @error('kdmatkul') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-white font-medium" required>Semester* </label>
+                <select wire:model="semester" wire:change="dataDosen()" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
+                <option selected>Pilih Semester</option>
+                    @foreach($datasemester as $s)
+                        <option value="{{ $s->semester }}">
+                        Semester {{$s->semester}}
+                        </option>
+                    @endforeach
+                </select>
+                @error('semester') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+            </div>
+            <div class="mb-4">
+                <label class="block text-white font-medium" required>Dosen Pengampu* </label>
+                <select wire:model="dosen" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
+                <option selected>Pilih Dosen Pengampu</option>
+                    @foreach($datadosen as $d)
+                        <option value="{{ $d->id_dosen }}">
+                        {{$d->nm_dosen}}
+                        </option>
+                    @endforeach
+                </select>
+                @error('dosen') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+            </div>
             <div class="mb-4">
                 <label class="block text-white font-medium" required>Data Distribusi Mata Kuliah* </label>
                 <select wire:model="idsebaranmatkul" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>

@@ -12,7 +12,9 @@ use App\Livewire\AbsenMahasiswa;
 use App\Livewire\CeklistAbsensi;
 use App\Livewire\CetakAbsensiHarian;
 
-Route::view('/', 'welcome');
+Route::get('/', function () {
+    return redirect('/dashboard');
+});
 Route::get('/data-absensi-{idperkuliahan}', AbsenMahasiswa::class)->name('absensimahasiswa');
 
 Route::get('/link-absen-{qrlink}', [DataPerkuliahan::class, 'redirectToAbsensi']);
