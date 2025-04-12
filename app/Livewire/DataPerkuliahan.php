@@ -14,8 +14,8 @@ class DataPerkuliahan extends Component
    
 
     public $idperkuliahan, $idsebaranmatkul,$kelas,$tanggal,$jam,$expired;
-    public $perkuliahan,$sebaranmatkul,$kdmatkul,$prodi,$dosen,$semester;
-    public $datadosen=[],$datamatkul=[],$dataprodi=[],$datasemester=[];
+    public $perkuliahan,$kdmatkul,$prodi,$dosen,$semester;
+    public $datadosen=[],$datamatkul=[],$dataprodi=[],$datasemester=[],$sebaranmatkul=[];
     public $formdataperkuliahan='hidden',$opsisave;
 
     public function render()
@@ -31,17 +31,12 @@ class DataPerkuliahan extends Component
         $this->dataprodi=DB::table('dat_prodi')->get();
 
 
-        $this->sebaranmatkul=DB::table('dat_sebaran_matkul')
-        ->join('dat_prodi', 'dat_sebaran_matkul.kd_prodi', '=', 'dat_prodi.kd_prodi')
-        ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
-        ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
-        ->select('dat_sebaran_matkul.*', 'dat_prodi.nm_prodi','dat_matkul.nm_matkul','dat_dosen.nm_dosen')
-        ->get();
+        
 
         return view('livewire.data-perkuliahan', [
         'perkuliahan' => $this->perkuliahan,
         'dataprodi' => $this->dataprodi,
-        'sebaranmatkul' => $this->sebaranmatkul,
+//        'sebaranmatkul' => $this->sebaranmatkul,
     ])->extends('layouts.back');
 }
 
@@ -245,7 +240,30 @@ class DataPerkuliahan extends Component
             $this->kdmatkul=null;
         }
     }
-
+public function dataDistribusi(){
+        // dd($this->semester);
+        $datadistribusi=DB::table('dat_sebaran_matkul')
+        ->join('dat_prodi', 'dat_sebaran_matkul.kd_prodi', '=', 'dat_prodi.kd_prodi')
+        ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
+        ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
+        ->select('dat_sebaran_matkul.*', 'dat_prodi.nm_prodi','dat_matkul.nm_matkul','dat_dosen.nm_dosen')
+        ->where('dat_sebaran_matkul.kd_prodi','=',$this->prodi)
+        ->where('dat_sebaran_matkul.semester','=',$this->semester)
+        ->where('dat_sebaran_matkul.kd_matkul','=',$this->kdmatkul)
+        ->where('dat_sebaran_matkul.id_dosen','=',$this->dosen)
+        ->get();
+        
+        dd($datadistribusi);
+        if($datadosen->isNotEmpty()){
+            $this->datadosen=$datadosen;
+        }
+        else{
+            
+            session()->flash('messagemodal', 'Data Distribusi Mata Kuliah ini belum ada!');
+            $this->dispatch('flashMessage');
+            $this->kdmatkul=null;
+        }
+    }
     public function cetakabsensi($idperkuliahan)
     {
         $dataabsensi=DB::table('dat_absensi')->where('id_perkuliahan','=',$idperkuliahan)->first();
