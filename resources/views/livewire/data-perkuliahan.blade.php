@@ -140,15 +140,15 @@
                         </option>
                     @endforeach
                 </select>
-                @error('kdprodi') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+                @error('prodi') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div class="mb-4">
                 <label class="block text-white font-medium" required>Mata Kuliah* </label>
                 <select wire:model="kdmatkul" wire:change="dataSemester()" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
-                <option selected>Pilih Mata Kuliah</option>
+                <option>Pilih Mata Kuliah</option>
                     @foreach($datamatkul as $m)
-                        <option value="{{ $m->kd_matkul }}">
+                        <option value="{{ $m->kd_matkul }}" @if($m->kd_matkul == $kdmatkul) selected @endif>
                         {{$m->kd_matkul}}||{{$m->nm_matkul}}
                         </option>
                     @endforeach
@@ -161,7 +161,7 @@
                 <select wire:model="semester" wire:change="dataDosen()" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
                 <option selected>Pilih Semester</option>
                     @foreach($datasemester as $s)
-                        <option value="{{ $s->semester }}">
+                        <option value="{{ $s->semester }}" @if($s->semester == $semester) selected @endif>
                         Semester {{$s->semester}}
                         </option>
                     @endforeach
@@ -171,9 +171,9 @@
             <div class="mb-4">
                 <label class="block text-white font-medium" required>Dosen Pengampu* </label>
                 <select wire:model="dosen" wire:change="dataDistribusi()" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
-                <option selected>Pilih Dosen Pengampu</option>
+                <option >Pilih Dosen Pengampu</option>
                     @foreach($datadosen as $d)
-                        <option value="{{ $d->id_dosen }}">
+                        <option value="{{ $d->id_dosen }}" @if($d->id_dosen == $dosen) selected @endif>
                         {{$d->nm_dosen}}
                         </option>
                     @endforeach
@@ -183,9 +183,9 @@
             <div class="mb-4">
                 <label class="block text-white font-medium" required>Data Distribusi Mata Kuliah* </label>
                 <select wire:model="idsebaranmatkul" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
-                <option selected>Pilih Distribusi Matkul</option>
+                <option >Pilih Distribusi Matkul</option>
                     @foreach($datadistribusi as $m)
-                        <option value="{{ $m->id_sebaran_matkul }}">
+                        <option value="{{ $m->id_sebaran_matkul }}" @if($m->id_sebaran_matkul == $idsebaranmatkul) selected @endif>
                         {{$m->id_sebaran_matkul}}||{{$m->nm_prodi}}||{{ $m->nm_matkul }}||{{$m->nm_dosen}}||Semester {{$m->semester}}
                         </option>
                     @endforeach

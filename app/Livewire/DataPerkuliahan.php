@@ -15,7 +15,7 @@ class DataPerkuliahan extends Component
 
     public $idperkuliahan, $idsebaranmatkul,$kelas,$tanggal,$jam,$expired;
     public $perkuliahan,$kdmatkul,$prodi,$dosen,$semester;
-    public $datadosen=[],$datamatkul=[],$dataprodi=[],$datasemester=[],$datadistribusi=[];
+    public $datadosen=[],$datamatkul=[],$datasemester=[],$datadistribusi=[];
     public $formdataperkuliahan='hidden',$opsisave;
 
     public function render()
@@ -145,15 +145,59 @@ class DataPerkuliahan extends Component
         $this->formdataperkuliahan='';
         $this->resetValidation();
         $this->opsisave='Perbarui';
-        $data=DB::table('dat_perkuliahan')->where('id_perkuliahan', $idperkuliahan)->first();
-        dd($data);
+        $data=DB::table('dat_perkuliahan')
+        ->join('dat_sebaran_matkul', 'dat_sebaran_matkul.id_sebaran_matkul', '=', 'dat_perkuliahan.id_sebaran_matkul')
+        ->where('id_perkuliahan', $idperkuliahan)
+        ->select('dat_perkuliahan.*','dat_sebaran_matkul.*')
+        ->first();
+
+        $this->datamatkul=DB::table('dat_sebaran_matkul')
+        ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
+        ->select('dat_sebaran_matkul.kd_matkul','dat_matkul.nm_matkul')
+        ->where('dat_sebaran_matkul.kd_prodi','=',$data->kd_prodi)
+        ->distinct()
+        ->get();
+
+        $this->datasemester=DB::table('dat_sebaran_matkul')
+        ->select('dat_sebaran_matkul.semester')
+        ->where('dat_sebaran_matkul.kd_prodi','=',$data->kd_prodi)
+        ->where('dat_sebaran_matkul.kd_matkul','=',$data->kd_matkul)
+        ->distinct()
+        ->get();
+
+        $this->datadosen=DB::table('dat_sebaran_matkul')
+        ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
+        ->select('dat_sebaran_matkul.*','dat_dosen.nm_dosen')
+        ->where('dat_sebaran_matkul.kd_prodi','=',$data->kd_prodi)
+        ->where('dat_sebaran_matkul.kd_matkul','=',$data->kd_matkul)
+        ->where('dat_sebaran_matkul.semester','=',$data->semester)
+        ->get();
+
+        $this->datadistribusi=DB::table('dat_sebaran_matkul')
+        ->join('dat_prodi', 'dat_sebaran_matkul.kd_prodi', '=', 'dat_prodi.kd_prodi')
+        ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
+        ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
+        ->select('dat_sebaran_matkul.*', 'dat_prodi.nm_prodi','dat_matkul.nm_matkul','dat_dosen.nm_dosen')
+        ->where('dat_sebaran_matkul.kd_prodi','=',$data->kd_prodi)
+        ->where('dat_sebaran_matkul.semester','=',$data->semester)
+        ->where('dat_sebaran_matkul.kd_matkul','=',$data->kd_matkul)
+        ->where('dat_sebaran_matkul.id_dosen','=',$data->id_dosen)
+        ->get();
+
+
+        
+
+        $this->prodi=$data->kd_prodi;
+        $this->kdmatkul=$data->kd_matkul;
+        $this->semester=$data->semester;
+        $this->dosen=$data->id_dosen;
+        $this->idsebaranmatkul=$data->id_sebaran_matkul;
         $this->idperkuliahan=$data->id_perkuliahan;
         $this->idsebaranmatkul=$data->id_sebaran_matkul;
         $this->kelas=$data->kelas;
         $this->tanggal=$data->tanggal;
         $this->jam=$data->jam;
         $this->expired=$data->batas_absen;
-        
     }
 
     public function absensi($idperkuliahan)
@@ -184,6 +228,11 @@ class DataPerkuliahan extends Component
     }
 
     public function dataMatkul(){
+        $this->datamatkul=[];
+        $this->datasemester=[];
+        $this->datadosen=[];
+        $this->datadistribusi=[];
+        
             $this->kdmatkul=null;
             $this->semester=null;
             $this->dosen=null;
@@ -211,6 +260,10 @@ class DataPerkuliahan extends Component
         }
     }
     public function dataSemester(){
+        $this->datasemester=[];
+        $this->datadosen=[];
+        $this->datadistribusi=[];
+        
         $this->semester=null;
         $this->dosen=null;
         $this->idsebaranmatkul=null;
@@ -236,6 +289,9 @@ class DataPerkuliahan extends Component
     }
     public function dataDosen(){
         // dd($this->semester);
+        $this->datadosen=[];
+        $this->datadistribusi=[];
+        
         $this->dosen=null;
         $this->idsebaranmatkul=null;
         $datadosen=DB::table('dat_sebaran_matkul')
@@ -260,6 +316,10 @@ class DataPerkuliahan extends Component
     }
 public function dataDistribusi(){
         // dd($this->semester);
+        $this->datadistribusi=[];
+        
+        $this->idsebaranmatkul=null;
+
         $datadistribusi=DB::table('dat_sebaran_matkul')
         ->join('dat_prodi', 'dat_sebaran_matkul.kd_prodi', '=', 'dat_prodi.kd_prodi')
         ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
