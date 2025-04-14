@@ -170,7 +170,7 @@
             </div>
             <div class="mb-4">
                 <label class="block text-white font-medium" required>Dosen Pengampu* </label>
-                <select wire:model="dosen" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
+                <select wire:model="dosen" wire:change="dataDistribusi()" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
                 <option selected>Pilih Dosen Pengampu</option>
                     @foreach($datadosen as $d)
                         <option value="{{ $d->id_dosen }}">
@@ -184,7 +184,7 @@
                 <label class="block text-white font-medium" required>Data Distribusi Mata Kuliah* </label>
                 <select wire:model="idsebaranmatkul" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
                 <option selected>Pilih Distribusi Matkul</option>
-                    @foreach($sebaranmatkul as $m)
+                    @foreach($datadistribusi as $m)
                         <option value="{{ $m->id_sebaran_matkul }}">
                         {{$m->id_sebaran_matkul}}||{{$m->nm_prodi}}||{{ $m->nm_matkul }}||{{$m->nm_dosen}}||Semester {{$m->semester}}
                         </option>

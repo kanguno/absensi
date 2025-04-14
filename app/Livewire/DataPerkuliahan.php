@@ -15,7 +15,7 @@ class DataPerkuliahan extends Component
 
     public $idperkuliahan, $idsebaranmatkul,$kelas,$tanggal,$jam,$expired;
     public $perkuliahan,$kdmatkul,$prodi,$dosen,$semester;
-    public $datadosen=[],$datamatkul=[],$dataprodi=[],$datasemester=[],$sebaranmatkul=[];
+    public $datadosen=[],$datamatkul=[],$dataprodi=[],$datasemester=[],$datadistribusi=[];
     public $formdataperkuliahan='hidden',$opsisave;
 
     public function render()
@@ -146,7 +146,7 @@ class DataPerkuliahan extends Component
         $this->resetValidation();
         $this->opsisave='Perbarui';
         $data=DB::table('dat_perkuliahan')->where('id_perkuliahan', $idperkuliahan)->first();
-
+        dd($data);
         $this->idperkuliahan=$data->id_perkuliahan;
         $this->idsebaranmatkul=$data->id_sebaran_matkul;
         $this->kelas=$data->kelas;
@@ -184,7 +184,11 @@ class DataPerkuliahan extends Component
     }
 
     public function dataMatkul(){
-        
+            $this->kdmatkul=null;
+            $this->semester=null;
+            $this->dosen=null;
+            $this->idsebaranmatkul=null;
+
         $datamatkul=DB::table('dat_sebaran_matkul')
         ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
         ->select('dat_sebaran_matkul.kd_matkul','dat_matkul.nm_matkul')
@@ -199,10 +203,17 @@ class DataPerkuliahan extends Component
             
             session()->flash('messagemodal', 'Data Distribusi Mata Kuliah ini belum ada!');
             $this->dispatch('flashMessage');
+            $this->prodi=null;
             $this->kdmatkul=null;
+            $this->semester=null;
+            $this->dosen=null;
+            $this->idsebaranmatkul=null;
         }
     }
     public function dataSemester(){
+        $this->semester=null;
+        $this->dosen=null;
+        $this->idsebaranmatkul=null;
         $datasemester=DB::table('dat_sebaran_matkul')
         ->select('dat_sebaran_matkul.semester')
         ->where('dat_sebaran_matkul.kd_prodi','=',$this->prodi)
@@ -218,10 +229,15 @@ class DataPerkuliahan extends Component
             session()->flash('messagemodal', 'Data Distribusi Mata Kuliah ini belum ada!');
             $this->dispatch('flashMessage');
             $this->kdmatkul=null;
+            $this->semester=null;
+            $this->dosen=null;
+            $this->idsebaranmatkul=null;
         }
     }
     public function dataDosen(){
         // dd($this->semester);
+        $this->dosen=null;
+        $this->idsebaranmatkul=null;
         $datadosen=DB::table('dat_sebaran_matkul')
         ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
         ->select('dat_sebaran_matkul.*','dat_dosen.nm_dosen')
@@ -237,7 +253,9 @@ class DataPerkuliahan extends Component
             
             session()->flash('messagemodal', 'Data Distribusi Mata Kuliah ini belum ada!');
             $this->dispatch('flashMessage');
-            $this->kdmatkul=null;
+            $this->semester=null;
+            $this->dosen=null;
+            $this->idsebaranmatkul=null;
         }
     }
 public function dataDistribusi(){
@@ -253,15 +271,14 @@ public function dataDistribusi(){
         ->where('dat_sebaran_matkul.id_dosen','=',$this->dosen)
         ->get();
         
-        dd($datadistribusi);
-        if($datadosen->isNotEmpty()){
-            $this->datadosen=$datadosen;
+        if($datadistribusi->isNotEmpty()){
+            $this->datadistribusi=$datadistribusi;
         }
         else{
             
             session()->flash('messagemodal', 'Data Distribusi Mata Kuliah ini belum ada!');
             $this->dispatch('flashMessage');
-            $this->kdmatkul=null;
+            $this->idsebaranmatkul=null;
         }
     }
     public function cetakabsensi($idperkuliahan)
