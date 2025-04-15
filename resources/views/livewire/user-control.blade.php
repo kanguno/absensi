@@ -28,7 +28,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($users as $u)
+                            @forelse($datauser as $u)
                                 <tr class="text-md hover:bg-gray-100 border">
                                     <td class="px-4 py-2">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-2">{{ $u->nm_user }}</td>
@@ -70,12 +70,14 @@
             </div>
         </div>
     </div>
-    <div class="form-group {{$formdataprodi}} fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-20">
+    
+
+    <div class="form-group {{$formdatauser}} fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-20">
         <div class="max-w-4xl mx-auto mt-10 shadow-md min-w-[90%]">
         <div class="bg-[#66008b] p-4 rounded-t-md">
 
             <div class="text-end">
-                <span wire:click="cfprodi" class="px-2 py-1 bg-slate-50 rounded-full cursor-pointer hover:bg-slate-200 font-bold">X</span>
+                <span wire:click="cfuser" class="px-2 py-1 bg-slate-50 rounded-full cursor-pointer hover:bg-slate-200 font-bold">X</span>
             </div>    
             <h2 class="text-xl text-center text-white font-bold">FORMULIR DATA USER</h2>
         </div>
@@ -84,7 +86,7 @@
                 <div class="mb-4">
                     <label class="block text-white font-medium">Nama User* </label>
                     <input type="text" wire:model="nmuser"
-                        class="w-full px-4 py-2 border-none rounded-lg focus:ring focus:ring-blue-300 placeholder-red-500 {{ $kdprodi ? 'bg-gray-200' : '' }}"
+                        class="w-full px-4 py-2 border-none rounded-lg focus:ring focus:ring-blue-300 placeholder-red-500 {{ $iduser ? 'bg-gray-200' : '' }}"
                         {{ $opsisave==='Perbarui' ? 'disabled' : '' }}
                         >
                     @error('nmuser') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
@@ -103,12 +105,13 @@
                         @error('verifpassword') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div class="mb-4">
+                <div>{{ $dataotoritas }}</div>
                 <label class="block text-white font-medium" required>Otoritas* </label>
                 <select wire:model="kdotoritas" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
                 <option selected>Pilih Otoritas</option>
                     @foreach($dataotoritas as $r)
                         <option value="{{ $r->kd_otoritas }}" {{ $kdotoritas == $r->kd_otoritas ? 'selected' : '' }}>
-                            {{ $p->nm_otoritas}}
+                            {{ $r->nm_otoritas}}
                         </option>
                     @endforeach
                 </select>
