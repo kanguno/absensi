@@ -30,7 +30,7 @@ Route::view('profile', 'profile')
 
   
 
-    Route::get('/user-controll', UserControl::class)->middleware(['auth'])->name('userkontrol');
+    Route::get('/user-controll', UserControl::class)->middleware(['auth'])->name('usercontroll');
     Route::get('/data-mahasiswa', DataMahasiswa::class)->middleware(['auth'])->name('datamahasiswa');
     Route::get('/data-prodi', DataProdi::class)->middleware(['auth'])->name('dataprodi');
     Route::get('/data-fakultas', DataFakultas::class)->middleware(['auth'])->name('datafakultas');

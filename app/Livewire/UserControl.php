@@ -18,7 +18,7 @@ class UserControl extends Component
         ->join('otoritas', 'users.kd_otoritas', '=', 'otoritas.kd_otoritas')
         ->select('users.*', 'otoritas.*')
         ->get();
-    
+        $this->dataotoritas=DB::table('otoritas')->get();
     
     return view('livewire.user-control', [
         'dataotoritas' => $this->dataotoritas,
@@ -28,7 +28,7 @@ class UserControl extends Component
 
     public function mount()
     {
-        $this->dataotoritas=DB::table('otoritas')->get();
+        // $this->dataotoritas=DB::table('otoritas')->get();
         
         // Debugging untuk memastikan data ada
         

@@ -28,7 +28,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($datauser as $u)
+                            
+                        @forelse($datauser as $u)
                                 <tr class="text-md hover:bg-gray-100 border">
                                     <td class="px-4 py-2">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-2">{{ $u->nm_user }}</td>
@@ -73,6 +74,7 @@
     
 
     <div class="form-group {{$formdatauser}} fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-20">
+   
         <div class="max-w-4xl mx-auto mt-10 shadow-md min-w-[90%]">
         <div class="bg-[#66008b] p-4 rounded-t-md">
 
