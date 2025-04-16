@@ -4,129 +4,125 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserControl extends Component
 {
-    public $datauser=[],$dataotoritas=[];
-    public $iduser, $nmuser, $kdotoritas;
-    
-    public $formdatauser='hidden',$opsisave;
-    public $editingId = null;
-    public function render()
-{
-    $this->datauser = DB::table('users')
-        ->join('otoritas', 'users.kd_otoritas', '=', 'otoritas.kd_otoritas')
-        ->select('users.*', 'otoritas.*')
-        ->get();
-        $this->dataotoritas=DB::table('otoritas')->get();
-    
-    return view('livewire.user-control', [
-        'dataotoritas' => $this->dataotoritas,
-        'datauser' => $this->datauser
-    ])->extends('layouts.back');
-}
+    public $datauser = [], $dataotoritas = [];
+    public $iduser, $email, $nmuser, $password, $password_confirmation, $kdotoritas;
 
-    public function mount()
+    public $formdatauser = 'hidden', $opsisave;
+    public $editingId = null;
+
+    public function render()
     {
-        // $this->dataotoritas=DB::table('otoritas')->get();
-        
-        // Debugging untuk memastikan data ada
-        
+        $this->datauser = DB::table('users')
+            ->join('otoritas', 'users.kd_otoritas', '=', 'otoritas.kd_otoritas')
+            ->select('users.*', 'otoritas.nm_otoritas')
+            ->get();
+
+        $this->dataotoritas = DB::table('otoritas')->get();
+
+        return view('livewire.user-control', [
+            'datauser' => $this->datauser,
+            'dataotoritas' => $this->dataotoritas
+        ])->extends('layouts.back');
     }
+
     public function rules()
     {
         return [
-            'kdprodi' => $this->editingId 
-                ? 'required|max:2|exists:dat_prodi,kd_prodi' // Hanya validasi exists jika sedang edit
-                : 'required|max:2|unique:dat_prodi,kd_prodi',
-            'nmprodi' => 'required|string|max:255',
-            'kdfakultas' => 'required|string|max:2',
+            'email' => $this->editingId
+                ? 'required|email|max:100|unique:users,email,' . $this->editingId . ',id'
+                : 'required|email|max:100|unique:users,email',
+            'nmuser' => 'required|string|max:255',
+            'password' => $this->editingId ? 'nullable|string|max:50|confirmed' : 'required|string|max:50|confirmed',
+            'password_confirmation' => $this->editingId ? 'nullable|string|max:50' : 'required|string|max:50',
+            'kdotoritas' => 'required|string|max:10',
         ];
     }
 
-    // protected $rules = [
-    //     'kdprodi' => 'required|max:2|unique:dat_prodi,kd_prodi',
-    //     'nmprodi' => 'required|string|max:255',
-    //     'kdfakultas' => 'required|string|max:2',
-    // ],
-    protected $message = [
-        'kdprodi.unique' => 'Kode Prodi sudah ada di database.',
-        'kdprodi.required' => 'Kode Prodi wajib diisi.',
-        'nmprodi.required' => 'Nama Prodi wajib diisi.',
-        'kdfakultas.required' => 'Pilih salah satu fakultas'
+    protected $messages = [
+        'email.unique' => 'Email sudah digunakan.',
+        'email.required' => 'Email wajib diisi.',
+        'nmuser.required' => 'Nama user wajib diisi.',
+        'password.required' => 'Password wajib diisi.',
+        'password.confirmed' => 'Konfirmasi password tidak cocok.',
+        'password_confirmation.required' => 'Konfirmasi password wajib diisi.',
+        'kdotoritas.required' => 'Silakan pilih otoritas.',
     ];
 
     public function save()
     {
-        $this->validate($this->rules(), $this->message);
+        $this->validate();
 
-        $prodi = DB::table('dat_prodi')->where('kd_prodi', $this->kdprodi)->first();
+        if ($this->editingId) {
+            // Update
+            $updateData = [
+                'email' => $this->email,
+                'nm_user' => $this->nmuser,
+                'kd_otoritas' => $this->kdotoritas,
+            ];
 
-        if ($prodi) {
-            // Update data jika sudah ada
-            DB::table('dat_prodi')
-                ->where('kd_prodi', $this->kdprodi)
-                ->update([
-                    'nm_prodi' => $this->nmprodi,
-                    'kd_fakultas' => $this->kdfakultas,
-                    
-                ]);
-            session()->flash('message', 'Data berhasil diperbarui!');
+            if ($this->password) {
+                $updateData['password'] = Hash::make($this->password);
+            }
+
+            DB::table('users')->where('id', $this->editingId)->update($updateData);
+            session()->flash('message', 'User berhasil diperbarui!');
         } else {
-            // Insert data baru
-            DB::table('dat_prodi')->insert([
-                'kd_prodi' => $this->kdprodi,
-                'nm_prodi' => $this->nmprodi,
-                'kd_fakultas' => $this->kdfakultas
+            // Insert
+            DB::table('users')->insert([
+                'email' => $this->email,
+                'nm_user' => $this->nmuser,
+                'kd_otoritas' => $this->kdotoritas,
+                'password' => Hash::make($this->password),
             ]);
-            session()->flash('message', 'Data berhasil ditambahkan!');
-            
+            session()->flash('message', 'User berhasil ditambahkan!');
         }
 
-        $this->reset();
+        $this->resetForm();
         $this->dispatch('flashMessage');
     }
 
-    public function delete($kdprodi)
+    public function delete($id)
     {
-        
-        $datmhs = DB::table('dat_prodi')->where('kd_prodi', $kdprodi)->delete();
-
-
-            // dd($datmhs);
-            
-            session()->flash('message', 'Data berhasil dihapus!');
-       
-
+        DB::table('users')->where('id', $id)->delete();
+        session()->flash('message', 'User berhasil dihapus!');
         $this->dispatch('flashMessage');
     }
 
-    public function tambahdata(){
-        $this->reset();
-        $this->resetValidation();
-        $this->formdatauser='';
-        $this->opsisave='Tambahkan';
+    public function tambahdata()
+    {
+        $this->resetForm();
+        $this->formdatauser = '';
+        $this->opsisave = 'Tambahkan';
     }
-    public function cfprodi(){
-        $this->reset();
-        $this->resetValidation();
-        $this->formdataprodi='hidden';
-    }
-    public function resetform(){
-        $this->reset();
-        $this->resetValidation();
-        $this->formdataprodi='';
-    }
-    public function edit($kdprodi){
-        $this->formdataprodi='';
-        $this->resetValidation();
-        $this->opsisave='Perbarui';
-        $this->editingId=$kdprodi;
-        $data=DB::table('dat_prodi')->where('kd_prodi', $kdprodi)->first();
 
-        $this->kdprodi=$data->kd_prodi;
-        $this->nmprodi=$data->nm_prodi;
-        $this->kdfakultas=$data->kd_fakultas;
-        
+    public function edit($id)
+    {
+        $this->resetForm();
+        $this->formdatauser = '';
+        $this->opsisave = 'Perbarui';
+        $this->editingId = $id;
+
+        $data = DB::table('users')->where('id', $id)->first();
+
+        $this->email = $data->email;
+        $this->nmuser = $data->nm_user;
+        $this->kdotoritas = $data->kd_otoritas;
+    }
+
+    public function cfuser()
+    {
+        $this->resetForm();
+        $this->formdatauser = 'hidden';
+    }
+
+    public function resetForm()
+    {
+        $this->reset(['email', 'nmuser', 'password', 'password_confirmation', 'kdotoritas', 'editingId']);
+        $this->resetValidation();
+        $this->formdatauser = 'hidden';
     }
 }

@@ -13,6 +13,8 @@ use App\Livewire\AbsenMahasiswa;
 use App\Livewire\CeklistAbsensi;
 use App\Livewire\CetakAbsensiHarian;
 
+use App\Http\Middleware\CheckUserOtoritas;
+
 Route::get('/', function () {
     return redirect('/dashboard');
 });
@@ -30,7 +32,10 @@ Route::view('profile', 'profile')
 
   
 
-    Route::get('/user-controll', UserControl::class)->middleware(['auth'])->name('usercontroll');
+    Route::middleware(['auth', 'check.otoritas'])->group(function () {
+        Route::get('/user-controll', UserControl::class)->name('usercontroll');
+    });
+    
     Route::get('/data-mahasiswa', DataMahasiswa::class)->middleware(['auth'])->name('datamahasiswa');
     Route::get('/data-prodi', DataProdi::class)->middleware(['auth'])->name('dataprodi');
     Route::get('/data-fakultas', DataFakultas::class)->middleware(['auth'])->name('datafakultas');
