@@ -14,7 +14,7 @@ class DataPerkuliahan extends Component
    
 
     public $idperkuliahan, $idsebaranmatkul,$kelas,$tanggal,$jam,$expired;
-    public $perkuliahan,$kdmatkul,$prodi,$dosen,$semester;
+    public $perkuliahan,$kdmatkul,$prodi,$dosen,$semester,$existdosen;
     public $datadosen=[],$datamatkul=[],$datasemester=[],$datadistribusi=[];
     public $formdataperkuliahan='hidden',$opsisave;
 
@@ -258,7 +258,7 @@ class DataPerkuliahan extends Component
         ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
         ->select('dat_sebaran_matkul.kd_matkul','dat_matkul.nm_matkul')
         ->where('dat_sebaran_matkul.kd_prodi','=',$this->prodi)
-        ->where()
+        ->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen)
         ->distinct()
         ->get();
 
@@ -288,6 +288,7 @@ class DataPerkuliahan extends Component
         ->select('dat_sebaran_matkul.semester')
         ->where('dat_sebaran_matkul.kd_prodi','=',$this->prodi)
         ->where('dat_sebaran_matkul.kd_matkul','=',$this->kdmatkul)
+        ->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen)
         ->distinct()
         ->get();
         
