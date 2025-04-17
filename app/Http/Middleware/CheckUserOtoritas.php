@@ -1,14 +1,17 @@
+<?php
+
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class CheckOtoritas
+class CheckUserOtoritas
 {
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->check() && auth()->user()->kd_otoritas != 1) {
-            return redirect()->route('dashboard');
+        if (Auth::check() && Auth::user()->kd_otoritas != 1) {
+            return redirect('/dashboard');
         }
 
         return $next($request);

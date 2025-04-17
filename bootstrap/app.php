@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         //
+        app('router')->aliasMiddleware('check.otoritas', \App\Http\Middleware\CheckUserOtoritas::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

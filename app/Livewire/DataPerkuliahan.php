@@ -20,13 +20,24 @@ class DataPerkuliahan extends Component
 
     public function render()
 {
-    $this->perkuliahan = DB::table('dat_perkuliahan')
+    
+    $this->existdosen=DB::table('dat_dosen')
+    ->where('email',auth()->user()->email)
+    ->first();
+
+    
+    $dataperkuliahan = DB::table('dat_perkuliahan')
         ->join('dat_sebaran_matkul', 'dat_perkuliahan.id_sebaran_matkul', '=', 'dat_sebaran_matkul.id_sebaran_matkul')
         ->join('dat_prodi', 'dat_sebaran_matkul.kd_prodi', '=', 'dat_prodi.kd_prodi')
         ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
         ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
-        ->select('dat_perkuliahan.*', 'dat_prodi.nm_prodi','dat_matkul.nm_matkul','dat_dosen.nm_dosen')
-        ->get();
+        ->select('dat_perkuliahan.*', 'dat_prodi.nm_prodi','dat_matkul.nm_matkul','dat_dosen.nm_dosen');
+        
+        if ($this->existdosen) {
+            $dataperkuliahan->where('dat_dosen.id_dosen', $this->existdosen->id_dosen);
+        }
+        
+        $this->perkuliahan=$dataperkuliahan->get();
         // $this->datamatkul=DB::table('dat_matkul')->get();
         $this->dataprodi=DB::table('dat_prodi')->get();
 
@@ -46,15 +57,19 @@ class DataPerkuliahan extends Component
         
     }
     
-    protected $rules = [
-        'idperkuliahan' => 'required|max:2|unique:dat_perkuliahan',
-        'idsebaranmatkul' => 'required',
-        'kelas' => 'required|max:10',
-        'tanggal' => 'required|date',
-        'jam' => 'required',
-        'expired' => 'required',
-    ],
-    $message = [
+    protected function rules()
+    {
+        return [
+            'idperkuliahan' => 'required|max:2|unique:dat_perkuliahan,id_perkuliahan,' . $this->idperkuliahan . ',id_perkuliahan',
+            'idsebaranmatkul' => 'required',
+            'kelas' => 'required|max:10',
+            'tanggal' => 'required|date',
+            'jam' => 'required',
+            'expired' => 'required',
+        ];
+    }
+    
+    protected array $messages = [
         'idperkuliahan.required' => 'Kode Prodi wajib diisi.',
         'kelas.required' => 'Kelas wajib diisi.',
         'idsebaranmatkul.required' => 'Pilih Data Distribusi Mata Kuliah.',
@@ -63,6 +78,7 @@ class DataPerkuliahan extends Component
         'jam.required' => 'Jam Wajib diisi',
         'expired.required' => 'Tanggal Kadaluarsa Wajib diisi',
     ];
+    
 
     public function save()
 {
@@ -242,6 +258,7 @@ class DataPerkuliahan extends Component
         ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
         ->select('dat_sebaran_matkul.kd_matkul','dat_matkul.nm_matkul')
         ->where('dat_sebaran_matkul.kd_prodi','=',$this->prodi)
+        ->where()
         ->distinct()
         ->get();
 

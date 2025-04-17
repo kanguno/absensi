@@ -62,9 +62,12 @@ $component = new class extends Component
                 
                     <div x-show="openDropdown" @click.away="openDropdown = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
                         <a href="{{ route('profile') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
-                        <button @click="$wire.logout()" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
                             Log Out
                         </button>
+                    </form>
                     </div>
                 </div>
 
@@ -72,9 +75,10 @@ $component = new class extends Component
             </header>
             <div class="flex">
                <div class="bg-white fixed z-10 p-4 h-full transition-transform duration-300"
-     :class="sidebarOpen ? 'w-64' : 'w-0'">
+                :class="sidebarOpen ? 'w-64' : 'w-0'">
 
                     <nav :class="sidebarOpen ? 'grid' : 'hidden'" class="mt-[4rem] p-4">
+                    @if(auth()->check() && auth()->user()->kd_otoritas == 1)
                         <div x-data="{ openAkademik: true }">
                             <button @click="openAkademik = !openAkademik" class="focus:outline-none w-full">
                                 <h2 class="flex justify-between text-left text-gray-700 font-semibold mt-4">
@@ -90,6 +94,8 @@ $component = new class extends Component
                                 <x-responsive-nav-link :href="route('datamatkul')" :active="request()->routeIs('datamatkul')" wire:navigate>Data Mata Kuliah</x-responsive-nav-link>
                             </div>
                         </div>
+                    @endif
+                    @if(auth()->check() && auth()->user()->kd_otoritas == 1)
                         <div x-data="{ openCivitas: true }">
                             <button @click="openCivitas = !openCivitas" class="focus:outline-none w-full">
                                 <h2 class="flex justify-between text-left text-gray-700 font-semibold mt-4">
@@ -106,6 +112,7 @@ $component = new class extends Component
                                 <x-responsive-nav-link :href="route('datadosen')" :active="request()->routeIs('datadosen')" wire:navigate>Data Dosen</x-responsive-nav-link>
                             </div>
                         </div>
+                        @endif
                         <div x-data="{ openPerkuliahan: true }">
                             <button @click="openPerkuliahan = !openPerkuliahan" class="focus:outline-none w-full">
                                 <h2 class="flex justify-between text-left text-gray-700 font-semibold mt-4">Manajemen Perkuliahan
@@ -117,9 +124,13 @@ $component = new class extends Component
                             </button>
                             <div x-show="openPerkuliahan" x-cloak>
                                 <x-responsive-nav-link :href="route('dataperkuliahan')" :active="request()->routeIs('dataperkuliahan')" wire:navigate>Data Perkuliahan</x-responsive-nav-link>
+
+                            @if(auth()->check() && auth()->user()->kd_otoritas == 1)
                                 <x-responsive-nav-link :href="route('datasebaranmatkul')" :active="request()->routeIs('datasebaranmatkul')" wire:navigate>Data Distribusi Mata Kuliah</x-responsive-nav-link>
+                            @endif
                             </div>
                         </div>
+                        
                     </nav>
                 </div>
                 <main :class="sidebarOpen ? 'ml-64' : 'ml-0'" class="mt-10 w-full p-4">
