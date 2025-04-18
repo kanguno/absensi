@@ -11,6 +11,7 @@ use App\Livewire\DataPerkuliahan;
 use App\Livewire\UserControl;
 use App\Livewire\AbsenMahasiswa;
 use App\Livewire\CeklistAbsensi;
+use App\Livewire\ReportAbsensi;
 use App\Livewire\CetakAbsensiHarian;
 
 use App\Http\Middleware\CheckUserOtoritas;
@@ -45,6 +46,7 @@ Route::view('profile', 'profile')
     
     Route::get('/data-perkuliahan', DataPerkuliahan::class)->middleware(['auth'])->name('dataperkuliahan');
     Route::get('/ceklist-absensi-{idperkuliahan}', CeklistAbsensi::class)->middleware(['auth'])->name('ceklistabsensi');
+    Route::get('/report-absensi-{idperkuliahan}', ReportAbsensi::class)->middleware(['auth'])->name('reportabsensi');
     Route::get('/cetak-absensi-harian-{idperkuliahan}', CetakAbsensiHarian::class)->middleware(['auth'])->name('cetakabsensiharian');
     
     Route::post('/logout', function () {
