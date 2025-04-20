@@ -166,12 +166,14 @@ class DataPerkuliahan extends Component
         ->where('id_perkuliahan', $idperkuliahan)
         ->select('dat_perkuliahan.*','dat_sebaran_matkul.*')
         ->first();
-
+        
         $this->datamatkul=DB::table('dat_sebaran_matkul')
         ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
         ->select('dat_sebaran_matkul.kd_matkul','dat_matkul.nm_matkul')
         ->where('dat_sebaran_matkul.kd_prodi','=',$data->kd_prodi)
-        ->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen)
+        ->when($this->existdosen, function ($query) {
+        return $query->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen);
+    })
         ->distinct()
         ->get();
 
@@ -179,7 +181,9 @@ class DataPerkuliahan extends Component
         ->select('dat_sebaran_matkul.semester')
         ->where('dat_sebaran_matkul.kd_prodi','=',$data->kd_prodi)
         ->where('dat_sebaran_matkul.kd_matkul','=',$data->kd_matkul)
-        ->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen)
+        ->when($this->existdosen, function ($query) {
+        return $query->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen);
+    })
         ->distinct()
         ->get();
 
@@ -188,7 +192,9 @@ class DataPerkuliahan extends Component
         ->select('dat_sebaran_matkul.*','dat_dosen.nm_dosen')
         ->where('dat_sebaran_matkul.kd_prodi','=',$data->kd_prodi)
         ->where('dat_sebaran_matkul.kd_matkul','=',$data->kd_matkul)
-        ->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen)
+        ->when($this->existdosen, function ($query) {
+        return $query->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen);
+    })
         ->where('dat_sebaran_matkul.semester','=',$data->semester)
         ->get();
 
@@ -200,7 +206,9 @@ class DataPerkuliahan extends Component
         ->where('dat_sebaran_matkul.kd_prodi','=',$data->kd_prodi)
         ->where('dat_sebaran_matkul.semester','=',$data->semester)
         ->where('dat_sebaran_matkul.kd_matkul','=',$data->kd_matkul)
-        ->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen)
+        ->when($this->existdosen, function ($query) {
+        return $query->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen);
+    })
         ->where('dat_sebaran_matkul.id_dosen','=',$data->id_dosen)
         ->get();
 
@@ -262,7 +270,9 @@ class DataPerkuliahan extends Component
         ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
         ->select('dat_sebaran_matkul.kd_matkul','dat_matkul.nm_matkul')
         ->where('dat_sebaran_matkul.kd_prodi','=',$this->prodi)
-        ->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen)
+        ->when($this->existdosen, function ($query) {
+        return $query->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen);
+    })
         ->distinct()
         ->get();
 
@@ -292,7 +302,9 @@ class DataPerkuliahan extends Component
         ->select('dat_sebaran_matkul.semester')
         ->where('dat_sebaran_matkul.kd_prodi','=',$this->prodi)
         ->where('dat_sebaran_matkul.kd_matkul','=',$this->kdmatkul)
-        ->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen)
+        ->when($this->existdosen, function ($query) {
+        return $query->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen);
+    })
         ->distinct()
         ->get();
         
@@ -319,7 +331,9 @@ class DataPerkuliahan extends Component
         $datadosen=DB::table('dat_sebaran_matkul')
         ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
         ->select('dat_sebaran_matkul.*','dat_dosen.nm_dosen')
-        ->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen)
+        ->when($this->existdosen, function ($query) {
+        return $query->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen);
+    })
         ->where('dat_sebaran_matkul.kd_prodi','=',$this->prodi)
         ->where('dat_sebaran_matkul.semester','=',$this->semester)
         ->where('dat_sebaran_matkul.kd_matkul','=',$this->kdmatkul)
@@ -348,7 +362,9 @@ public function dataDistribusi(){
         ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
         ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
         ->select('dat_sebaran_matkul.*', 'dat_prodi.nm_prodi','dat_matkul.nm_matkul','dat_dosen.nm_dosen')
-        ->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen)
+        ->when($this->existdosen, function ($query) {
+        return $query->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen);
+    })
         ->where('dat_sebaran_matkul.kd_prodi','=',$this->prodi)
         ->where('dat_sebaran_matkul.semester','=',$this->semester)
         ->where('dat_sebaran_matkul.kd_matkul','=',$this->kdmatkul)
