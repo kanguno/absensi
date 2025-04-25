@@ -17,15 +17,15 @@ use App\Livewire\CetakAbsensiHarian;
 use App\Http\Middleware\CheckUserOtoritas;
 
 Route::get('/', function () {
-    return redirect('/dashboard');
+    return redirect('/data-perkuliahan');
 });
 Route::get('/data-absensi-{idperkuliahan}', AbsenMahasiswa::class)->name('absensimahasiswa');
 
 Route::get('/link-absen-{qrlink}', [DataPerkuliahan::class, 'redirectToAbsensi']);
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+// Route::view('dashboard', 'dashboard')
+//     ->middleware(['auth', 'verified'])
+//     ->name('dashboard');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])

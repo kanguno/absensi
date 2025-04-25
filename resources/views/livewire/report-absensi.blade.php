@@ -93,6 +93,12 @@
                 placeholder="Contoh Penulisan : 2024-A">
             @error('kelas') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
         </div>
+        <div class="mb-4">
+            <label class="block text-white font-medium">Bulan </label>
+            <input type="month" wire:model="bulan"
+                class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+            @error('bulan') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+        </div>
         <div class="mb-4 flex justify-end " >
             <button type="submit" 
                 class="bg-orange-500 text-white border-2 border-orange-500 px-3 py-1 rounded hover:border-orange-500  hover:bg-[#66008b]">

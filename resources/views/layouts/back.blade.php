@@ -74,7 +74,7 @@ $component = new class extends Component
                 </div>
             </header>
             <div class="flex">
-               <div class="bg-white fixed z-10 p-4 h-full transition-transform duration-300"
+               <div class="bg-white fixed z-10 p-4 h-full overflow-scroll transition-transform duration-300"
                 :class="sidebarOpen ? 'w-64' : 'w-0'">
 
                     <nav :class="sidebarOpen ? 'grid' : 'hidden'" class="mt-[4rem] p-4">
@@ -124,12 +124,30 @@ $component = new class extends Component
                             </button>
                             <div x-show="openPerkuliahan" x-cloak>
                                 <x-responsive-nav-link :href="route('dataperkuliahan')" :active="request()->routeIs('dataperkuliahan')" wire:navigate>Data Perkuliahan</x-responsive-nav-link>
+                                <x-responsive-nav-link :href="route('reportabsensi')" :active="request()->routeIs('reportabsensi')" wire:navigate>RekaP Absensi</x-responsive-nav-link>
 
                             @if(auth()->check() && auth()->user()->kd_otoritas == 1)
                                 <x-responsive-nav-link :href="route('datasebaranmatkul')" :active="request()->routeIs('datasebaranmatkul')" wire:navigate>Data Distribusi Mata Kuliah</x-responsive-nav-link>
                             @endif
                             </div>
                         </div>
+                        @if(auth()->check() && auth()->user()->kd_otoritas == 1)
+                        <div x-data="{ openSetting: true }">
+                            <button @click="openSetting = !openSetting" class="focus:outline-none w-full">
+                                <h2 class="flex justify-between text-left text-gray-700 font-semibold mt-4">
+                                  <span>
+                                  Settings
+                                  </span>
+                                <svg class="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"></path>
+                                </svg>
+                                </h2>
+                            </button>
+                            <div x-show="openSetting" x-cloak>
+                                <x-responsive-nav-link :href="route('usercontroll')" :active="request()->routeIs('usercontroll')" wire:navigate>Data Pengguna</x-responsive-nav-link>                                
+                            </div>
+                        </div>
+                        @endif
                         
                     </nav>
                 </div>
