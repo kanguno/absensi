@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2025 at 12:26 AM
+-- Generation Time: May 14, 2025 at 04:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -64,8 +64,8 @@ CREATE TABLE `dat_absensi` (
 --
 
 INSERT INTO `dat_absensi` (`id_absensi`, `nim`, `id_perkuliahan`, `status_kehadiran`, `keterangan`) VALUES
-(1, '24612001', 3, 'T', 'Cuti Sakit'),
-(2, '24612002', 3, 'T', 'Kepentingan Keluarga'),
+(1, '24612001', 3, 'Y', 'Cuti'),
+(2, '24612002', 3, 'T', ''),
 (3, '24612003', 3, 'Y', NULL),
 (4, '24612004', 3, 'Y', NULL),
 (5, '24612005', 3, 'Y', NULL),
@@ -75,7 +75,19 @@ INSERT INTO `dat_absensi` (`id_absensi`, `nim`, `id_perkuliahan`, `status_kehadi
 (9, '24612009', 3, 'Y', NULL),
 (10, '24612010', 3, 'Y', NULL),
 (11, '24612011', 3, 'Y', NULL),
-(12, '24612012', 3, 'Y', NULL);
+(12, '24612012', 3, 'Y', NULL),
+(13, '24612001', 4, 'Y', NULL),
+(14, '24612002', 4, 'Y', NULL),
+(15, '24612003', 4, 'Y', NULL),
+(16, '24612004', 4, 'Y', NULL),
+(17, '24612005', 4, 'Y', NULL),
+(18, '24612006', 4, 'Y', NULL),
+(19, '24612007', 4, 'Y', NULL),
+(20, '24612008', 4, 'Y', NULL),
+(21, '24612009', 4, 'Y', NULL),
+(22, '24612010', 4, 'Y', NULL),
+(23, '24612011', 4, 'Y', NULL),
+(24, '24612012', 4, 'Y', NULL);
 
 -- --------------------------------------------------------
 
@@ -193,7 +205,10 @@ CREATE TABLE `dat_perkuliahan` (
 --
 
 INSERT INTO `dat_perkuliahan` (`id_perkuliahan`, `id_sebaran_matkul`, `kelas`, `tanggal`, `jam`, `batas_absen`) VALUES
-(3, 1, '2024-A', '2025-03-25', '13:59:00', '2025-03-25 14:30:00');
+(3, 2, '2024-A', '2025-04-19', '13:59:00', '2025-04-25 14:30:00'),
+(4, 2, '2024-A', '2025-04-03', '09:30:00', '2025-04-03 09:39:00'),
+(5, 2, '2024-B', '2024-12-31', '08:00:00', '2024-12-31 00:15:00'),
+(6, 1, '2024-B', '2025-04-14', '13:31:00', '2025-04-14 13:35:00');
 
 -- --------------------------------------------------------
 
@@ -317,10 +332,18 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `otoritas` (
-  `kd_otoritas` char(2) NOT NULL,
+  `kd_otoritas` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `nm_otoritas` varchar(100) NOT NULL,
   `deskripsi` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `otoritas`
+--
+
+INSERT INTO `otoritas` (`kd_otoritas`, `nm_otoritas`, `deskripsi`) VALUES
+('1', 'admin', ''),
+('2', 'dosen', '');
 
 -- --------------------------------------------------------
 
@@ -333,6 +356,29 @@ CREATE TABLE `password_reset_tokens` (
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `qrabsen`
+--
+
+CREATE TABLE `qrabsen` (
+  `id` int(11) NOT NULL,
+  `id_perkuliahan` int(11) NOT NULL,
+  `link_absen` varchar(50) NOT NULL,
+  `kata_kunci` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `qrabsen`
+--
+
+INSERT INTO `qrabsen` (`id`, `id_perkuliahan`, `link_absen`, `kata_kunci`) VALUES
+(1, 3, 'f317d1c63848ae31bf43a14ee0125f96', NULL),
+(2, 4, '471ab9319c6d6e0b29a5521f755969c2', NULL),
+(3, 5, 'e5f055ed4440d88ab4ae1d6ae8cffce6', NULL),
+(4, 6, 'a6431f580a6345109feaf81e472c4358', NULL);
 
 -- --------------------------------------------------------
 
@@ -354,7 +400,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('UDUEbX5CiwZD2ImhOV2qklwWq8CiHyNBf0JTCBiy', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiTzlzZkp0czkwekZhQ2s3SjVpNzJBMnFIUUQ2YzJWTDc3TThNV1AwZCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzg6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9kYXRhLXBlcmt1bGlhaGFuIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1742945056);
+('lXbvwUU0Iyd6RTOGqeHSDFQK5dkI5EfSA9LFUA1H', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoibG1CTWtqS1VLVWtkWDVOdU5uS3hBeFJWZ2Z4TmMyVnJpQk5aam80MSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzg6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9kYXRhLXBlcmt1bGlhaGFuIjt9czozOiJ1cmwiO2E6MDp7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1746658451);
 
 -- --------------------------------------------------------
 
@@ -379,7 +425,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `nm_user`, `email`, `email_verified_at`, `password`, `kd_otoritas`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@gmail.com', NULL, '$2y$12$RqX3EKZep/JVOnwrtWayiO8kYOSpcn7jjTc93WtajCiSVMzmFWekO', '2', NULL, '2025-03-23 20:19:24', '2025-03-23 20:19:24');
+(1, 'admin', 'admin@gmail.com', NULL, '$2y$12$slO1mvYi0ogZAV7DhzC0kuCScDqCdGz2vqyNC6SJMh5axSG/T9i.e', '1', NULL, '2025-03-23 20:19:24', '2025-04-16 22:57:57'),
+(2, 'Andik Setiawan', 'andik@gmail.com', NULL, '$2y$12$PRKVXQQ1D5CbYpCz2ECPk.b18eiL0dlLD0qDINspyDjxg3YtD44g.', '2', NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -493,6 +540,13 @@ ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
 
 --
+-- Indexes for table `qrabsen`
+--
+ALTER TABLE `qrabsen`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_perkuliahan` (`id_perkuliahan`);
+
+--
 -- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
@@ -515,13 +569,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `dat_absensi`
 --
 ALTER TABLE `dat_absensi`
-  MODIFY `id_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_absensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `dat_perkuliahan`
 --
 ALTER TABLE `dat_perkuliahan`
-  MODIFY `id_perkuliahan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_perkuliahan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `dat_sebaran_matkul`
@@ -548,10 +602,16 @@ ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `qrabsen`
+--
+ALTER TABLE `qrabsen`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -589,6 +649,12 @@ ALTER TABLE `dat_sebaran_matkul`
   ADD CONSTRAINT `dat_sebaran_matkul_ibfk_1` FOREIGN KEY (`kd_prodi`) REFERENCES `dat_prodi` (`kd_prodi`),
   ADD CONSTRAINT `dat_sebaran_matkul_ibfk_2` FOREIGN KEY (`kd_matkul`) REFERENCES `dat_matkul` (`kd_matkul`),
   ADD CONSTRAINT `dat_sebaran_matkul_ibfk_3` FOREIGN KEY (`id_dosen`) REFERENCES `dat_dosen` (`id_dosen`);
+
+--
+-- Constraints for table `qrabsen`
+--
+ALTER TABLE `qrabsen`
+  ADD CONSTRAINT `qrabsen_ibfk_1` FOREIGN KEY (`id_perkuliahan`) REFERENCES `dat_perkuliahan` (`id_perkuliahan`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
