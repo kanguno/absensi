@@ -13,8 +13,8 @@ class ReportAbsensi extends Component
     public $reportAbsen='display:none;',$form='';
     public $dataperkuliahan,$perkuliahan=[];
     public $kelas,$semester,$kdmatkul,$nmprodi,$nmfakultas,$nmdosen,$tahunakademik,$nmmatkul,$prodi,$existdosen,$dosen;
-    public $tahun = 2025;
-    public $bulan = 4;
+    public $tahun;
+    public $bulan;
     public $tanggalHeader = [],$dataprodi=[],$datamatkul=[],$datadosen=[],$datadistribusi=[],$datasemester=[],$datakelas=[];
     public $idsebaranmatkul='1';
 
@@ -40,15 +40,23 @@ class ReportAbsensi extends Component
     }
 
     public function cariData(){
-        $start = Carbon::create($this->tahun, $this->bulan, 1);
-        $end = $start->copy()->endOfMonth();
-
-        $this->tanggalHeader = [];
-        while ($start->lte($end)) {
-            $this->tanggalHeader[] = $start->format('Y-m-d');
-            $start->addDay();
+        
+        
+        if ($this->bulan) {
+            // Ubah dari string ke Carbon
+            $start = Carbon::createFromFormat('Y-m', $this->bulan)->startOfMonth();
+            $end = $start->copy()->endOfMonth();
+        
+            $this->tanggalHeader = [];
+            while ($start->lte($end)) {
+                $this->tanggalHeader[] = $start->format('Y-m-d');
+                $start->addDay();
+            }
         }
 
+        $bulan = Carbon::createFromFormat('Y-m', $this->bulan)->format('m');
+        $tahun = Carbon::createFromFormat('Y-m', $this->bulan)->format('Y');
+        
         // Ambil data absensi mahasiswa
         $data = DB::table('dat_sebaran_matkul as a')
             ->join('dat_perkuliahan as b', 'a.id_sebaran_matkul', '=', 'b.id_sebaran_matkul')
@@ -60,11 +68,12 @@ class ReportAbsensi extends Component
             ->where('a.semester', $this->semester)
             ->where('a.id_dosen', $this->dosen)
             ->where('b.kelas', $this->kelas)
-            ->whereMonth('b.tanggal', $this->bulan)
-            ->whereYear('b.tanggal', $this->tahun)
+            ->whereMonth('b.tanggal', $bulan)
+            ->whereYear('b.tanggal', $tahun)
             ->select('a.*','b.*','c.id_perkuliahan','d.nim', 'd.nm_mahasiswa', 'b.tanggal', 'c.status_kehadiran')
             ->get();
 
+            //dd($data);
         if($data->isNotEmpty()){
             $this->reportAbsen='';
             $this->form='hidden';  
