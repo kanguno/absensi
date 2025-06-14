@@ -36,6 +36,143 @@ $component = new class extends Component
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+/* === TEXT COLORS === */
+.text-campus-primary           { color: #81007f; }
+.text-campus-primary-light     { color: #c576c5; }
+.text-campus-primary-dark      { color: #4e0051; }
+
+.text-campus-accent            { color: #fe8da1; }
+.text-campus-accent-soft       { color: #febfca; }
+.text-campus-accent-dark       { color: #c8576b; }
+
+.text-campus-action            { color: #05bbaa; }
+.text-campus-action-light      { color: #80e7dd; }
+.text-campus-action-dark       { color: #02796e; }
+
+.text-campus-info              { color: #76e1d1; }
+.text-campus-info-dark         { color: #3da99b; }
+
+.text-campus-warn              { color: #d4a537; }
+.text-campus-warn-dark         { color: #bdb97f; }
+
+.text-campus-alert             { color: #eb5951; }
+.text-campus-alert-light       { color: #fba8a4; }
+.text-campus-alert-dark        { color: #b53932; }
+
+.text-campus-deep              { color: #534293; }
+.text-campus-deep-light        { color: #897ac4; }
+.text-campus-deep-dark         { color: #342266; }
+
+/* === BACKGROUND COLORS === */
+.bg-campus-primary             { background-color: #81007f; }
+.bg-campus-primary-light       { background-color: #c576c5; }
+.bg-campus-primary-dark        { background-color: #4e0051; }
+
+.bg-campus-accent              { background-color: #fe8da1; }
+.bg-campus-accent-soft         { background-color: #febfca; }
+.bg-campus-accent-dark         { background-color: #c8576b; }
+
+.bg-campus-action              { background-color: #05bbaa; }
+.bg-campus-action-light        { background-color: #80e7dd; }
+.bg-campus-action-dark         { background-color: #02796e; }
+
+.bg-campus-info                { background-color: #76e1d1; }
+.bg-campus-info-dark           { background-color: #3da99b; }
+
+.bg-campus-warn                { background-color:#f1c971; }
+.bg-campus-warn-dark           { background-color: #bdb97f; }
+
+.bg-campus-alert               { background-color: #eb5951; }
+.bg-campus-alert-light         { background-color: #fba8a4; }
+.bg-campus-alert-dark          { background-color: #b53932; }
+
+.bg-campus-deep                { background-color: #534293; }
+.bg-campus-deep-light          { background-color: #897ac4; }
+.bg-campus-deep-dark           { background-color: #342266; }
+
+/* === BORDER COLORS === */
+.border-campus-primary         { border-color: #81007f; }
+.border-campus-primary-light   { border-color: #c576c5; }
+.border-campus-primary-dark    { border-color: #4e0051; }
+
+.border-campus-accent          { border-color: #fe8da1; }
+.border-campus-accent-soft     { border-color: #febfca; }
+.border-campus-accent-dark     { border-color: #c8576b; }
+
+.border-campus-action          { border-color: #05bbaa; }
+.border-campus-action-light    { border-color: #80e7dd; }
+.border-campus-action-dark     { border-color: #02796e; }
+
+.border-campus-info            { border-color: #76e1d1; }
+.border-campus-info-dark       { border-color: #3da99b; }
+
+.border-campus-warn            { border-color: #d4a537; }
+.border-campus-warn-dark       { border-color: #bdb97f; }
+
+.border-campus-alert           { border-color: #eb5951; }
+.border-campus-alert-light     { border-color: #fba8a4; }
+.border-campus-alert-dark      { border-color: #b53932; }
+
+.border-campus-deep            { border-color: #534293; }
+.border-campus-deep-light      { border-color: #897ac4; }
+.border-campus-deep-dark       { border-color: #342266; }
+
+/* === HOVER STATES === */
+.hover\:bg-campus-primary:hover         { background-color: #81007f; }
+.hover\:bg-campus-primary-light:hover   { background-color: #c576c5; }
+.hover\:bg-campus-primary-dark:hover    { background-color: #4e0051; }
+
+.hover\:bg-campus-accent:hover          { background-color: #fe8da1; }
+.hover\:bg-campus-accent-soft:hover     { background-color: #febfca; }
+.hover\:bg-campus-accent-dark:hover     { background-color: #c8576b; }
+
+.hover\:bg-campus-action:hover          { background-color: #05bbaa; }
+.hover\:bg-campus-action-light:hover    { background-color: #80e7dd; }
+.hover\:bg-campus-action-dark:hover     { background-color: #02796e; }
+
+.hover\:bg-campus-info:hover            { background-color: #76e1d1; }
+.hover\:bg-campus-info-dark:hover       { background-color: #3da99b; }
+
+.hover\:bg-campus-warn:hover            { background-color: #d4a537; }
+.hover\:bg-campus-warn-dark:hover       { background-color: #bdb97f; }
+
+.hover\:bg-campus-alert:hover           { background-color: #eb5951; }
+.hover\:bg-campus-alert-light:hover     { background-color: #fba8a4; }
+.hover\:bg-campus-alert-dark:hover      { background-color: #b53932; }
+
+.hover\:bg-campus-deep:hover            { background-color: #534293; }
+.hover\:bg-campus-deep-light:hover      { background-color: #897ac4; }
+.hover\:bg-campus-deep-dark:hover       { background-color: #342266; }
+
+/* === ACTIVE STATES === */
+.active\:bg-campus-primary:active       { background-color: #81007f; }
+.active\:bg-campus-primary-light:active { background-color: #c576c5; }
+.active\:bg-campus-primary-dark:active  { background-color: #4e0051; }
+
+.active\:bg-campus-accent:active        { background-color: #fe8da1; }
+.active\:bg-campus-accent-soft:active   { background-color: #febfca; }
+.active\:bg-campus-accent-dark:active   { background-color: #c8576b; }
+
+.active\:bg-campus-action:active        { background-color: #05bbaa; }
+.active\:bg-campus-action-light:active  { background-color: #80e7dd; }
+.active\:bg-campus-action-dark:active   { background-color: #02796e; }
+
+.active\:bg-campus-info:active          { background-color: #76e1d1; }
+.active\:bg-campus-info-dark:active     { background-color: #3da99b; }
+
+.active\:bg-campus-warn:active          { background-color: #d4a537; }
+.active\:bg-campus-warn-dark:active     { background-color: #bdb97f; }
+
+.active\:bg-campus-alert:active         { background-color: #eb5951; }
+.active\:bg-campus-alert-light:active   { background-color: #fba8a4; }
+.active\:bg-campus-alert-dark:active    { background-color: #b53932; }
+
+.active\:bg-campus-deep:active          { background-color: #534293; }
+.active\:bg-campus-deep-light:active    { background-color: #897ac4; }
+.active\:bg-campus-deep-dark:active     { background-color: #342266; }
+
+
+
         [x-cloak] { display: none; }
         .scrollbar::-webkit-scrollbar {
             width: 12px;

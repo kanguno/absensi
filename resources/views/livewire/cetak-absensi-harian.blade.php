@@ -2,8 +2,8 @@
 <div class="a4" style="padding-top: 3rem; padding-bottom: 3rem;">
     <div style="max-width: 80rem; margin: auto; padding-left: 1.5rem; padding-right: 1.5rem;">
         <div class="rounded-xl shadow-lg flex w-fit justify-self-end gap-4 mb-4 bg-white p-3">
-            <button wire:click="kembali" class="bg-[#1db851] text-white px-3 py-1 rounded hover:bg-green-600 cursor-pointer"><i class="bi bi-arrow-left-square"></i> Kembali</button>
-            <button id="printBtn" wire:click="print" class="hover:bg-blue-500 text-white px-4 py-2 rounded bg-[#00bcd4]"> <i class="bi bi-printer-fill"></i> Cetak</button>
+            <button wire:click="kembali" class="bg-campus-primary text-white px-3 py-1 rounded hover:bg-campus-warn-600 cursor-pointer"><i class="bi bi-arrow-left-square"></i> Kembali</button>
+            <button id="printBtn" wire:click="print" class="hover:bg-blue-500 text-white px-4 py-2 rounded bg-campus-deep"> <i class="bi bi-printer-fill"></i> Cetak</button>
         </div>
 
         <div id="print-area" style="background-color: #ffffff; overflow: hidden; padding: 2rem;">

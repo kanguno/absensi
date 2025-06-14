@@ -34,8 +34,8 @@
                         {{ $absen->hadir ? 'Hadir' : 'Tidak Hadir' }}
                     </td>
                     <td class="border px-4 py-2">
-                        <button wire:click="tandaiHadir({{ $absen->id }})" class="bg-green-500 text-white px-2 py-1 rounded">Hadir</button>
-                        <button wire:click="tandaiTidakHadir({{ $absen->id }})" class="bg-red-500 text-white px-2 py-1 rounded">Tidak Hadir</button>
+                        <button wire:click="tandaiHadir({{ $absen->id }})" class="bg-campus-warn-500 text-white px-2 py-1 rounded">Hadir</button>
+                        <button wire:click="tandaiTidakHadir({{ $absen->id }})" class="bg-campus-alert-500 text-white px-2 py-1 rounded">Tidak Hadir</button>
                     </td>
                 </tr>
             @endforeach

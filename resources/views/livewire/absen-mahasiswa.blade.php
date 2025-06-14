@@ -4,7 +4,7 @@
         <div id="notifikasiModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div class="bg-white p-4 rounded-lg shadow-lg max-w-xs">
                 <p class="text-green-700 font-semibold">{{ session('message') }}</p>
-                <button onclick="closeModal()" class="mt-2 bg-green-500 text-white px-4 py-2 rounded-lg">OK</button>
+                <button onclick="closeModal()" class="mt-2 bg-campus-warn-500 text-white px-4 py-2 rounded-lg">OK</button>
             </div>
         </div>
 
@@ -67,7 +67,7 @@
                 <form wire:submit.prevent="caridataabsensi" class='{{$carimhs}} grid w-full'>
                     <div class="h-fit flex gap-0 w-full justify-between bg-white rounded-3xl p-2 shadow-xl items-center">
                         <input type="text" wire:model="nim" class="border-none p-0 focus:ring-0 w-full placeholder:text-center mx-2" placeholder="Masukkan NIM Anda">
-                        <button type="submit" wire:click="caridataabsensi" class="border-none text-center px-3 py-2 text-white bg-orange-500 hover:bg-[#ff9800] rounded-3xl" ><i class="bi bi-search"></i></button>
+                        <button type="submit" wire:click="caridataabsensi" class="border-none text-center px-3 py-2 text-white bg-orange-500 hover:bg-campus-warn rounded-3xl" ><i class="bi bi-search"></i></button>
                     </div>
                 </form>
                 @if($absensi)
@@ -104,8 +104,8 @@
                     </tr>
                 </table>
                     <<div class="w-5/6 flex justify-self-center justify-between text-white bg-white rounded-3xl items-center px-4 py-1 shadow-lg {{$formabsen}}">
-                        <button wire:click="resetcaridata" wire:model="nim" class="h-fit rounded-2xl justify-self-center px-2 py-2 shadow-lg border-none text-center bg-[#66008b] hover:bg-orange-500">Cari Data</button>
-                        <button wire:click="absen({{$absensi->id_absensi}})" class="h-fit rounded-2xl justify-self-center px-2 py-2 shadow-lg border-none text-center bg-orange-500 hover:bg-[#ff9800]" >Absen</button>
+                        <button wire:click="resetcaridata" wire:model="nim" class="h-fit rounded-2xl justify-self-center px-2 py-2 shadow-lg border-none text-center bg-campus-primary hover:bg-orange-500">Cari Data</button>
+                        <button wire:click="absen({{$absensi->id_absensi}})" class="h-fit rounded-2xl justify-self-center px-2 py-2 shadow-lg border-none text-center bg-orange-500 hover:bg-campus-warn" >Absen</button>
                     </div>
             </div>
             @endif

@@ -1,7 +1,7 @@
 <div>
 
 @if (session()->has('message'))
-    <div id="notifikasi" class="fixed bottom-4 right-4 z-50 bg-green-100 text-green-700 px-4 py-3 rounded-2xl shadow-lg max-w-xs">
+    <div id="notifikasi" class="fixed bottom-4 right-4 z-50 bg-campus-warn-100 text-green-700 px-4 py-3 rounded-2xl shadow-lg max-w-xs">
         {{ session('message') }}
         <div class="absolute -bottom-2 right-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent shadow-lg border-t-8 border-green-100"></div>
     </div>
@@ -32,7 +32,7 @@
                         </option>
                     @endforeach
             </select>
-                @error('prodi') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+                @error('prodi') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div class="mb-4">
@@ -45,7 +45,7 @@
                     </option>
                 @endforeach
             </select>
-                @error('kdmatkul') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+                @error('kdmatkul') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div class="mb-4">
@@ -58,7 +58,7 @@
                     </option>
                 @endforeach
             </select>
-                @error('semester') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+                @error('semester') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div class="mb-4">
@@ -71,7 +71,7 @@
                     </option>
                 @endforeach
             </select>
-                @error('dosen') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+                @error('dosen') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
         </div>
         <div class="mb-4">
             <label class="block text-white font-medium" required>Data Distribusi Mata Kuliah* </label>
@@ -83,7 +83,7 @@
                         </option>
                     @endforeach
             </select>
-                @error('idsebaranmatkul') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+                @error('idsebaranmatkul') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
         </div>
             
         <div class="mb-4">
@@ -91,17 +91,17 @@
             <input type="text" wire:model="kelas"
                 class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
                 placeholder="Contoh Penulisan : 2024-A">
-            @error('kelas') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+            @error('kelas') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
         </div>
         <div class="mb-4">
             <label class="block text-white font-medium">Bulan </label>
             <input type="month" wire:model="bulan"
                 class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-            @error('bulan') <span class="text-[#ffb700] text-sm">{{ $message }}</span> @enderror
+            @error('bulan') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
         </div>
         <div class="mb-4 flex justify-end " >
             <button type="submit" 
-                class="bg-orange-500 text-white border-2 border-orange-500 px-3 py-1 rounded hover:border-orange-500  hover:bg-[#66008b]">
+                class="bg-orange-500 text-white border-2 border-orange-500 px-3 py-1 rounded hover:border-orange-500  hover:bg-campus-primary">
                 Cari Data
             </button>
         </div>
@@ -112,8 +112,8 @@
 <div class="a4" style="padding-top: 3rem; padding-bottom: 3rem; {{ $reportAbsen }} ">
     <div style="max-width: 80rem; margin: auto; padding-left: 1.5rem; padding-right: 1.5rem;">
         <div class="rounded-xl shadow-lg flex w-fit justify-self-end gap-4 mb-4 bg-white p-3">
-            <button wire:click="kembali" class="bg-[#1db851] text-white px-3 py-1 rounded hover:bg-green-600 cursor-pointer"><i class="bi bi-arrow-left-square"></i> Kembali</button>
-            <button id="printBtn" wire:click="print" class="hover:bg-blue-500 text-white px-4 py-2 rounded bg-[#00bcd4]"> <i class="bi bi-printer-fill"></i> Cetak</button>
+            <button wire:click="kembali" class="bg-campus-primary text-white px-3 py-1 rounded hover:bg-campus-warn-600 cursor-pointer"><i class="bi bi-arrow-left-square"></i> Kembali</button>
+            <button id="printBtn" wire:click="print" class="hover:bg-blue-500 text-white px-4 py-2 rounded bg-campus-deep"> <i class="bi bi-printer-fill"></i> Cetak</button>
         </div>
         <div class="shadow-xl">
             <div id="print-area" style="background-color: #ffffff; overflow: hidden; padding: 2rem;">

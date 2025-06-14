@@ -56,14 +56,14 @@
                 </div>
                 <div class="max-h-[70vh] overflow-scroll">
                     <table class="min-w-full border border-gray-300">
-                        <thead class="bg-[#66008b] text-white">
+                        <thead class="bg-campus-primary text-white">
                         <tr>
                                 <th class="border px-4 py-2 text-center">NIM</th>
                                 <th class="border px-4 py-2 text-center">Nama</th>
                                 <th class="border px-4 py-2 text-center" colspan="2">Status Kehadiran</th>
                                 <th class="border px-4 py-2 text-center">Keterangan</th>
                             </tr>
-                            <tr class="bg-[#66008b] text-white">
+                            <tr class="bg-campus-primary text-white">
                                 <th colspan="2"></th>
                                 <th class="border px-4 py-2 text-center">Hadir</th>
                                 <th class="border px-4 py-2 text-center">Tidak Hadir</th>

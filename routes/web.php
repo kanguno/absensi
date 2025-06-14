@@ -16,9 +16,9 @@ use App\Livewire\CetakAbsensiHarian;
 
 use App\Http\Middleware\CheckUserOtoritas;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-})->name('home');
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// })->name('home');
 
 Route::get('/data-absensi-{idperkuliahan}', AbsenMahasiswa::class)->name('absensimahasiswa');
 
@@ -61,3 +61,4 @@ Route::view('profile', 'profile')
         return redirect('/');
     })->name('logout');
 require __DIR__.'/auth.php';
+ 

@@ -17,6 +17,29 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
+    <style>
+/* === TEXT COLORS === */
+.text-magenta    { color: #D83F87; }
+.text-violet     { color: #2A1B3D; }
+.text-indigo     { color: #44318D; }
+.text-orange     { color: #E98907; }
+.text-gray-soft  { color: #A4B3B6; }
+
+/* === BACKGROUND COLORS === */
+.bg-magenta      { background-color: #D83F87; }
+.bg-violet       { background-color: #2A1B3D; }
+.bg-indigo       { background-color: #44318D; }
+.bg-orange       { background-color: #E98907; }
+.bg-gray-soft    { background-color: #A4B3B6; }
+
+/* === BORDER COLORS === */
+.border-magenta   { border-color: #D83F87; }
+.border-violet    { border-color: #2A1B3D; }
+.border-indigo    { border-color: #44318D; }
+.border-orange    { border-color: #E98907; }
+.border-gray-soft { border-color: #A4B3B6; }
+
+    </style>
     </head>
             <body class="font-sans antialiased">
                 <div class="min-h-screen bg-white">

@@ -1,7 +1,7 @@
 <div>
 
 @if (session()->has('message'))
-    <div id="notifikasi" class="fixed bottom-4 right-4 z-50 bg-green-100 text-green-700 px-4 py-3 rounded-2xl shadow-lg max-w-xs">
+    <div id="notifikasi" class="fixed bottom-4 right-4 z-50 bg-campus-warn-100 text-green-700 px-4 py-3 rounded-2xl shadow-lg max-w-xs">
         {{ session('message') }}
         <div class="absolute -bottom-2 right-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent shadow-lg border-t-8 border-green-100"></div>
     </div>
@@ -88,14 +88,14 @@
                 </div>
                 <div class="max-h-[70vh] overflow-scroll">
                     <table class="min-w-full border border-gray-300">
-                        <thead class="bg-[#66008b] text-white">
+                        <thead class="bg-campus-primary text-white">
                         <tr>
                                 <th class="border px-4 py-2 text-center">NIM</th>
                                 <th class="border px-4 py-2 text-center">Nama</th>
                                 <th class="border px-4 py-2 text-center" colspan="2">Status Kehadiran</th>
                                 <th class="border px-4 py-2 text-center">Keterangan</th>
                             </tr>
-                            <tr class="bg-[#66008b] text-white">
+                            <tr class="bg-campus-primary text-white">
                                 <th colspan="2"></th>
                                 <th class="border px-4 py-2 text-center">Hadir</th>
                                 <th class="border px-4 py-2 text-center">Tidak Hadir</th>
@@ -114,7 +114,7 @@
                                                 value="Y" 
                                                 wire:change="updateKehadiran({{ $databsensi->id_absensi }}, 'Y')"
                                                 class="hidden peer">
-                                            <div class="w-12 h-6 rounded-full bg-gray-300 peer-checked:bg-green-500 relative transition-all">
+                                            <div class="w-12 h-6 rounded-full bg-gray-300 peer-checked:bg-campus-warn-500 relative transition-all">
                                                 <div class="w-6 h-6 bg-white rounded-full absolute left-0 peer-checked:left-6 transition-all"></div>
                                             </div>
                                         </label>
@@ -126,7 +126,7 @@
                                                 value="T" 
                                                 wire:change="updateKehadiran({{ $databsensi->id_absensi }}, 'T')"
                                                 class="hidden peer">
-                                            <div class="w-12 h-6 rounded-full bg-gray-300 peer-checked:bg-red-500 relative transition-all">
+                                            <div class="w-12 h-6 rounded-full bg-gray-300 peer-checked:bg-campus-alert-500 relative transition-all">
                                                 <div class="w-6 h-6 bg-white rounded-full absolute left-0 peer-checked:left-6 transition-all"></div>
                                             </div>
                                         </label>
