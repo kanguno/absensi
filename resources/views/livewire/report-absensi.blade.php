@@ -156,11 +156,16 @@
                             <th colspan="{{ count($tanggalHeader) }}" style="text-align: center; border: 1px solid black;">Tanggal Perkuliahan</th>
                         </tr>
                         <tr>
-                            @foreach($tanggalHeader as $tgl)
-                                <th style="max-width: 20px; border: 1px solid black; text-align: center;">
-                                    {{ \Carbon\Carbon::parse($tgl)->format('d') }}
+                            <tr>
+                            @for ($i = 1; $i <= 14; $i++)
+                                <th style="border: 1px solid black; text-align: center;">
+                                    TM {{ $i }}<br>
+                                    <span style="font-size: 0.8em;">
+                                        {{ \Carbon\Carbon::parse($tanggalPerTM[$i - 1])->format('d M Y') }}
+                                    </span>
                                 </th>
-                            @endforeach
+                            @endfor
+                        </tr>
                         </tr>
                             </thead>
                             <tbody border="1" >

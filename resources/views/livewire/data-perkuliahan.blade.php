@@ -31,6 +31,50 @@
                         + Tambah Perkuliahan
                     </button>
                 </div>
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+<div class="flex flex-wrap gap-4 mb-4">
+    <!-- Filter Kelas -->
+    <div>
+        <label for="filterKelas" class="block text-sm font-medium">Kelas</label>
+        <select wire:model="filterKelas" id="filterKelas" class="border px-3 py-2 rounded w-40">
+            <option value="">-- Semua Kelas --</option>
+            @foreach ($listKelas as $kelas)
+                <option value="{{ $kelas->kelas }}">{{ $kelas->kelas }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <!-- Filter Dosen -->
+    <div>
+        <label for="filterDosen" class="block text-sm font-medium">Nama Dosen</label>
+        <select wire:model="filterDosen" id="filterDosen" class="border px-3 py-2 rounded w-48">
+            <option value="">-- Semua Dosen --</option>
+            @foreach ($listDosen as $dosen)
+                <option value="{{ $dosen->id_dosen }}">{{ $dosen->nm_dosen }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <!-- Filter Mata Kuliah -->
+    <div>
+        <label for="filterMatkul" class="block text-sm font-medium">Mata Kuliah</label>
+        <select wire:model="filterMatkul" id="filterMatkul" class="border px-3 py-2 rounded w-56">
+            <option value="">-- Semua Matkul --</option>
+            @foreach ($listMatkul as $matkul)
+                <option value="{{ $matkul->kd_matkul }}">{{ $matkul->nm_matkul }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
+    <div class="flex gap-2 w-full md:w-1/2 justify-end">
+
+        <button wire:click="cetakPdf" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+            <i class="bi bi-printer"></i> Cetak PDF
+        </button>
+    </div>
+</div>
+
                 <div class="overflow-x-auto">
                     <table class="min-w-full border border-gray-300">
                         <thead class="bg-campus-primary text-white">
@@ -39,7 +83,10 @@
                                 <th class="border px-4 py-2 text-center">Kelas</th>
                                 <th class="border px-4 py-2 text-center">Mata Kuliah</th>
                                 <th class="border px-4 py-2 text-center">Nama Dosen</th>
-                                <th class="border px-4 py-2 text-center">Tanggal</th>
+                                 <th class="border px-4 py-2 text-center">Materi</th>
+                                 <th class="border px-4 py-2 text-center">Pertemuan ke</th>
+                                <th class="border px-4 py-2 text-center">Tanggal Mulai</th>
+                                 <th class="border px-4 py-2 text-center">Tanggal Selesai</th>
                                 <th class="border px-4 py-2 text-center">Jam</th>
                                 <th class="border px-4 py-2 text-center">Batas Absen</th>
                                 <th class="border px-4 py-2 text-center">Aksi</th>
@@ -52,7 +99,10 @@
                                     <td class="px-4 py-2">{{ $datperkuliahan->kelas }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->nm_matkul }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->nm_dosen }}</td>
+                                    <td class="px-4 py-2">{{ $datperkuliahan->materi }}</td>
+                                    <td class="px-4 py-2">{{ $datperkuliahan->pertemuan_ke }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->tanggal }}</td>
+             <td class="px-4 py-2">{{ $datperkuliahan->tanggal_selesai }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->jam }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->batas_absen }}</td>
                                     <td class="px-4 py-2 text-center text-sm justify-center flex gap-5">
@@ -197,24 +247,35 @@
                     <input type="text" wire:model="kelas"
                         class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
                         placeholder="Contoh Penulisan : 2024-A">
-                    @error('kelasl') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
+                    @error('kelas') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
+                </div>
+                
+                            <div class="mb-4">
+                    <label class="block text-white font-medium">Pertemuan ke* </label>
+                    <input type="number" wire:model="pertemuanke"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                    @error('pertemuanke') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
+                </div>
+            <div class="mb-4">
+                    <label class="block text-white font-medium">Materi* </label>
+                    <textarea wire:model="materi" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"></textarea>
+                    @error('materi') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
                 </div>
 
-            <div class="mb-4">
-                <div class="p-2">
+            <div class="w-full flex gap-1">
+                <div class="mb-4">
                     <label class="block text-white font-medium">tanggal mulai* </label>
                     <input type="date" wire:model="tanggal"
-                        class="w-1/2 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                        class="px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
                     @error('tanggal') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
-                </div>   
-                <div class="p-2">
-                    <label class="block text-white font-medium">tanggal berakhir* </label>
-                    <input type="date" wire:model="tanggalakhir"
-                        class="w-1/2 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('tanggalakhir') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
-                </div>   
+                </div>  
+                  <div class="mb-4">
+                    <label class="block text-white font-medium">tanggal Selesai* </label>
+                    <input type="date" wire:model="tanggalselesai"
+                        class="px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                    @error('tanggalselesai') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
+                </div>  
             </div>
-
                 <div class="mb-4">
                     <label class="block text-white font-medium">Jam* </label>
                     <input type="time" wire:model="jam"
@@ -246,5 +307,3 @@
     </div>
    
 </div>
-
-
