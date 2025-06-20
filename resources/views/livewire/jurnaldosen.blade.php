@@ -36,7 +36,7 @@
         </tr>
         <tr>
             <td style="padding: 0.3rem; padding-right: 2rem;text-transform: uppercase;">BEBAN STUDI</td><td>:</td><td>{{ $sks }} SKS</td>
-            <td style="padding: 0.3rem; padding-right: 2rem;text-transform: uppercase;">{{$jenis}}</td><td>:</td><td>50 Menit/SKS({{50 Menit x $sks SKS x Tm = 2100 Menit = 35 Jam}} )SKS</td>
+            <td style="padding: 0.3rem; padding-right: 2rem;text-transform: uppercase;"></td><td>:</td><td>{{$sks}}</td>
             
         </tr>
         <tr>

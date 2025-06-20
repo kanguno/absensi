@@ -262,17 +262,19 @@
                     <div class="mb-4">
                     <label class="block text-white font-medium">Jenis Perkuliahan* </label>
                      <div class="flex text-white gap-6">
+                        @if($sksteori>0)
                         <div class="flex items-center gap-2">
                         <input type="checkbox" wire:model="teori" class="form-checkbox">
                         <span>Teori</span>
                         </div>
-
+                    @endif
+                    @if($skspraktik>0)
                         <div class="flex items-center gap-2">
                             <input type="checkbox" wire:model="praktik" class="form-checkbox" >
                             <span>praktik</span>
                         </div>
                      </div>
-                    
+                    @endif
                     @error('pertemuanke') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
                 </div>
             <div class="mb-4">

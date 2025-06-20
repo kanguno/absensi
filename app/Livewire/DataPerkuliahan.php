@@ -10,7 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class DataPerkuliahan extends Component
 {
-    public $idperkuliahan, $idsebaranmatkul, $kelas, $tanggal, $tanggalselesai, $jam, $expired, $pertemuanke,$sksteori,$skspraktek;
+    public $idperkuliahan, $idsebaranmatkul, $kelas, $tanggal, $tanggalselesai, $jam, $expired, $pertemuanke,$sksteori=0,$skspraktik=0;
     public bool $teori = false;
 public bool $praktik = false;
 
@@ -29,9 +29,6 @@ public bool $praktik = false;
     public function mount()
     {
         $this->existdosen = DB::table('dat_dosen')->where('email', auth()->user()->email)->first();
-        $this->listKelas = DB::table('dat_perkuliahan')->select('kelas')->distinct()->get();
-        $this->listDosen = DB::table('dat_dosen')->select('id_dosen', 'nm_dosen')->get();
-        $this->listMatkul = DB::table('dat_matkul')->select('kd_matkul', 'nm_matkul','teori','praktek')->get();
     }
 
     public function render()
@@ -42,7 +39,11 @@ public bool $praktik = false;
             ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
             ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
             ->select('dat_perkuliahan.*', 'dat_prodi.nm_prodi', 'dat_matkul.nm_matkul', 'dat_dosen.nm_dosen');
-        
+            
+        $this->listKelas = DB::table('dat_perkuliahan')->select('kelas')->distinct()->get();
+        $this->listDosen = DB::table('dat_dosen')->select('id_dosen', 'nm_dosen')->get();
+        $this->listMatkul = DB::table('dat_matkul')->select('kd_matkul', 'nm_matkul','teori','praktek')->get();
+
         if ($this->existdosen) {
             $query->where('dat_dosen.id_dosen', $this->existdosen->id_dosen);
         }
@@ -87,7 +88,7 @@ public bool $praktik = false;
 
         $datamatkul=DB::table('dat_sebaran_matkul')
         ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
-        ->select('dat_sebaran_matkul.kd_matkul','dat_matkul.nm_matkul')
+        ->select('dat_sebaran_matkul.kd_matkul','dat_matkul.*')
         ->where('dat_sebaran_matkul.kd_prodi','=',$this->prodi)
         ->when($this->existdosen, function ($query) {
         return $query->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen);
@@ -139,6 +140,15 @@ public bool $praktik = false;
             $this->dosen=null;
             $this->idsebaranmatkul=null;
         }
+        if($this->kdmatkul){
+        $this->sksteori=$this->datamatkul->where('kd_matkul','=',$this->kdmatkul)->first()->teori;
+        $this->skspraktik=$this->datamatkul->where('kd_matkul','=',$this->kdmatkul)->first()->praktek;
+        }else{
+            $this->sksteori=0;
+            $this->skspraktik=0;
+        }
+
+        
     }
     public function dataDosen(){
         // dd($this->semester);
@@ -324,7 +334,7 @@ public function filterData()
 
         $this->datamatkul = DB::table('dat_sebaran_matkul')
             ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
-            ->select('dat_sebaran_matkul.kd_matkul', 'dat_matkul.nm_matkul')
+            ->select('dat_sebaran_matkul.kd_matkul', 'dat_matkul.*')
             ->where('dat_sebaran_matkul.kd_prodi', $data->kd_prodi)
             ->when($this->existdosen, fn($q) => $q->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen))
             ->distinct()
@@ -361,6 +371,13 @@ public function filterData()
             ->when($this->existdosen, fn($q) => $q->where('dat_sebaran_matkul.id_dosen', $this->existdosen->id_dosen))
             ->get();
 
+            if($data->kd_matkul){
+        $this->sksteori=$this->datamatkul->where('kd_matkul','=',$data->kd_matkul)->first()->teori;
+        $this->skspraktik=$this->datamatkul->where('kd_matkul','=',$data->kd_matkul)->first()->praktek;
+        }else{
+            $this->sksteori=0;
+            $this->skspraktik=0;
+        }
         $this->fill([
             'prodi' => $data->kd_prodi,
             'kdmatkul' => $data->kd_matkul,
@@ -452,6 +469,7 @@ if ($this->filterJenis == 't') {
 {
     $header=$this->getFilteredHeader();
     $data = $this->getFilteredData();
+    dd($header);
         $this->nmfakultas = $header->nm_fakultas;
         $this->nmprodi = $header->nm_prodi;
         $this->nmmatkul = $header->nm_matkul;
@@ -461,9 +479,6 @@ if ($this->filterJenis == 't') {
         $this->semester = $header->semester;
         $this->kelas = $header->kelas;
         $this->sks = $header->jml_sks;
-    if($header->is_teori){
-        dd($header);
-    }
         $this->sks = $header->is_teori;
         $this->sks = $header->is_praktik;
     $pdf = Pdf::loadView('livewire.jurnaldosen', [
