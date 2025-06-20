@@ -39,7 +39,7 @@ $component = new class extends Component
 /* === TEXT COLORS === */
 .text-campus-primary           { color: #81007f; }
 .text-campus-primary-light     { color: #c576c5; }
-.text-campus-primary-dark      { color: #4e0051; }
+.text-campus-primary-dark      { color: #6a0469; }
 
 .text-campus-accent            { color: #fe8da1; }
 .text-campus-accent-soft       { color: #febfca; }

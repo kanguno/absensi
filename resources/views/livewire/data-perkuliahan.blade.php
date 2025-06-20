@@ -24,56 +24,59 @@
  <div class="py-5">
         <div class="w-full h-screen mx-auto lg:px-5">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-semibold">Data Perkuliahan</h2>
+                <div class="text-center mb-10 ">
+                    <h2 class="text-2xl font-semibold">Data Perkuliahan</h2>
+                </div>
+                 <div class="flex gap-2 w-full justify-end">
                     <button wire:click="tambahdata"
                        class="hover:bg-blue-500 text-white px-4 py-2 rounded bg-campus-deep">
                         + Tambah Perkuliahan
                     </button>
+                            
+                    <button wire:click="cetakPdf" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                        <i class="bi bi-printer"></i> Cetak PDF
+                    </button>
                 </div>
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
-<div class="flex flex-wrap gap-4 mb-4">
-    <!-- Filter Kelas -->
-    <div>
-        <label for="filterKelas" class="block text-sm font-medium">Kelas</label>
-        <select wire:model="filterKelas" id="filterKelas" class="border px-3 py-2 rounded w-40">
-            <option value="">-- Semua Kelas --</option>
-            @foreach ($listKelas as $kelas)
-                <option value="{{ $kelas->kelas }}">{{ $kelas->kelas }}</option>
-            @endforeach
-        </select>
-    </div>
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-2">
+            <div class="flex flex-wrap gap-2 mb-2">
+                <!-- Filter Kelas -->
+                <div>
+                    <select wire:model="filterKelas" wire:change="filterData" id="filterKelas" class="border-campus-primary px-2 py-1 rounded w-40">
+                        <option value="">-- Semua Kelas --</option>
+                        @foreach ($listKelas as $kelas)
+                            <option value="{{ $kelas->kelas }}">{{ $kelas->kelas }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-    <!-- Filter Dosen -->
-    <div>
-        <label for="filterDosen" class="block text-sm font-medium">Nama Dosen</label>
-        <select wire:model="filterDosen" id="filterDosen" class="border px-3 py-2 rounded w-48">
-            <option value="">-- Semua Dosen --</option>
-            @foreach ($listDosen as $dosen)
-                <option value="{{ $dosen->id_dosen }}">{{ $dosen->nm_dosen }}</option>
-            @endforeach
-        </select>
-    </div>
+                <!-- Filter Dosen -->
+                <div>
+                    <select wire:model="filterDosen" wire:change="filterData" id="filterDosen" class="border-campus-primary px-2 py-1 rounded w-40">
+                        <option value="">-- Semua Dosen --</option>
+                        @foreach ($listDosen as $dosen)
+                            <option value="{{ $dosen->id_dosen }}">{{ $dosen->nm_dosen }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <select wire:model="filterJenis" wire:change="filterData" id="filterJenis" class="border-campus-primary px-2 py-1 rounded w-40">
+                        <option value="">-- Teori/praktik --</option>
+                            <option value="t">Teori</option>
+                            <option value="p">praktik</option>
+                    </select>
+                </div>
 
-    <!-- Filter Mata Kuliah -->
-    <div>
-        <label for="filterMatkul" class="block text-sm font-medium">Mata Kuliah</label>
-        <select wire:model="filterMatkul" id="filterMatkul" class="border px-3 py-2 rounded w-56">
-            <option value="">-- Semua Matkul --</option>
-            @foreach ($listMatkul as $matkul)
-                <option value="{{ $matkul->kd_matkul }}">{{ $matkul->nm_matkul }}</option>
-            @endforeach
-        </select>
-    </div>
-</div>
-
-    <div class="flex gap-2 w-full md:w-1/2 justify-end">
-
-        <button wire:click="cetakPdf" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-            <i class="bi bi-printer"></i> Cetak PDF
-        </button>
-    </div>
-</div>
+                <!-- Filter Mata Kuliah -->
+                <div>
+                    <select wire:model="filterMatkul" wire:change="filterData" id="filterMatkul" class="border-campus-primary px-2 py-1 rounded w-40">
+                        <option value="">-- Semua Matkul --</option>
+                        @foreach ($listMatkul as $matkul)
+                            <option value="{{ $matkul->kd_matkul }}">{{ $matkul->nm_matkul }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
 
                 <div class="overflow-x-auto">
                     <table class="min-w-full border border-gray-300">
@@ -178,7 +181,7 @@
             <h2 class="text-xl text-center text-white font-bold">FORMULIR DATA PERKULIAHAN</h2>
         </div>
             
-        <form wire:submit.prevent="save" class='p-6 bg-[#45025b] rounded-b-md max-h-[70vh] overflow-y-auto'>
+        <form wire:submit.prevent="save" class='p-6 bg-campus-primary-dark rounded-b-md max-h-[70vh] overflow-y-auto'>
             <div class="mb-4">
                 <label class="block text-white font-medium" required>Program Studi* </label>
                 <select wire:model="prodi" wire:change="dataMatkul()" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" require>
@@ -254,6 +257,22 @@
                     <label class="block text-white font-medium">Pertemuan ke* </label>
                     <input type="number" wire:model="pertemuanke"
                         class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                    @error('pertemuanke') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
+                </div>
+                    <div class="mb-4">
+                    <label class="block text-white font-medium">Jenis Perkuliahan* </label>
+                     <div class="flex text-white gap-6">
+                        <div class="flex items-center gap-2">
+                        <input type="checkbox" wire:model="teori" class="form-checkbox">
+                        <span>Teori</span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" wire:model="praktik" class="form-checkbox" >
+                            <span>praktik</span>
+                        </div>
+                     </div>
+                    
                     @error('pertemuanke') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
                 </div>
             <div class="mb-4">
