@@ -46,7 +46,28 @@ Route::view('profile', 'profile')
         Route::get('/data-dosen', DataDosen::class)->middleware(['auth'])->name('datadosen');
         Route::get('/data-matkul', DataMatkul::class)->middleware(['auth'])->name('datamatkul');
         Route::get('/data-sebaran-matkul', DataSebaranMatkul::class)->middleware(['auth'])->name('datasebaranmatkul');
-        
+        Route::get('/preview-jurnal', function () {
+    return view('livewire.jurnaldosen', [
+        'datperkuliahan' => session('datperkuliahan'),
+        'nmfakultas' => session('nmfakultas'),
+        'nmprodi' => session('nmprodi'),
+        'nmmatkul' => session('nmmatkul'),
+        'kdmatkul' => session('kdmatkul'),
+        'nmdosen' => session('nmdosen'),
+        'semester' => session('semester'),
+        'kelas' => session('kelas'),
+        'sks' => session('sks'),
+        'sksteori' => session('sksteori'),
+        'skspraktik' => session('skspraktik'),
+        'teori' => session('teori'),
+        'praktik' => session('praktik'),
+        'jeniskuliah' => session('jeniskuliah'),
+        'jmlpertemuan' => session('jmlpertemuan'),
+        'tahunakademik' => session('tahunakademik'),
+        'preview' => session('preview'),
+    ]);
+});
+
     });
     
     Route::get('/data-perkuliahan', DataPerkuliahan::class)->middleware(['auth'])->name('dataperkuliahan');

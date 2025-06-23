@@ -27,21 +27,12 @@
                 <div class="text-center mb-10 ">
                     <h2 class="text-2xl font-semibold">Data Perkuliahan</h2>
                 </div>
-                 <div class="flex gap-2 w-full justify-end">
-                    <button wire:click="tambahdata"
-                       class="hover:bg-blue-500 text-white px-4 py-2 rounded bg-campus-deep">
-                        + Tambah Perkuliahan
-                    </button>
-                            
-                    <button wire:click="cetakPdf" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-                        <i class="bi bi-printer"></i> Cetak PDF
-                    </button>
-                </div>
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-2">
-            <div class="flex flex-wrap gap-2 mb-2">
+                 
+        <div class="flex flex-col flex-wrap md:flex-row justify-between items-center gap-4 mb-2 p-2 shadow-xl rounded-md">
+            <div class="flex flex-wrap gap-2">
                 <!-- Filter Kelas -->
                 <div>
-                    <select wire:model="filterKelas" wire:change="filterData" id="filterKelas" class="border-campus-primary px-2 py-1 rounded w-40">
+                    <select wire:model="filterKelas" wire:change="filterData" id="filterKelas" class="border-campus-primary px-2 py-1 text-xs rounded w-fit">
                         <option value="">-- Semua Kelas --</option>
                         @foreach ($listKelas as $kelas)
                             <option value="{{ $kelas->kelas }}">{{ $kelas->kelas }}</option>
@@ -51,7 +42,7 @@
 
                 <!-- Filter Dosen -->
                 <div>
-                    <select wire:model="filterDosen" wire:change="filterData" id="filterDosen" class="border-campus-primary px-2 py-1 rounded w-40">
+                    <select wire:model="filterDosen" wire:change="filterData" id="filterDosen" class="border-campus-primary px-2 py-1 text-xs rounded w-fit">
                         <option value="">-- Semua Dosen --</option>
                         @foreach ($listDosen as $dosen)
                             <option value="{{ $dosen->id_dosen }}">{{ $dosen->nm_dosen }}</option>
@@ -59,7 +50,7 @@
                     </select>
                 </div>
                 <div>
-                    <select wire:model="filterJenis" wire:change="filterData" id="filterJenis" class="border-campus-primary px-2 py-1 rounded w-40">
+                    <select wire:model="filterJenis" wire:change="filterData" id="filterJenis" class="border-campus-primary px-2 py-1 text-xs rounded w-fit">
                         <option value="">-- Teori/praktik --</option>
                             <option value="t">Teori</option>
                             <option value="p">praktik</option>
@@ -68,7 +59,7 @@
 
                 <!-- Filter Mata Kuliah -->
                 <div>
-                    <select wire:model="filterMatkul" wire:change="filterData" id="filterMatkul" class="border-campus-primary px-2 py-1 rounded w-40">
+                    <select wire:model="filterMatkul" wire:change="filterData" id="filterMatkul" class="border-campus-primary px-2 py-1 text-xs rounded w-fit">
                         <option value="">-- Semua Matkul --</option>
                         @foreach ($listMatkul as $matkul)
                             <option value="{{ $matkul->kd_matkul }}">{{ $matkul->nm_matkul }}</option>
@@ -76,6 +67,18 @@
                     </select>
                 </div>
             </div>
+    <div class="flex gap-2 w-fit text-xs justify-end">
+                    <button wire:click="tambahdata"
+                       class="hover:bg-blue-500 text-white px-4 py-2 rounded bg-campus-deep">
+                        + Tambah Perkuliahan
+                    </button>
+                    <button wire:click="preview" class="px-4 py-2 bg-campus-primary-dark text-white rounded hover:bg-blue-700">
+                        <i class="bi bi-eye"></i> Preview Jurnal Dosen
+                    </button>
+                    <button wire:click="cetakPdf" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                        <i class="bi bi-printer"></i> Cetak Jurnal Dosen
+                    </button>
+                </div>
         </div>
 
                 <div class="overflow-x-auto">
@@ -89,8 +92,7 @@
                                  <th class="border px-4 py-2 text-center">Materi</th>
                                  <th class="border px-4 py-2 text-center">Pertemuan ke</th>
                                 <th class="border px-4 py-2 text-center">Tanggal Mulai</th>
-                                 <th class="border px-4 py-2 text-center">Tanggal Selesai</th>
-                                <th class="border px-4 py-2 text-center">Jam</th>
+                                 <th class="border px-4 py-2 text-center">Jam Perkuliahan</th>
                                 <th class="border px-4 py-2 text-center">Batas Absen</th>
                                 <th class="border px-4 py-2 text-center">Aksi</th>
                             </tr>
@@ -105,8 +107,7 @@
                                     <td class="px-4 py-2">{{ $datperkuliahan->materi }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->pertemuan_ke }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->tanggal }}</td>
-             <td class="px-4 py-2">{{ $datperkuliahan->tanggal_selesai }}</td>
-                                    <td class="px-4 py-2">{{ $datperkuliahan->jam }}</td>
+                                    <td class="px-4 py-2">{{ $datperkuliahan->jam }} s/d {{ $datperkuliahan->jam_selesai }}</td>
                                     <td class="px-4 py-2">{{ $datperkuliahan->batas_absen }}</td>
                                     <td class="px-4 py-2 text-center text-sm justify-center flex gap-5">
                                             <a x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
@@ -283,27 +284,28 @@
                     @error('materi') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
                 </div>
 
-            <div class="w-full flex gap-1">
+            
                 <div class="mb-4">
                     <label class="block text-white font-medium">tanggal mulai* </label>
                     <input type="date" wire:model="tanggal"
                         class="px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
                     @error('tanggal') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
-                </div>  
-                  <div class="mb-4">
-                    <label class="block text-white font-medium">tanggal Selesai* </label>
-                    <input type="date" wire:model="tanggalselesai"
-                        class="px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
-                    @error('tanggalselesai') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
-                </div>  
-            </div>
+                </div>   
+            
+            <div class="w-full flex gap-1">
                 <div class="mb-4">
                     <label class="block text-white font-medium">Jam* </label>
                     <input type="time" wire:model="jam"
                         class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
                         @error('jam') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
                 </div>
-
+                <div class="mb-4">
+                    <label class="block text-white font-medium">Jam Selesai* </label>
+                    <input type="time" wire:model="jamselesai"
+                        class="px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                    @error('jamselesai') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
+                </div> 
+            </div>
                 <div class="mb-4">
                     <label class="block text-white font-medium">expired* </label>
                     <input type="datetime-local" wire:model="expired"
@@ -326,5 +328,5 @@
         </div>
 
     </div>
-   
+
 </div>

@@ -9,7 +9,7 @@
         <div id="print-area" style="background-color: #ffffff; overflow: hidden; padding: 2rem;">
             <div style="margin-bottom: 1rem;">
                 <div class="header" style="display:flex;border-bottom:2px solid black;">
-                <img src="https://istekicsadabjn.ac.id/wp-content/uploads/2023/09/logo-1.png" class="justify-self-center h-fit w-[120px]" alt="">
+                <img src="{{asset('images/logo-istek.png')  }}" class="justify-self-center h-fit w-[120px]" alt="">
                 <div>
                 <h2 style="text-align: center; font-size: 16pt; font-weight: 600;">ISTeK INSAN CENDEKIA HUSADA BOJONEGORO</h2>
                 <h2 style="text-align: center; font-size: 16pt; font-weight: bolder; text-transform: uppercase;">FAKULTAS {{$perkuliahan->nm_fakultas}}</h2>

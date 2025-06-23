@@ -114,7 +114,7 @@
                                                 value="Y" 
                                                 wire:change="updateKehadiran({{ $databsensi->id_absensi }}, 'Y')"
                                                 class="hidden peer">
-                                            <div class="w-12 h-6 rounded-full bg-gray-300 peer-checked:bg-campus-warn-500 relative transition-all">
+                                            <div class="w-12 h-6 rounded-full bg-gray-300 peer-checked:bg-green-900 relative transition-all">
                                                 <div class="w-6 h-6 bg-white rounded-full absolute left-0 peer-checked:left-6 transition-all"></div>
                                             </div>
                                         </label>
@@ -126,7 +126,7 @@
                                                 value="T" 
                                                 wire:change="updateKehadiran({{ $databsensi->id_absensi }}, 'T')"
                                                 class="hidden peer">
-                                            <div class="w-12 h-6 rounded-full bg-gray-300 peer-checked:bg-campus-alert-500 relative transition-all">
+                                            <div class="w-12 h-6 rounded-full bg-gray-300 peer-checked:bg-red-500 relative transition-all">
                                                 <div class="w-6 h-6 bg-white rounded-full absolute left-0 peer-checked:left-6 transition-all"></div>
                                             </div>
                                         </label>

@@ -1,12 +1,76 @@
 <div>
-    @if (!$cetak)
-        <div class="w-full flex my-4 content-end">
-            <button wire:click="exportPDF" class="px-4 py-2 bg-campus-primary text-white rounded">
-                Cetak PDF
-            </button>
+    @if (!$cetak)<div class="bg-campus-primary p-4 rounded-t-md mx-auto mt-10">
+    <h2 class="text-xl text-center text-white font-bold">REKAP ABSENSI</h2>
+</div>
+
+<form wire:submit.prevent="caridata()" class="p-6 bg-white text-black rounded-b-md max-h-[70vh] overflow-y-auto">
+    <div class="grid grid-cols-2 gap-2"> {{-- Paksa jadi 2 kolom --}}
+        <div class="mb-2">
+            <label class="block text-back font-medium">Program Studi*</label>
+            <select wire:model="prodi" wire:change="dataMatkul()" required class="w-full px-4 py-2 border rounded-lg">
+                <option value="">Pilih Program Studi</option>
+                @foreach($dataprodi as $p)
+                    <option value="{{ $p->kd_prodi }}">{{ $p->kd_prodi }} || {{ $p->nm_prodi }}</option>
+                @endforeach
+            </select>
+            @error('prodi') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
         </div>
+
+        <div class="mb-2">
+            <label class="block text-back font-medium">Mata Kuliah*</label>
+            <select wire:model="kdmatkul" wire:change="dataSemester()" required class="w-full px-4 py-2 border rounded-lg">
+                <option value="">Pilih Mata Kuliah</option>
+                @foreach($datamatkul as $m)
+                    <option value="{{ $m->kd_matkul }}">{{ $m->kd_matkul }} || {{ $m->nm_matkul }}</option>
+                @endforeach
+            </select>
+            @error('kdmatkul') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="mb-2">
+            <label class="block text-back font-medium">Semester*</label>
+            <select wire:model="semester" wire:change="dataDosen()" required class="w-full px-4 py-2 border rounded-lg">
+                <option value="">Pilih Semester</option>
+                @foreach($datasemester as $s)
+                    <option value="{{ $s->semester }}">Semester {{ $s->semester }}</option>
+                @endforeach
+            </select>
+            @error('semester') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="mb-2">
+            <label class="block text-back font-medium">Dosen Pengampu*</label>
+            <select wire:model="dosen" required class="w-full px-4 py-2 border rounded-lg">
+                <option value="">Pilih Dosen Pengampu</option>
+                @foreach($datadosen as $d)
+                    <option value="{{ $d->id_dosen }}">{{ $d->nm_dosen }}</option>
+                @endforeach
+            </select>
+            @error('dosen') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="mb-4 col-span-2">
+            <label class="block text-back font-medium">Kelas*</label>
+            <input type="text" wire:model="kelas" required placeholder="Contoh Penulisan : 2024-A" class="w-full px-4 py-2 border rounded-lg">
+            @error('kelas') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
+        </div>
+    </div>
+
+    <div class="flex justify-between mt-6">
+        <button type="button" wire:click="resetform()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Reset</button>
+        <button type="submit" class="bg-campus-deep text-white px-3 py-1 rounded hover:border-white hover:bg-campus-primary">Cari Data</button>
+    </div>
+</form>
+
+@if($dataabsen)
+        <div class="w-full flex mt-4 p-4 bg-white justify-end">
+            <button wire:click="exportPDF" class="px-4 py-2 bg-campus-primary text-white rounded">
+                 <i class="bi bi-printer"></i> Cetak PDF</button>
+        </div>
+        @endif
     @endif
 
+@if($dataabsen)
     <div class="bg-white p-4 w-full rounded shadow-2xl overflow-scroll">
         {{-- HEADER --}}
         <div style="margin-bottom: 1rem;">
@@ -102,4 +166,5 @@
             </table>
         </div>
     </div>
+    @endif
 </div>

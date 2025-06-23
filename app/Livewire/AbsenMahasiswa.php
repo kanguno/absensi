@@ -50,9 +50,11 @@ class AbsenMahasiswa extends Component
         ->join('dat_mahasiswa', 'dat_mahasiswa.nim', '=', 'dat_absensi.nim')
         ->join('dat_prodi', 'dat_mahasiswa.kd_prodi', '=', 'dat_prodi.kd_prodi')
         ->join('dat_fakultas', 'dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
+        ->where('dat_absensi.id_perkuliahan', '=', $this->idperkuliahan)
         ->where('dat_absensi.nim', '=', $this->nim)
         ->select('dat_absensi.*', 'dat_mahasiswa.nm_mahasiswa','dat_mahasiswa.kelas','dat_mahasiswa.kelas','dat_prodi.nm_prodi','dat_fakultas.nm_fakultas')
-        ->first();        
+        ->first();      
+        
     }
     public function absen($idabsensi){
         $this->absensi=DB::table('dat_absensi')->where('id_absensi','=',$idabsensi)

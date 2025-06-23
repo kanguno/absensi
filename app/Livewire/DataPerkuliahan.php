@@ -10,9 +10,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class DataPerkuliahan extends Component
 {
-    public $idperkuliahan, $idsebaranmatkul, $kelas, $tanggal, $tanggalselesai, $jam, $expired, $pertemuanke,$sksteori=0,$skspraktik=0;
-    public bool $teori = false;
-public bool $praktik = false;
+    public $idperkuliahan, $idsebaranmatkul, $kelas, $tanggal, $jamselesai, $jam, $expired, $pertemuanke,$sksteori=0,$skspraktik=0,$jamsks=0,$jeniskuliah='';
+    public bool $teori = false;public bool $praktik = false;
 
     public $materi, $perkuliahan;
     public $kdmatkul, $prodi, $dosen, $semester;
@@ -256,7 +255,7 @@ public function filterData()
                 'jam' => $this->jam,
                 'batas_absen' => $this->expired,
                 'materi' => $this->materi,
-                'tanggal_selesai' => $this->tanggalselesai,
+                'jam_selesai' => $this->jamselesai,
                 'pertemuan_ke' => $this->pertemuanke,
                 'is_teori' => $this->teori,
                 'is_praktik' => $this->praktik,
@@ -390,7 +389,7 @@ public function filterData()
             'tanggal' => $data->tanggal,
             'teori' => $data->is_teori,
             'praktik' => $data->is_praktik,
-            'tanggalselesai' => $data->tanggal_selesai,
+            'jamselesai' => $data->jam_selesai,
             'jam' => $data->jam,
             'expired' => $data->batas_absen,
             'materi' => $data->materi,
@@ -400,22 +399,40 @@ public function filterData()
     public function getFilteredHeader()
 {
     $headerdata = DB::table('dat_perkuliahan')
-            ->join('dat_sebaran_matkul', 'dat_perkuliahan.id_sebaran_matkul', '=', 'dat_sebaran_matkul.id_sebaran_matkul')
-            ->join('dat_prodi', 'dat_sebaran_matkul.kd_prodi', '=', 'dat_prodi.kd_prodi')
-            ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
-            ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
-            ->join('dat_fakultas', 'dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
-            ->select(
-                'dat_perkuliahan.*',
-                'dat_sebaran_matkul.semester',
-                'dat_sebaran_matkul.thn_akademik',
-                'dat_matkul.jml_sks',
-                'dat_fakultas.nm_fakultas',
-                'dat_prodi.nm_prodi',
-                'dat_matkul.kd_matkul',
-                'dat_matkul.nm_matkul',
-                'dat_dosen.nm_dosen'
-            );
+        ->join('dat_sebaran_matkul', 'dat_perkuliahan.id_sebaran_matkul', '=', 'dat_sebaran_matkul.id_sebaran_matkul')
+        ->join('dat_prodi', 'dat_sebaran_matkul.kd_prodi', '=', 'dat_prodi.kd_prodi')
+        ->join('dat_matkul', 'dat_sebaran_matkul.kd_matkul', '=', 'dat_matkul.kd_matkul')
+        ->join('dat_dosen', 'dat_sebaran_matkul.id_dosen', '=', 'dat_dosen.id_dosen')
+        ->join('dat_fakultas', 'dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
+        ->select(
+            'dat_perkuliahan.id_sebaran_matkul',
+            'dat_perkuliahan.kelas',
+            'dat_sebaran_matkul.semester',
+            'dat_sebaran_matkul.thn_akademik',
+            'dat_matkul.jml_sks',
+            'dat_matkul.teori',
+            'dat_matkul.praktek',
+            'dat_fakultas.nm_fakultas',
+            'dat_prodi.nm_prodi',
+            'dat_matkul.kd_matkul',
+            'dat_matkul.nm_matkul',
+            'dat_dosen.nm_dosen',
+            DB::raw('COUNT(dat_perkuliahan.pertemuan_ke) as jml_pertemuan')
+        )
+        ->groupBy(
+            'dat_perkuliahan.id_sebaran_matkul',
+            'dat_perkuliahan.kelas',
+            'dat_sebaran_matkul.semester',
+            'dat_sebaran_matkul.thn_akademik',
+            'dat_matkul.jml_sks',
+            'dat_matkul.teori',
+            'dat_matkul.praktek',
+            'dat_fakultas.nm_fakultas',
+            'dat_prodi.nm_prodi',
+            'dat_matkul.kd_matkul',
+            'dat_matkul.nm_matkul',
+            'dat_dosen.nm_dosen'
+        );
 
     if ($this->filterKelas) {
         $headerdata->where('dat_perkuliahan.kelas', $this->filterKelas);
@@ -465,12 +482,73 @@ if ($this->filterJenis == 't') {
     return $query->get();
 }
    
-    public function cetakPdf()
+public function cetakPdf()
+{
+    if ($this->filterDosen == null || $this->filterMatkul == null || $this->filterKelas == null) {
+        session()->flash('messagemodal', 'Filter Data Harus Di isi semua');
+        $this->dispatch('flashMessage');
+        return;
+    }
+
+    $header = $this->getFilteredHeader();
+    $data = $this->getFilteredData();
+
+    // Isi properti
+    $this->nmfakultas = $header->nm_fakultas;
+    $this->nmprodi = $header->nm_prodi;
+    $this->nmmatkul = $header->nm_matkul;
+    $this->kdmatkul = $header->kd_matkul;
+    $this->nmdosen = $header->nm_dosen;
+    $this->tahunakademik = $header->thn_akademik;
+    $this->semester = $header->semester;
+    $this->kelas = $header->kelas;
+    $this->sks = $header->jml_sks;
+    $this->sksteori = $header->teori;
+    $this->skspraktik = $header->praktek;
+    $this->jmlpertemuan = $header->jml_pertemuan;
+
+   if ($this->filterJenis == 't') {
+            $this->teori=true;
+        } elseif ($this->filterJenis == 'p') {
+            $this->praktik=true;
+        }
+         else {
+            $this->teori=true;
+            $this->praktik=true;
+        }
+    // Kirim langsung ke PDF
+    $pdf = Pdf::loadView('livewire.jurnaldosen', [
+        'datperkuliahan' => $data,
+        'nmfakultas' => $this->nmfakultas,
+        'nmprodi' => $this->nmprodi,
+        'nmmatkul' => $this->nmmatkul,
+        'kdmatkul' => $this->kdmatkul,
+        'nmdosen' => $this->nmdosen,
+        'semester' => $this->semester,
+        'kelas' => $this->kelas,
+        'sks' => $this->sks,
+        'sksteori' => $this->sksteori,
+        'skspraktik' => $this->skspraktik,
+        'teori' => $this->teori,
+        'praktik' => $this->praktik,
+        'jamsks' => $this->jamsks,
+        'jeniskuliah' => $this->jeniskuliah,
+        'jmlpertemuan' => $this->jmlpertemuan,
+        'tahunakademik' => $this->tahunakademik,
+        'preview' => false,
+    ])->setPaper('a4', 'landscape');
+
+    return response()->streamDownload(function () use ($pdf) {
+        echo $pdf->stream();
+    }, 'jurnal-perkuliahan.pdf');
+}
+
+public function preview()
 {
     $header=$this->getFilteredHeader();
     $data = $this->getFilteredData();
-    dd($header);
-        $this->nmfakultas = $header->nm_fakultas;
+    
+    $this->nmfakultas = $header->nm_fakultas;
         $this->nmprodi = $header->nm_prodi;
         $this->nmmatkul = $header->nm_matkul;
         $this->kdmatkul = $header->kd_matkul;
@@ -479,23 +557,162 @@ if ($this->filterJenis == 't') {
         $this->semester = $header->semester;
         $this->kelas = $header->kelas;
         $this->sks = $header->jml_sks;
-        $this->sks = $header->is_teori;
-        $this->sks = $header->is_praktik;
-    $pdf = Pdf::loadView('livewire.jurnaldosen', [
-        'datperkuliahan' => $data,
-         'nmfakultas' => $this->nmfakultas,
-        'nmprodi' => $this->nmprodi,
-        'nmmatkul' => $this->nmmatkul,
-        'kdmatkul' => $this->kdmatkul,
-        'nmdosen' => $this->nmdosen,
-        'semester' => $this->semester,
-        'kelas' => $this->kelas,
-        'sks'=>$this->sks,
-        'tahunakademik' => $this->tahunakademik,
-    ])->setPaper('a4', 'landscape');
+        $this->jmlpertemuan = $header->jml_pertemuan;
+        
+        if ($this->filterJenis == 't') {
+            $this->teori=true;
+        } elseif ($this->filterJenis == 'p') {
+            $this->praktek=true;
+        }
+         else {
+            $this->teori=true;
+            $this->praktek=true;
+        }
+        
+        // if ($this->filterJenis == 't') {
+        //     $this->jeniskuliah='Teori';
+        //     $this->jamsks=50;
+        // } elseif ($this->filterJenis == 'p') {
+        //     $this->jamsks=120;
+        //     $this->jeniskuliah='Praktek';
+        // }
+        //  elseif ($this->filterJenis == 'pt') {
+        //     $this->jamsks=120;
+        //     $this->jeniskuliah='Praktek';
+        // }
+        
 
-    return response()->streamDownload(function () use ($pdf) {
-        echo $pdf->stream();
-    }, 'data-perkuliahan.pdf');
+   session([
+        'nmfakultas' => $header->nm_fakultas,
+        'nmprodi' => $header->nm_prodi,
+        'nmmatkul' => $header->nm_matkul,
+        'kdmatkul' => $header->kd_matkul,
+        'nmdosen' => $header->nm_dosen,
+        'tahunakademik' => $header->thn_akademik,
+        'semester' => $header->semester,
+        'kelas' => $header->kelas,
+        'sks' => $header->jml_sks,
+        'jmlpertemuan' => $header->jml_pertemuan,
+        'sksteori' => $header->teori,
+        'skspraktik' => $header->praktek,
+        'teori' => $this->filterJenis === 'p' ? false : true,
+        'praktik' => $this->filterJenis === 't' ? false : true,
+        'datperkuliahan' => $data,
+        'preview' => false,
+    ]);
+      return redirect('/preview-jurnal');
 }
+ public function absensi($idperkuliahan)
+    {
+        $dataabsensi=DB::table('dat_absensi')->where('id_perkuliahan','=',$idperkuliahan)->first();
+
+        if($dataabsensi){
+            $this->redirectRoute('ceklistabsensi', $idperkuliahan);
+        }
+        else{
+            $mahasiswa = DB::table('dat_mahasiswa')
+            ->join('dat_perkuliahan', 'dat_mahasiswa.kelas', '=', 'dat_perkuliahan.kelas')
+            ->where('dat_perkuliahan.id_perkuliahan', $idperkuliahan)
+            ->select('dat_mahasiswa.nim', 'dat_mahasiswa.nm_mahasiswa')
+            ->get();
+        
+        foreach ($mahasiswa as $mhs) {
+            DB::table('dat_absensi')->insert([
+                'id_perkuliahan' => $idperkuliahan,
+                'nim' => $mhs->nim,
+                'status_kehadiran' => 'T',
+                'keterangan' => null,
+            ]);
+        }
+        $this->redirectRoute('ceklistabsensi', $idperkuliahan);
+        }
+    }
+     public function cetakabsensi($idperkuliahan)
+    {
+        $dataabsensi=DB::table('dat_absensi')->where('id_perkuliahan','=',$idperkuliahan)->first();
+
+        
+        if($dataabsensi){
+            $this->redirectRoute('cetakabsensiharian', $idperkuliahan);
+        }
+        else{
+            session()->flash('messagemodal', 'Data Absensi Belum Dibuat!');
+            $this->dispatch('flashMessage');
+            
+        }
+    }
+      public function Generate($idperkuliahan){
+      $qrabsen=DB::table('qrabsen')->where('id_perkuliahan','=',$idperkuliahan)->first();
+      
+
+      if(!$qrabsen){
+        do {
+        $hash = hash('sha256', $data . Str::random(5));
+        $exists = DB::table('qrabsen')->where('link_absen', $hash)->exists();
+    } while ($exists);
+        DB::table('qrabsen')->insert([
+          'id_perkuliahan'=>$idperkuliahan,
+          'link-absen'=>$hash,
+          ]);
+      }
+    
+      
+    $qrabsen=DB::table('qrabsen')->where('id_perkuliahan','=',$idperkuliahan)->first();
+    $qrCode = QrCode::size(300)->generate(url('/link-absen-' . $qrabsen->id_perkuliahan));
+
+      return response(QrCode::size(300)->generate(url('localhost:8000/link-absen-' . $qrlink)))
+        ->header('Content-Type', 'image/svg+xml');
+    }
+
+
+
+public function GenerateQr($idperkuliahan)
+{
+    // Cari QR yang sudah ada berdasarkan id_perkuliahan
+    $qrabsen = DB::table('qrabsen')->where('id_perkuliahan', '=', $idperkuliahan)->first();
+
+    // Path untuk menyimpan file sementara
+    $filePath = storage_path('app/public/qrcode-' . $idperkuliahan . '.svg');
+
+\QrCode::format('svg')->size(300)
+    ->margin(10)
+    ->backgroundColor(255,255,255)
+    ->generate(url('/link-absen-' . $qrabsen->link_absen), $filePath);
+
+return response()->download($filePath, 'qrcode-' . $idperkuliahan . '.svg')->deleteFileAfterSend(true);
+
+}
+
+    
+
+public function redirectToAbsensi($qrlink)
+{
+    $qrabsen = DB::table('qrabsen')
+        ->join('dat_perkuliahan', 'qrabsen.id_perkuliahan', '=', 'dat_perkuliahan.id_perkuliahan')
+        ->select('qrabsen.*', 'dat_perkuliahan.*')
+        ->where('qrabsen.link_absen', '=', $qrlink)
+        ->first();
+
+    // Cek apakah $qrabsen ditemukan
+    if (!$qrabsen) {
+        // Jika QR tidak ditemukan
+        return response('QR Code tidak ditemukan', 404);
+    }
+
+    // Mengonversi batas_absen ke zona waktu lokal (misalnya Asia/Jakarta)
+    $batasAbsen = Carbon::parse($qrabsen->batas_absen)->setTimezone('Asia/Jakarta');
+
+    // Periksa apakah waktu batas absen sudah lewat
+    if ($batasAbsen->greaterThan(now('Asia/Jakarta'))) {
+        return redirect()->route('absensimahasiswa', ['idperkuliahan' => $qrabsen->id_perkuliahan]);
+    } else {
+        return response("
+            <body>
+            <h1>Waktu Absen Telah Berakhir</h1>
+            </body>
+        ", 200)->header('Content-Type', 'text/html');
+    }
+}
+
+ 
 }
