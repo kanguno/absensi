@@ -674,10 +674,11 @@ public function GenerateQr($idperkuliahan)
     // Path untuk menyimpan file sementara
     $filePath = storage_path('app/public/qrcode-' . $idperkuliahan . '.svg');
 
+    $currentHost = request()->getSchemeAndHttpHost(); 
 \QrCode::format('svg')->size(300)
     ->margin(10)
     ->backgroundColor(255,255,255)
-    ->generate(url('/link-absen-' . $qrabsen->link_absen), $filePath);
+    ->generate(url($currentHost . '/link-absen-' . $qrabsen->link_absen), $filePath);
 
 return response()->download($filePath, 'qrcode-' . $idperkuliahan . '.svg')->deleteFileAfterSend(true);
 

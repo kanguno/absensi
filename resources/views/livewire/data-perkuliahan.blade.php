@@ -173,7 +173,7 @@
         </div>
     </div>
     <div class="form-group {{$formdataperkuliahan}} fixed z-40 inset-0 flex items-center justify-center bg-black bg-opacity-20">
-        <div class="max-w-4xl mx-auto mt-10 shadow-md min-w-[90%]">
+        <div class="mx-auto mt-10 shadow-md min-w-[90%] max-w-screen-md">
         <div class="bg-campus-primary p-4 rounded-t-md">
 
             <div class="text-end">
@@ -305,13 +305,14 @@
                         class="px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
                     @error('jamselesai') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
                 </div> 
-            </div>
-                <div class="mb-4">
+                 <div class="mb-4">
                     <label class="block text-white font-medium">expired* </label>
                     <input type="datetime-local" wire:model="expired"
                         class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
                     @error('expired') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
                 </div>
+            </div>
+               
 
                 <div class="flex justify-between">
                     <button type="button" wire:click="resetform()"

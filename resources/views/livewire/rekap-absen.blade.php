@@ -71,7 +71,7 @@
     @endif
 
 @if($dataabsen)
-    <div class="bg-white p-4 w-full rounded shadow-2xl overflow-scroll">
+    <div class="bg-white px-20 py-4 w-full rounded shadow-2xl overflow-scroll" style="font-family:sans-serif;">
         {{-- HEADER --}}
         <div style="margin-bottom: 1rem;">
             <div class="header" style="display:flex; border-bottom:2px solid black; width:100%; justify-content:space-between; align-items:center;">
@@ -81,14 +81,14 @@
                   <img 
                     src="{{ $cetak ? public_path('images/logo-istek.png') : asset('images/logo-istek.png') }}" 
                     alt="Logo" 
-                    class="w-[120px]"
+                    class="w-[100%]"
                 >
                 </td>
                 <td>
                 <div style="flex-grow:1; text-align:center;">
-                    <h2 style="font-size: 16pt; font-weight: 600;">ISTeK INSAN CENDEKIA HUSADA BOJONEGORO</h2>
-                    <h2 style="font-size: 16pt; font-weight: bolder; text-transform: uppercase;">FAKULTAS {{ $nmfakultas }}</h2>
-                    <h2 style="font-size: 16pt; font-weight: bolder; text-transform: uppercase;">PRODI {{ $nmprodi }}</h2>
+                    <h2 style="margin:0;font-size: 16pt; font-weight: bolder; text-transform: uppercase;">ISTeK INSAN CENDEKIA HUSADA BOJONEGORO</h2>
+                    <h2 style="margin:0;font-size: 16pt; font-weight: bolder; text-transform: uppercase;">FAKULTAS {{ $nmfakultas }}</h2>
+                    <h2 style="margin:0;font-size: 16pt; font-weight: bolder; text-transform: uppercase;">PRODI {{ $nmprodi }}</h2>
                 </div>
                 </td>
                 </tr>

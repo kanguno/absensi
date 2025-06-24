@@ -259,7 +259,7 @@ $component = new class extends Component
                             </button>
                             <div x-show="openPerkuliahan" x-cloak>
                                 <x-responsive-nav-link :href="route('dataperkuliahan')" :active="request()->routeIs('dataperkuliahan')" wire:navigate>Data Perkuliahan</x-responsive-nav-link>
-                                <x-responsive-nav-link :href="route('reportabsensi')" :active="request()->routeIs('reportabsensi')" wire:navigate>Rekap Absensi Bulanan</x-responsive-nav-link>
+                                <x-responsive-nav-link :href="route('rekapabsen')" :active="request()->routeIs('reportabsensi')" wire:navigate>Rekap Absensi Bulanan</x-responsive-nav-link>
                                 @if(auth()->check() && auth()->user()->kd_otoritas == 1)
                                 <x-responsive-nav-link :href="route('datasebaranmatkul')" :active="request()->routeIs('datasebaranmatkul')" wire:navigate>Data Distribusi Mata Kuliah</x-responsive-nav-link>
                                 @endif

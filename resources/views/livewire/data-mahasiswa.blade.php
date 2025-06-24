@@ -43,7 +43,7 @@
                                     <td class="px-4 py-2 text-center text-sm justify-center flex gap-5">
                                             <a x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
                                             wire:click="edit({{ $datmhs->nim }})"
-                                            class="relative bg-campus-warn text-white px-2 py-1 items-center rounded hover:bg-yellow-600 cursor-pointer">
+                                            class="relative relative bg-campus-action text-white px-2 py-1 items-center rounded hover:bg-campus-action-dark cursor-pointer">
                                                 <i class="bi bi-pencil-square"></i>
                                                 <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
                                                     Perbaruhi Data

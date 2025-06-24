@@ -8,10 +8,16 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-     server: {
-    watch: {
-      usePolling: true,
-    },
-  },
-});
+  //    server: {
+  //   watch: {
+  //     usePolling: true,
+  //   },
+  // },
 
+  server: {
+    host: '0.0.0.0',
+    port: 5173, // pastikan sesuai
+    strictPort: true,
+  },
+
+});
