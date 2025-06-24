@@ -1,28 +1,29 @@
 <?php
 
-use App\Livewire\Forms\LoginForm;
-use Illuminate\Support\Facades\Session;
-use Livewire\Attributes\Layout;
-use Livewire\Volt\Component;
+// use App\Livewire\Forms\LoginForm;
+// use Illuminate\Support\Facades\Session;
+// use Livewire\Attributes\Layout;
+// use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest')] class extends Component
-{
-    public LoginForm $form;
+// new #[Layout('layouts.guest')] class extends Component
+// {
+//     public LoginForm $form;
 
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function login(): void
-    {
-        $this->validate();
+//     /**
+//      * Handle an incoming authentication request.
+//      */
+//     public function login(): void
+//     {
+//         $this->validate();
 
-        $this->form->authenticate();
-
-        Session::regenerate();
-
-        $this->redirectIntended(default: route('dataperkuliahan', absolute: false), navigate: true);
-    }
-}; ?>
+//         $this->form->authenticate();
+//         Session::regenerate();
+//         // return $this->redirectIntended(default: route('dataperkuliahan', absolute: false), navigate: true);
+//          $destination = session()->pull('url.intended', route('dataperkuliahan'));
+//          dd($destination);
+//          $this->dispatch('livewire-navigate', ['to' => $destination]);
+//     }
+// }; ?>
 
 <div>
     <!-- Session Status -->
@@ -68,4 +69,9 @@ new #[Layout('layouts.guest')] class extends Component
             </x-primary-button>
         </div>
     </form>
+<script>
+document.addEventListener('livewire-navigate', e => {
+    window.location.href = e.detail.to;
+});
+</script>
 </div>

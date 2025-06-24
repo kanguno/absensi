@@ -45,6 +45,9 @@ class DataPerkuliahan extends Component
 
         if ($this->existdosen) {
             $query->where('dat_dosen.id_dosen', $this->existdosen->id_dosen);
+            $this->listDosen = DB::table('dat_dosen')->select('id_dosen', 'nm_dosen')
+            ->where('dat_dosen.id_dosen', $this->existdosen->id_dosen)->get();
+            // dd($this->listDosen);
         }
         
         if ($this->filterKelas) {

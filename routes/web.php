@@ -14,13 +14,14 @@ use App\Livewire\CeklistAbsensi;
 use App\Livewire\ReportAbsensi;
 use App\Livewire\RekapAbsen;
 use App\Livewire\CetakAbsensiHarian;
+use App\Livewire\Pages\Auth\LoginPage;
 
 use App\Http\Middleware\CheckUserOtoritas;
 
 // Route::get('/', function () {
 //     return redirect()->route('login');
 // })->name('home');
-
+Route::get('/login', LoginPage::class)->name('login');
 Route::get('/data-absensi-{idperkuliahan}', AbsenMahasiswa::class)->name('absensimahasiswa');
 
 Route::get('/link-absen-{qrlink}', [DataPerkuliahan::class, 'redirectToAbsensi']);
@@ -80,7 +81,7 @@ Route::view('profile', 'profile')
         request()->session()->invalidate();
         request()->session()->regenerateToken();
     
-        return redirect('/');
+        return redirect('/login');
     })->name('logout');
 require __DIR__.'/auth.php';
  

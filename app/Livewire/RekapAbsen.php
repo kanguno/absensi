@@ -24,9 +24,9 @@ class RekapAbsen extends Component
         $this->listKelas = DB::table('dat_perkuliahan')->select('kelas')->distinct()->get();
         $this->listDosen = DB::table('dat_dosen')->select('id_dosen', 'nm_dosen')->get();
         $this->listMatkul = DB::table('dat_matkul')->select('kd_matkul', 'nm_matkul','teori','praktek')->get();
-        if ($this->existdosen) {
-            $query->where('dat_dosen.id_dosen', $this->existdosen->id_dosen);
-        }
+        // if ($this->existdosen) {
+        //     $query->where('dat_dosen.id_dosen', $this->existdosen->id_dosen);
+        // }
         return view('livewire.rekap-absen',['dataprodi' => DB::table('dat_prodi')->get()])
             ->extends('layouts.back');
     }
