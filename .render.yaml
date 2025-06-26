@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: laravel-docker-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        value: base64:fqKafFQ40wmM2jsFH7xJ51pg/I9NwNoJCbkseKW8ukI=
+      - key: APP_URL
+        value: https://laravel-docker-app.onrender.com
