@@ -18,9 +18,9 @@ use App\Livewire\Pages\Auth\LoginPage;
 
 use App\Http\Middleware\CheckUserOtoritas;
 
-// Route::get('/', function () {
-//     return redirect()->route('login');
-// })->name('home');
+Route::get('/', function () {
+return redirect()->route('dataperkuliahan');
+})->name('home');
 Route::get('/login', LoginPage::class)->name('login');
 Route::get('/data-absensi-{idperkuliahan}', AbsenMahasiswa::class)->name('absensimahasiswa');
 
