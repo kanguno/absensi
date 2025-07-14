@@ -27,7 +27,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($fakultas as $datfakultas)
+                            @forelse($fakultas ?? []  as $datfakultas)
                                 <tr class="text-md hover:bg-gray-100 border">
                                     <td class="px-4 py-2">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-2">{{ $datfakultas->kd_fakultas }}</td>
@@ -35,7 +35,7 @@
                                     <td class="px-4 py-2 text-center text-sm justify-center flex gap-5">
                                             <a x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
                                             wire:click="edit({{ $datfakultas->kd_fakultas }})"
-                                            class="relative relative bg-campus-action text-white px-2 py-1 items-center rounded hover:bg-campus-action-dark cursor-pointer">
+                                            class="relative bg-campus-action text-white px-2 py-1 items-center rounded hover:bg-campus-action-dark cursor-pointer">
                                                 <i class="bi bi-pencil-square"></i>
                                                 <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
                                                     Perbaruhi Data
@@ -43,16 +43,28 @@
                                             </a>
 
                                             <form class="inline">
-                                                <button x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
-                                                        type="button" wire:click="delete({{ $datfakultas->kd_fakultas }})"
-                                                        onclick="return confirm('Yakin ingin menghapus?')"
-                                                        class="relative bg-campus-alert text-white px-2 py-1 items-center rounded hover:bg-campus-alert-dark">
+                                                <button
+                                                    x-data="{ tooltip: false }"
+                                                    @mouseenter="tooltip = true"
+                                                    @mouseleave="tooltip = false"
+                                                    @click.prevent="
+                                                        if (confirm('Yakin ingin menghapus?')) {
+                                                            $wire.delete({{ $datfakultas->kd_fakultas }});
+                                                        }
+                                                    "
+                                                    type="button"
+                                                    class="relative bg-campus-alert text-white px-2 py-1 items-center rounded hover:bg-campus-alert-dark"
+                                                >
                                                     <i class="bi bi-trash-fill"></i>
-                                                    <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
+                                                    <span
+                                                        x-show="tooltip"
+                                                        class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2"
+                                                    >
                                                         Hapus Data
                                                     </span>
                                                 </button>
                                             </form>
+
                                     </td>
                                 </tr>
                             @empty
@@ -64,6 +76,30 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <div class="mt-6 flex justify-center items-center space-x-2">
+                        {{-- Tombol Prev --}}
+                        @if ($fakultas->onFirstPage())
+                            <span class="px-3 py-1 bg-gray-200 text-gray-500 rounded cursor-not-allowed">← Prev</span>
+                        @else
+                            <button wire:click="previousPage" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">← Prev</button>
+                        @endif
+
+                        {{-- Nomor Halaman --}}
+                        @foreach ($fakultas->getUrlRange(1, $fakultas->lastPage()) as $page => $url)
+                            @if ($page == $fakultas->currentPage())
+                                <span class="px-3 py-1 bg-blue-700 text-white rounded">{{ $page }}</span>
+                            @else
+                                <button wire:click="gotoPage({{ $page }})" class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ $page }}</button>
+                            @endif
+                        @endforeach
+
+                        {{-- Tombol Next --}}
+                        @if ($fakultas->hasMorePages())
+                            <button wire:click="nextPage" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Next →</button>
+                        @else
+                            <span class="px-3 py-1 bg-gray-200 text-gray-500 rounded cursor-not-allowed">Next →</span>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

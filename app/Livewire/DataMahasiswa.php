@@ -5,9 +5,11 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\datMahasiswa;
 use Illuminate\Support\Facades\DB;
+use Livewire\WithPagination;
 
 class DataMahasiswa extends Component
 {
+     use WithPagination;
     public $nim, $nm_mahasiswa, $kelas,$semester,$kd_prodi, $fakultas,$editingId;
     public $mahasiswa_id,$prodi;
     public $formdatamhs='hidden',$opsisave;
@@ -99,17 +101,26 @@ class DataMahasiswa extends Component
 
         $this->reset();
         $this->dispatch('flashMessage');
+        $this->resetPage();
     }
 
     public function delete($nim)
     {
-        
-        $datmhs = DB::table('dat_mahasiswa')->where('nim', $nim)->delete();
+        $databsensi = DB::table('dat_absensi')->where('nim', $nim)->get();
+
+            if ($databsensi->isEmpty()) {
+                $datmhs = DB::table('dat_mahasiswa')->where('nim', $nim)->delete();
+            } else {
+                dd($databsensi); // Data masih ada, tidak dihapus
+            }
+
 
 
             // dd($datmhs);
             
             session()->flash('message', 'Data berhasil dihapus!');
+            $this->resetPage();
+
        
 
         $this->dispatch('flashMessage');

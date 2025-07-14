@@ -2,26 +2,27 @@
 
 namespace App\Livewire;
 use Illuminate\Support\Facades\DB;
-
+use Livewire\WithPagination;
 use Livewire\Component;
 
 class DataFakultas extends Component
 {
-   
+    use WithPagination;
 
     public $nmfakultas, $kdfakultas, $editingId = null;
-    public $fakultas;
-    public $formdatafakultas='hidden',$opsisave;
+    public $formdatafakultas = 'hidden', $opsisave;
 
     public function render()
-{
-    $this->fakultas=DB::table('dat_fakultas')->get();
-    
-    return view('livewire.data-fakultas', [
-        'fakultas' => $this->fakultas
-    ])->extends('layouts.back');
-}
-    
+    {
+        $fakultas = DB::table('dat_fakultas')
+        ->where('is_aktif','=','1')
+        ->paginate(10); // ✅ langsung disiapkan untuk view
+
+        return view('livewire.data-fakultas', [
+            'fakultas' => $fakultas
+        ])->extends('layouts.back');
+    }
+
 public function rules()
 {
     return [
@@ -69,19 +70,23 @@ public function rules()
         $this->dispatch('flashMessage');
     }
 
-    public function delete($kdfakultas)
-    {
-        
-        $datmhs = DB::table('dat_fakultas')->where('kd_fakultas', $kdfakultas)->delete();
-
-
-            // dd($datmhs);
-            
-            session()->flash('message', 'Data berhasil dihapus!');
-       
-
-        $this->dispatch('flashMessage');
+   public function delete($kdfakultas)
+{
+    try {
+        // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
+        DB::statement("ALTER TABLE dat_fakultas ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
+    } catch (\Exception $e) {
+        // Kolom mungkin sudah ada, abaikan
     }
+
+    // Nonaktifkan data, bukan hapus
+    DB::table('dat_fakultas')
+        ->where('kd_fakultas', $kdfakultas)
+        ->update(['is_aktif' => 0]);
+
+    session()->flash('message', 'Data fakultas berhasil dinonaktifkan.');
+    $this->dispatch('flashMessage');
+}
 
     public function tambahdata(){
         $this->reset();

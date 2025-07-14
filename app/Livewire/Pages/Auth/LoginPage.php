@@ -19,22 +19,24 @@ class LoginPage extends Component
 
     public bool $remember = false;
 
-    public function login(): mixed
-    {
-        $this->validate();
+   public function login(): mixed
+{
+    $this->validate();
 
-        if (Auth::attempt(
-            ['email' => $this->email, 'password' => $this->password],
-            $this->remember
-        )) {
-            Session::regenerate();
+    if (Auth::attempt(
+        ['email' => $this->email, 'password' => $this->password],
+        $this->remember
+    )) {
+        Session::regenerate();
 
-            $target = session()->pull('url.intended', route('dataperkuliahan'));
-            return $this->redirect($target, navigate: true);
-        }
-
-        $this->addError('email', 'Email atau password salah');
+        $target = session()->pull('url.intended', route('dataperkuliahan'));
+        return $this->redirect($target, navigate: true);
     }
+
+    $this->addError('email', 'Email atau password salah');
+
+    return null; // ← Tambahkan ini
+}
 
     public function render(): mixed
     {
