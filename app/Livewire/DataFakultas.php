@@ -14,6 +14,13 @@ class DataFakultas extends Component
 
     public function render()
     {
+           try {
+        // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
+        DB::statement("ALTER TABLE dat_fakultas ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
+    } catch (\Exception $e) {
+        // Kolom mungkin sudah ada, abaikan
+    }
+    
         $fakultas = DB::table('dat_fakultas')
         ->where('is_aktif','=','1')
         ->paginate(10); // ✅ langsung disiapkan untuk view
@@ -72,12 +79,7 @@ public function rules()
 
    public function delete($kdfakultas)
 {
-    try {
-        // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
-        DB::statement("ALTER TABLE dat_fakultas ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
-    } catch (\Exception $e) {
-        // Kolom mungkin sudah ada, abaikan
-    }
+ 
 // dd($kdfakultas);
     // Nonaktifkan data, bukan hapus
     DB::table('dat_fakultas')

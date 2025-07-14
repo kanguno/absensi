@@ -17,6 +17,12 @@ class DataProdi extends Component
 
     public function render()
 {
+      try {
+            // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
+            DB::statement("ALTER TABLE dat_prodi ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
+        } catch (\Exception $e) {
+            // Kolom mungkin sudah ada, abaikan
+        }
    $prodi = DB::table('dat_prodi')
     ->leftJoin('dat_fakultas', function ($join) {
         $join->on('dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
@@ -101,13 +107,6 @@ class DataProdi extends Component
 
     public function delete($kdprodi)
     {
-        
-        try {
-            // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
-            DB::statement("ALTER TABLE dat_prodi ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
-        } catch (\Exception $e) {
-            // Kolom mungkin sudah ada, abaikan
-        }
     
         // Nonaktifkan data, bukan hapus
         DB::table('dat_prodi')

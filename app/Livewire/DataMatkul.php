@@ -22,6 +22,13 @@ class DataMatkul extends Component
 
     public function render()
     {
+          try {
+            // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
+            DB::statement("ALTER TABLE dat_matkul ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
+        } catch (\Exception $e) {
+            // Kolom mungkin sudah ada, abaikan
+        }
+    
         return view('livewire.data-matkul', [
             'matkul' => $this->matkul // ← memanggil getMatkulProperty()
         ])->extends('layouts.back');
@@ -89,14 +96,7 @@ class DataMatkul extends Component
 
     public function delete($kdmatkul)
     {
-        
-        try {
-            // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
-            DB::statement("ALTER TABLE dat_matkul ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
-        } catch (\Exception $e) {
-            // Kolom mungkin sudah ada, abaikan
-        }
-    
+       
         // Nonaktifkan data, bukan hapus
         DB::table('dat_matkul')
             ->where('kd_matkul', $kdmatkul)

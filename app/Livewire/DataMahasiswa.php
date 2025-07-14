@@ -16,15 +16,31 @@ class DataMahasiswa extends Component
 
     public function render()
 {
+      try {
+            // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
+            DB::statement("ALTER TABLE dat_mahasiswa ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
+        } catch (\Exception $e) {
+            // Kolom mungkin sudah ada, abaikan
+        }
+
     $this->prodi = DB::table('dat_prodi')
         ->join('dat_fakultas', 'dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
         ->select('dat_prodi.*', 'dat_fakultas.nm_fakultas')
         ->get();
 
     $datmhs = DB::table('dat_mahasiswa')
-        ->leftJoin('dat_prodi', 'dat_mahasiswa.kd_prodi', '=', 'dat_prodi.kd_prodi')
-        ->leftJoin('dat_fakultas', 'dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
+    ->leftJoin('dat_prodi', function ($join) {
+       $join->on('dat_mahasiswa.kd_prodi', '=', 'dat_prodi.kd_prodi')
+            ->where('dat_prodi.is_aktif', '=', '1');
+   })
+     ->leftJoin('dat_fakultas', function ($join) {
+        $join->on('dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
+             ->where('dat_fakultas.is_aktif', '=', '1');
+    })
+        // ->leftJoin('dat_prodi', 'dat_mahasiswa.kd_prodi', '=', 'dat_prodi.kd_prodi')
+        // ->leftJoin('dat_fakultas', 'dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
         ->select('dat_mahasiswa.*', 'dat_prodi.nm_prodi', 'dat_fakultas.nm_fakultas')
+         ->where('dat_mahasiswa.is_aktif', '=', '1')
         ->paginate(10);
 
     return view('livewire.data-mahasiswa', [
@@ -110,13 +126,7 @@ class DataMahasiswa extends Component
 
     public function delete($nim)
     {
-         try {
-            // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
-            DB::statement("ALTER TABLE dat_mahasiswa ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
-        } catch (\Exception $e) {
-            // Kolom mungkin sudah ada, abaikan
-        }
-    
+       
         // Nonaktifkan data, bukan hapus
         DB::table('dat_mahasiswa')
             ->where('nim', $nim)

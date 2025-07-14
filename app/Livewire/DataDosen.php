@@ -4,20 +4,29 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-
+use Livewire\WithPagination;
 class DataDosen extends Component
 {
+    use WithPagination;
     public $iddosen, $nmdosen, $notelp, $email;
-    public $datdosen;
+    // public $datdosen;
     public $formdatadosen = 'hidden', $opsisave;
     public $editingId = null; // ID yang sedang diedit
 
     public function render()
     {
-        $this->datdosen = DB::table('dat_dosen')->get();
+        try {
+            // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
+            DB::statement("ALTER TABLE dat_dosen ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
+        } catch (\Exception $e) {
+            // Kolom mungkin sudah ada, abaikan
+        }
+        $datdosen = DB::table('dat_dosen')
+        ->where('is_aktif','=','1')
+        ->paginate(10);
 
         return view('livewire.data-dosen', [
-            'dosen' => $this->datdosen
+            'dosen' => $datdosen
         ])->extends('layouts.back');
     }
 
@@ -75,8 +84,11 @@ class DataDosen extends Component
 
     public function delete($iddosen)
     {
-        DB::table('dat_dosen')->where('id_dosen', $iddosen)->delete();
-        session()->flash('message', 'Data berhasil dihapus!');
+          DB::table('dat_dosen')
+            ->where('id_dosen', $iddosen)
+            ->update(['is_aktif' => 0]);
+    
+        session()->flash('message', 'Data mata kuliah berhasil dinonaktifkan.');
         $this->dispatch('flashMessage');
     }
   public function cfdosen(){
