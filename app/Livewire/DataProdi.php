@@ -2,36 +2,47 @@
 
 namespace App\Livewire;
 use Illuminate\Support\Facades\DB;
-
+use Livewire\WithPagination;
 use Livewire\Component;
 
 class DataProdi extends Component
 {
-   
+    use WithPagination;
+        protected $paginationTheme = 'tailwind';
 
     public $kdprodi, $nmprodi, $kdfakultas;
-    public $fakultas,$prodi;
+    // public $fakultas,$prodi;
     public $formdataprodi='hidden',$opsisave;
     public $editingId = null; // ID yang sedang diedit
 
     public function render()
 {
-    $this->prodi = DB::table('dat_prodi')
-        ->join('dat_fakultas', 'dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
-        ->select('dat_prodi.*', 'dat_fakultas.nm_fakultas')
+   $prodi = DB::table('dat_prodi')
+    ->leftJoin('dat_fakultas', function ($join) {
+        $join->on('dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
+             ->where('dat_fakultas.is_aktif', '=', '1');
+    })
+    ->select('dat_prodi.*', 'dat_fakultas.nm_fakultas')
+    ->where('dat_prodi.is_aktif', '=', '1')
+    ->paginate(10);
+
+    $fakultas = DB::table('dat_fakultas')
+        ->where('is_aktif', '=', '1')
         ->get();
-    $this->fakultas=DB::table('dat_fakultas')->get();
-    
+
     return view('livewire.data-prodi', [
-        'fakultas' => $this->fakultas,
-        'prodi' => $this->prodi
+        'prodi' => $prodi,
+        'fakultas' => $fakultas,
     ])->extends('layouts.back');
 }
 
     public function mount()
     {
-        $this->fakultas=DB::table('dat_fakultas')->get();
+        $this->fakultas=DB::table('dat_fakultas')
+        ->where('is_aktif','=','1')
+        ->get();
         // Debugging untuk memastikan data ada
+   
         
     }
     public function rules()
@@ -91,14 +102,19 @@ class DataProdi extends Component
     public function delete($kdprodi)
     {
         
-        $datmhs = DB::table('dat_prodi')->where('kd_prodi', $kdprodi)->delete();
-
-
-            // dd($datmhs);
-            
-            session()->flash('message', 'Data berhasil dihapus!');
-       
-
+        try {
+            // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
+            DB::statement("ALTER TABLE dat_prodi ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
+        } catch (\Exception $e) {
+            // Kolom mungkin sudah ada, abaikan
+        }
+    
+        // Nonaktifkan data, bukan hapus
+        DB::table('dat_prodi')
+            ->where('kd_prodi', $kdprodi)
+            ->update(['is_aktif' => 0]);
+    
+        session()->flash('message', 'Data Prodi berhasil dinonaktifkan.');
         $this->dispatch('flashMessage');
     }
 

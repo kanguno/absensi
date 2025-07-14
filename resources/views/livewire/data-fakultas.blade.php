@@ -49,7 +49,7 @@
                                                     @mouseleave="tooltip = false"
                                                     @click.prevent="
                                                         if (confirm('Yakin ingin menghapus?')) {
-                                                            $wire.delete({{ $datfakultas->kd_fakultas }});
+                                                            $wire.delete('{{ $datfakultas->kd_fakultas }}');
                                                         }
                                                     "
                                                     type="button"

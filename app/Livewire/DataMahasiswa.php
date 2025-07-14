@@ -36,8 +36,12 @@ class DataMahasiswa extends Component
     public function mount()
     {
         $this->prodi = DB::table('dat_prodi')
-            ->join('dat_fakultas', 'dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
+             ->leftJoin('dat_fakultas', function ($join) {
+                    $join->on('dat_prodi.kd_fakultas', '=', 'dat_fakultas.kd_fakultas')
+                        ->where('dat_fakultas.is_aktif', '=', '1');
+                })
             ->select('dat_prodi.*', 'dat_fakultas.nm_fakultas')
+            ->where('dat_prodi.is_aktif','=','1')
             ->get();
         
         // Debugging untuk memastikan data ada
@@ -106,23 +110,19 @@ class DataMahasiswa extends Component
 
     public function delete($nim)
     {
-        $databsensi = DB::table('dat_absensi')->where('nim', $nim)->get();
-
-            if ($databsensi->isEmpty()) {
-                $datmhs = DB::table('dat_mahasiswa')->where('nim', $nim)->delete();
-            } else {
-                dd($databsensi); // Data masih ada, tidak dihapus
-            }
-
-
-
-            // dd($datmhs);
-            
-            session()->flash('message', 'Data berhasil dihapus!');
-            $this->resetPage();
-
-       
-
+         try {
+            // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
+            DB::statement("ALTER TABLE dat_mahasiswa ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
+        } catch (\Exception $e) {
+            // Kolom mungkin sudah ada, abaikan
+        }
+    
+        // Nonaktifkan data, bukan hapus
+        DB::table('dat_mahasiswa')
+            ->where('nim', $nim)
+            ->update(['is_aktif' => 0]);
+    
+        session()->flash('message', 'Data Mahasiswa berhasil dinonaktifkan.');
         $this->dispatch('flashMessage');
     }
 

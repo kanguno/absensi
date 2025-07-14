@@ -78,7 +78,7 @@ public function rules()
     } catch (\Exception $e) {
         // Kolom mungkin sudah ada, abaikan
     }
-
+// dd($kdfakultas);
     // Nonaktifkan data, bukan hapus
     DB::table('dat_fakultas')
         ->where('kd_fakultas', $kdfakultas)

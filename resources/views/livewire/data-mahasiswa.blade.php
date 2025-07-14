@@ -73,32 +73,30 @@
                             
                           </tbody>
                     </table>
-                    @if ($datamahasiswa->hasPages())
-                        <div class="mt-6 flex justify-center items-center space-x-2">
-                            {{-- Tombol Prev --}}
-                            @if ($datamahasiswa->onFirstPage())
-                                <span class="px-3 py-1 bg-gray-200 text-gray-500 rounded cursor-not-allowed">← Prev</span>
-                            @else
-                                <a href="{{ $datamahasiswa->previousPageUrl() }}" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">← Prev</a>
-                            @endif
+                      <div class="mt-6 flex justify-center items-center space-x-2">
+                        {{-- Tombol Prev --}}
+                        @if ($datamahasiswa->onFirstPage())
+                            <span class="px-3 py-1 bg-gray-200 text-gray-500 rounded cursor-not-allowed">← Prev</span>
+                        @else
+                            <button wire:click="previousPage" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">← Prev</button>
+                        @endif
 
-                            {{-- Nomor Halaman --}}
-                            @foreach ($datamahasiswa->getUrlRange(1, $datamahasiswa->lastPage()) as $page => $url)
-                                @if ($page == $datamahasiswa->currentPage())
-                                    <span class="px-3 py-1 bg-blue-700 text-white rounded">{{ $page }}</span>
-                                @else
-                                    <a href="{{ $url }}" class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ $page }}</a>
-                                @endif
-                            @endforeach
-
-                            {{-- Tombol Next --}}
-                            @if ($datamahasiswa->hasMorePages())
-                                <a href="{{ $datamahasiswa->nextPageUrl() }}" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Next →</a>
+                        {{-- Nomor Halaman --}}
+                        @foreach ($datamahasiswa->getUrlRange(1, $datamahasiswa->lastPage()) as $page => $url)
+                            @if ($page == $datamahasiswa->currentPage())
+                                <span class="px-3 py-1 bg-blue-700 text-white rounded">{{ $page }}</span>
                             @else
-                                <span class="px-3 py-1 bg-gray-200 text-gray-500 rounded cursor-not-allowed">Next →</span>
+                                <button wire:click="gotoPage({{ $page }})" class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">{{ $page }}</button>
                             @endif
-                        </div>
-                    @endif
+                        @endforeach
+
+                        {{-- Tombol Next --}}
+                        @if ($datamahasiswa->hasMorePages())
+                            <button wire:click="nextPage" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Next →</button>
+                        @else
+                            <span class="px-3 py-1 bg-gray-200 text-gray-500 rounded cursor-not-allowed">Next →</span>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

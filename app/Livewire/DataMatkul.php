@@ -4,21 +4,28 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Livewire\WithPagination;
 
 class DataMatkul extends Component
 {
+    use WithPagination;
     public $kdmatkul, $nmmatkul, $sks,$teori,$praktek;
     public $datmakul,$user;
     public $formdatamatkul='hidden',$opsisave,$editingId=null;
 
-    public function render()
-{
-    $this->datmatkul = DB::table('dat_matkul')->get();
+     public function getMatkulProperty()
+    {
+        return DB::table('dat_matkul')
+            ->where('is_aktif', '=', '1')
+            ->paginate(10);
+    }
 
-    return view('livewire.data-matkul', [
-        'matkul' => $this->datmatkul
-    ])->extends('layouts.back');
-}
+    public function render()
+    {
+        return view('livewire.data-matkul', [
+            'matkul' => $this->matkul // ← memanggil getMatkulProperty()
+        ])->extends('layouts.back');
+    }
 
     public function rules () {
         return[
@@ -83,12 +90,19 @@ class DataMatkul extends Component
     public function delete($kdmatkul)
     {
         
-        $datmatkul = DB::table('dat_matkul')->where('kd_matkul', $kdmatkul)->delete();
-
-
-            session()->flash('message', 'Data berhasil dihapus!');
-       
-
+        try {
+            // Coba tambahkan kolom jika belum ada (optional, dijalankan sekali saja)
+            DB::statement("ALTER TABLE dat_matkul ADD COLUMN is_aktif TINYINT(1) DEFAULT 1");
+        } catch (\Exception $e) {
+            // Kolom mungkin sudah ada, abaikan
+        }
+    
+        // Nonaktifkan data, bukan hapus
+        DB::table('dat_matkul')
+            ->where('kd_matkul', $kdmatkul)
+            ->update(['is_aktif' => 0]);
+    
+        session()->flash('message', 'Data mata kuliah berhasil dinonaktifkan.');
         $this->dispatch('flashMessage');
     }
 
