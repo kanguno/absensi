@@ -92,28 +92,28 @@ class DataMahasiswa extends Component
     public function save()
     {
         $this->validate($this->rules(),$this->message);
-
-        $datmhs = DB::table('dat_mahasiswa')->where('nim', $this->nim)->first();
+        $datmhs = DB::table('dat_mahasiswa')->where('nim', (string) $this->editingId)->first();
 
         if ($datmhs) {
             // Update data jika sudah ada
-            DB::table('dat_mahasiswa')
-                ->where('nim', $this->nim)
-                ->update([
-                    'nm_mahasiswa' => $this->nm_mahasiswa,
-                    'kelas' => $this->kelas,
-                    'semester' => $this->semester,
-                    'kd_prodi' => $this->kd_prodi,
-                ]);
+         DB::table('dat_mahasiswa')
+            ->where('nim', (string) $this->editingId)
+            ->update([
+                'nim'=> (string) $this->nim,
+                'nm_mahasiswa' => (string) $this->nm_mahasiswa,
+                'kelas' => (string) $this->kelas,
+                'semester' => (int) $this->semester,
+                'kd_prodi' => (string) $this->kd_prodi,
+            ]);
             session()->flash('message', 'Data berhasil diperbarui!');
         } else {
             // Insert data baru
             DB::table('dat_mahasiswa')->insert([
-                'nim' => $this->nim,
-                'nm_mahasiswa' => $this->nm_mahasiswa,
-                'kelas' => $this->kelas,
-                'semester' => $this->semester,
-                'kd_prodi' => $this->kd_prodi,
+                 'nim'=> (string) $this->nim,
+                'nm_mahasiswa' => (string) $this->nm_mahasiswa,
+                'kelas' => (string) $this->kelas,
+                'semester' => (int) $this->semester,
+                'kd_prodi' => (string) $this->kd_prodi,
             ]);
             session()->flash('message', 'Data berhasil ditambahkan!');
             
@@ -129,7 +129,7 @@ class DataMahasiswa extends Component
        
         // Nonaktifkan data, bukan hapus
         DB::table('dat_mahasiswa')
-            ->where('nim', $nim)
+            ->where('nim', (string) $nim)
             ->update(['is_aktif' => 0]);
     
         session()->flash('message', 'Data Mahasiswa berhasil dinonaktifkan.');
@@ -153,14 +153,15 @@ class DataMahasiswa extends Component
         $this->formdatamhs='';
     }
     public function edit($nim){
+        
         $this->formdatamhs='';
         $this->resetValidation();
         $this->opsisave='Perbarui';
-        $data=datMahasiswa::where('nim',$nim)->first();
-
+        $data=datMahasiswa::where('nim', $nim)->first();
+        // dd( $data->nim);
         if ($data) {
-            $this->nim = $data->nim; // Simpan ID untuk validasi update
-            $this->editingId = $data->nim; // Simpan ID untuk validasi update
+            $this->nim = $nim; // Simpan ID untuk validasi update
+            $this->editingId = $nim; // Simpan ID untuk validasi update
             $this->nm_mahasiswa=$data->nm_mahasiswa;
             $this->kelas=$data->kelas;
             $this->semester=$data->semester;

@@ -42,7 +42,7 @@
                                     <td class="px-4 py-2">{{ $datmhs->nm_fakultas }}</td>
                                     <td class="px-4 py-2 text-center text-sm justify-center flex gap-5">
                                             <a x-data="{ tooltip: false }" @mouseenter="tooltip = true" @mouseleave="tooltip = false"
-                                            wire:click="edit({{ $datmhs->nim }})"
+                                            wire:click="edit('{{ $datmhs->nim }}')"
                                             class="relative bg-campus-action text-white px-2 py-1 items-center rounded hover:bg-campus-action-dark cursor-pointer">
                                                 <i class="bi bi-pencil-square"></i>
                                                 <span x-show="tooltip" class="absolute -top-[30px] left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2">
@@ -112,10 +112,11 @@
         </div>
             <form wire:submit.prevent="save" class='p-6  bg-[#45025b] rounded-b-md max-h-[70vh] overflow-y-auto'>
                 <div class="mb-4">
+                    
                     <label class="block text-white font-medium">NIM* </label>
                     <input type="text" wire:model="nim"
                         class="w-full px-4 py-2 border-none rounded-lg focus:ring focus:ring-blue-300 placeholder-red-500 {{ $nim ? 'bg-gray-200' : '' }}"
-                        {{ $opsisave==='Perbarui' ? 'disabled' : '' }}
+                       
                         >
                     @error('nim') <span class="text-campus-warn text-sm">{{ $message }}</span> @enderror
                 </div>

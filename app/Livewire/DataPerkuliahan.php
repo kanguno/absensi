@@ -295,8 +295,11 @@ public function filterData()
 
     public function delete($idperkuliahan)
     {
+        DB::table('dat_absensi')->where('id_perkuliahan', $idperkuliahan)->delete();
+        DB::table('qrabsen')->where('id_perkuliahan', $idperkuliahan)->delete();
         DB::table('dat_perkuliahan')->where('id_perkuliahan', $idperkuliahan)->delete();
         session()->flash('message', 'Data berhasil dihapus!');
+        
         $this->dispatch('flashMessage');
     }
 

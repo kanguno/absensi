@@ -58,7 +58,7 @@ class DataDosen extends Component
         if ($this->editingId) {
             // Update data jika sedang mengedit (tidak ubah id_dosen)
             DB::table('dat_dosen')
-                ->where('id_dosen', $this->editingId)
+                ->where('id_dosen',(string) $this->editingId)
                 ->update([
                     'nm_dosen' => $this->nmdosen,
                     'no_telp' => $this->notelp,
@@ -111,7 +111,7 @@ class DataDosen extends Component
         $this->opsisave = 'Perbarui';
         $this->editingId = $iddosen; // Simpan ID yang sedang diedit
 
-        $data = DB::table('dat_dosen')->where('id_dosen', $iddosen)->first();
+        $data = DB::table('dat_dosen')->where('id_dosen', (string) $iddosen)->first();
 
         $this->iddosen = $data->id_dosen;
         $this->nmdosen = $data->nm_dosen;
